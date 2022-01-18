@@ -31,7 +31,7 @@ public class SplashMixin {
     @Shadow
     @Final
     @Mutable
-    private static int MOJANG_RED = 0x00111111;
+    private static int MOJANG_RED = 0x0075D2FC;
 
     @Inject(method = "init(Lnet/minecraft/client/MinecraftClient;)V",at=@At("HEAD"), cancellable = true)
     private static void init(MinecraftClient client, CallbackInfo ci){

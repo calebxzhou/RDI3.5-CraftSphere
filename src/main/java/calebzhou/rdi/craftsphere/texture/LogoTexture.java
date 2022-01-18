@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.io.InputStream;
 @Environment(EnvType.CLIENT)
 public class LogoTexture extends ResourceTexture{
-    public static Identifier LOGO= new Identifier("rdi-craftsphere:splash.png");;
+    public static Identifier LOGO= new Identifier("rdi-craftsphere:splash.png");
         public LogoTexture() {
             super(LOGO);
         }
@@ -27,7 +27,7 @@ public class LogoTexture extends ResourceTexture{
             DefaultResourcePack defaultResourcePack = minecraftClient.getResourcePackProvider().getPack();
 
             try {
-                InputStream inputStream = FileUtils.getJarResourceAsStream("/assets/rdi-craftsphere/splash.png");//defaultResourcePack.open(ResourceType.CLIENT_RESOURCES, LOGO);
+                InputStream inputStream = FileUtils.getJarResourceAsStream("splash.png");//defaultResourcePack.open(ResourceType.CLIENT_RESOURCES, LOGO);
 
                 ResourceTexture.TextureData var5;
                 try {

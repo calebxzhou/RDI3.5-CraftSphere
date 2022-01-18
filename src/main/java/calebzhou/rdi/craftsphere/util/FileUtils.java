@@ -27,7 +27,7 @@ public class FileUtils {
     }
     public static InputStream getJarResourceAsStream(String fileInJar)
     {
-        return ExampleMod.class.getResourceAsStream(fileInJar);
+        return ExampleMod.class.getResourceAsStream("/assets/rdi-craftsphere/"+fileInJar);
     }
     private static ByteBuffer resizeBuffer(ByteBuffer buffer, int newCapacity) {
         ByteBuffer newBuffer = createByteBuffer(newCapacity);
