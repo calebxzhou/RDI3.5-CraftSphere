@@ -1,25 +1,29 @@
 package calebzhou.rdi.craftsphere.mixin;
 
-import calebzhou.rdi.craftsphere.texture.LogoTexture;
 import calebzhou.rdi.craftsphere.texture.Textures;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.SharedConstants;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
+import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
+import net.minecraft.client.gui.screen.option.AccessibilityOptionsScreen;
+import net.minecraft.client.gui.screen.option.LanguageOptionsScreen;
+import net.minecraft.client.gui.screen.option.OptionsScreen;
+import net.minecraft.client.gui.screen.world.SelectWorldScreen;
+import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.ClickableWidget;
+import net.minecraft.client.gui.widget.TexturedButtonWidget;
 import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.resource.language.I18n;
+import net.minecraft.client.util.InputUtil;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
-import net.minecraft.util.Util;
+import net.minecraft.text.TranslatableText;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3f;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -29,6 +33,12 @@ import java.util.Iterator;
 
 @Mixin(TitleScreen.class)
 public class TitleScreenMixin extends Screen {
+    @Shadow @Final @Mutable private boolean isMinceraft;
+
+    @Inject(method = "Lnet/minecraft/client/gui/screen/TitleScreen;<init>(Z)V",at=@At("TAIL"))
+    private void setMce(boolean doBackgroundFade, CallbackInfo ci){
+        this.isMinceraft=false;
+    }
     protected TitleScreenMixin(Text title) {
         super(title);
     }
@@ -43,27 +53,14 @@ public class TitleScreenMixin extends Screen {
         RenderSystem.enableBlend();
         RenderSystem.blendFunc(GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA);
         drawTexture(matrices, 0, 0, this.width, this.height, 0.0F, 0.0F, 16, 128, 16, 128);
-
+        drawStringWithShadow(matrices, this.textRenderer, "按 Enter", this.width/2, this.height - 50, 0x00000000);
         RenderSystem.setShaderTexture(0, Textures.TITLE_LOGO);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 0.5f);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1f);
         int j = this.width / 2 - 137;
-            this.drawWithOutline(j, 30, (x, y) -> {
-                this.drawTexture(matrices, x + 0, y, 0, 0, 99, 44);
-                this.drawTexture(matrices, x + 99, y, 129, 0, 27, 44);
-                this.drawTexture(matrices, x + 99 + 26, y, 126, 0, 3, 44);
-                this.drawTexture(matrices, x + 99 + 26 + 3, y, 99, 0, 26, 44);
-                this.drawTexture(matrices, x + 155, y, 0, 45, 155, 44);
-            });
-
-/*
-        if (this.backgroundFadeStart == 0L && this.doBackgroundFade) {
-            this.backgroundFadeStart = Util.getMeasuringTimeMs();
-        }
-
-        float f = this.doBackgroundFade ? (float)(Util.getMeasuringTimeMs() - this.backgroundFadeStart) / 1000.0F : 1.0F;
-        this.backgroundRenderer.render(delta, MathHelper.clamp(f, 0.0F, 1.0F));
-*/
-
+        this.drawWithOutline(j, 30, (x, y) -> {
+            this.drawTexture(matrices, x + 0, y, 0, 0, 155, 44);
+            this.drawTexture(matrices, x + 155, y, 0, 45, 155, 44);
+        });
          float g = 1.0F;
         int l = MathHelper.ceil(g * 255.0F) << 24;
         if ((l & -67108864) != 0) {
@@ -76,13 +73,28 @@ public class TitleScreenMixin extends Screen {
                     ((ClickableWidget)element).setAlpha(g);
                 }
             }
-
             super.render(matrices, mouseX, mouseY, delta);
-            /*if (this.areRealmsNotificationsEnabled() && g >= 1.0F) {
-                this.realmsNotificationGui.render(matrices, mouseX, mouseY, delta);
-            }*/
-
         }
+    }
+    /**
+     * @author
+     */
+    @Overwrite
+    public void init() {
+        int j = this.height / 4 + 48;
+        /*this.addDrawableChild(new TexturedButtonWidget(this.width / 2 - 124, j + 72 + 12, 20, 20, 0, 106, 20, ButtonWidget.WIDGETS_TEXTURE, 256, 256, (button) -> {
+            this.client.setScreen(new LanguageOptionsScreen(this, this.client.options, this.client.getLanguageManager()));
+        }, new TranslatableText("narrator.button.language")));*/
+        this.addDrawableChild(new TexturedButtonWidget(this.width -25, j + 72 + 12, 20, 20, 0,0,20,Textures.ICON_SETTINGS,32,64, (button) -> {
+            this.client.setScreen(new OptionsScreen(this, this.client.options));
+        }, new TranslatableText("menu.options")));
+        /*this.addDrawableChild(new ButtonWidget(this.width / 2 + 2, j + 72 + 12, 98, 20, new TranslatableText("menu.quit"), (button) -> {
+            this.client.scheduleStop();
+        }));*/
+        this.addDrawableChild(new TexturedButtonWidget(this.width-50, j + 72 + 12, 20, 20, 0, 0, 20, new Identifier("textures/gui/accessibility.png"), 32, 64, (button) -> {
+            this.client.setScreen(new AccessibilityOptionsScreen(this, this.client.options));
+        }, new TranslatableText("narrator.button.accessibility")));
+
     }
     /**
      * @author
@@ -90,12 +102,44 @@ public class TitleScreenMixin extends Screen {
      */
     @Overwrite
     private void initWidgetsDemo(int y, int spacingY) {}
+    //去掉单人模式按钮
+    @Redirect(method = "Lnet/minecraft/client/gui/screen/TitleScreen;initWidgetsNormal(II)V",
+            at=@At(value = "INVOKE",target = "Lnet/minecraft/client/gui/screen/TitleScreen;addDrawableChild(Lnet/minecraft/client/gui/Element;)Lnet/minecraft/client/gui/Element;",
+                    ordinal = 0))
+    private Element noSingleButton(TitleScreen instance, Element element){
+        return element;
+    }
+    //多人模式不显示按钮
+    @Redirect(method = "Lnet/minecraft/client/gui/screen/TitleScreen;initWidgetsNormal(II)V",
+    at=@At(value = "INVOKE",target = "Lnet/minecraft/client/gui/screen/TitleScreen;addDrawableChild(Lnet/minecraft/client/gui/Element;)Lnet/minecraft/client/gui/Element;",ordinal = 1))
+    private Element multiBtn(TitleScreen instance, Element element,int y, int spacingY){
+
+        return element;
+    }
     //去掉领域服
     @Inject(method = "Lnet/minecraft/client/gui/screen/TitleScreen;initWidgetsNormal(II)V",
             at=@At(value = "INVOKE",target = "Lnet/minecraft/client/gui/screen/TitleScreen;addDrawableChild(Lnet/minecraft/client/gui/Element;)Lnet/minecraft/client/gui/Element;",
             ordinal = 2), cancellable = true)
     private void noRealmsButton(CallbackInfo ci){
         ci.cancel();
+    }
+
+    /**
+     * @author
+     * 按回车键进入服务器,按shift+回车进入单人
+     */
+    @Overwrite
+    public void tick() {
+        long handle = MinecraftClient.getInstance().getWindow().getHandle();
+        if(InputUtil.isKeyPressed(handle,InputUtil.GLFW_KEY_ENTER)){
+            if(InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_LEFT_SHIFT)){
+                this.client.setScreen(new SelectWorldScreen(this));
+            }else
+                this.client.setScreen(new MultiplayerScreen(this));
+        }
+
+
+
     }
 }
 @Mixin(MinecraftClient.class)
