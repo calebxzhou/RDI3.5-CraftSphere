@@ -1,6 +1,8 @@
 package calebzhou.rdi.craftsphere.mixin;
 
 import calebzhou.rdi.craftsphere.texture.Textures;
+import calebzhou.rdi.craftsphere.util.HttpUtils;
+import calebzhou.rdi.craftsphere.util.ThreadPool;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
@@ -36,7 +38,7 @@ import java.util.Iterator;
 
 @Mixin(TitleScreen.class)
 public class TitleScreenMixin extends Screen {
-
+    private static String weather="正在载入天气预报";
     protected TitleScreenMixin(Text title) {
         super(title);
     }
@@ -51,7 +53,9 @@ public class TitleScreenMixin extends Screen {
         RenderSystem.enableBlend();
         RenderSystem.blendFunc(GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA);
         drawTexture(matrices, 0, 0, this.width, this.height, 0.0F, 0.0F, 16, 128, 16, 128);
-        this.textRenderer.draw(matrices, "欢迎使用RDI客户端,按 Enter(回车键).", this.width/2-40, this.height - 50, 0x00000000);
+        this.textRenderer.draw(matrices, "按 Enter", (this.width/2.0f), this.height - 50, 0x00000000);
+        this.textRenderer.draw(matrices, weather, (this.width/2.0f), this.height/2 - 50, 0x00000000);
+
         RenderSystem.setShaderTexture(0, Textures.TITLE_LOGO);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1f);
         int j = this.width / 2 - 137;
@@ -79,17 +83,21 @@ public class TitleScreenMixin extends Screen {
      */
     @Overwrite
     public void init() {
-        int j = this.height / 4 + 48;
+        ThreadPool.newThread(()->{
+            String request = HttpUtils.sendRequest("GET", "getWeather");
+            this.weather=request;
+        });
+        int j = this.height-25;
         /*this.addDrawableChild(new TexturedButtonWidget(this.width / 2 - 124, j + 72 + 12, 20, 20, 0, 106, 20, ButtonWidget.WIDGETS_TEXTURE, 256, 256, (button) -> {
             this.client.setScreen(new LanguageOptionsScreen(this, this.client.options, this.client.getLanguageManager()));
         }, new TranslatableText("narrator.button.language")));*/
-        this.addDrawableChild(new TexturedButtonWidget(this.width -25, j + 72 + 12, 20, 20, 0,0,20,Textures.ICON_SETTINGS,32,64, (button) -> {
+        this.addDrawableChild(new TexturedButtonWidget(this.width -25, j, 20, 20, 0,0,20,Textures.ICON_SETTINGS,32,64, (button) -> {
             this.client.setScreen(new OptionsScreen(this, this.client.options));
         }, new TranslatableText("menu.options")));
         /*this.addDrawableChild(new ButtonWidget(this.width / 2 + 2, j + 72 + 12, 98, 20, new TranslatableText("menu.quit"), (button) -> {
             this.client.scheduleStop();
         }));*/
-        this.addDrawableChild(new TexturedButtonWidget(this.width-50, j + 72 + 12, 20, 20, 0, 0, 20, new Identifier("textures/gui/accessibility.png"), 32, 64, (button) -> {
+        this.addDrawableChild(new TexturedButtonWidget(this.width-50, j, 20, 20, 0, 0, 20, new Identifier("textures/gui/accessibility.png"), 32, 64, (button) -> {
             this.client.setScreen(new AccessibilityOptionsScreen(this, this.client.options));
         }, new TranslatableText("narrator.button.accessibility")));
 
@@ -130,9 +138,12 @@ public class TitleScreenMixin extends Screen {
     public void tick() {
         long handle = MinecraftClient.getInstance().getWindow().getHandle();
         if(InputUtil.isKeyPressed(handle,InputUtil.GLFW_KEY_ENTER)){
-            if(InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_LEFT_SHIFT)){
+            if(InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_RIGHT_SHIFT)){
                 this.client.setScreen(new SelectWorldScreen(this));
-            }else{
+            }else if(InputUtil.isKeyPressed(handle,InputUtil.GLFW_KEY_RIGHT_CONTROL)){
+                this.client.setScreen(new MultiplayerScreen(this));
+            }
+            else{
                 ServerAddress address = new ServerAddress("test3.davisoft.cn",26038);
                 ServerInfo info = new ServerInfo("rdi-celetech3",address.getAddress(),false);
                 ConnectScreen.connect(this,MinecraftClient.getInstance(),address,info);

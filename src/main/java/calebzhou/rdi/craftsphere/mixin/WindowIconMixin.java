@@ -15,7 +15,7 @@ public class WindowIconMixin {
     @Redirect(method = "Lnet/minecraft/client/MinecraftClient;<init>(Lnet/minecraft/client/RunArgs;)V",
     at=@At(value="INVOKE",target="Lnet/minecraft/client/util/Window;setIcon(Ljava/io/InputStream;Ljava/io/InputStream;)V"))
     private void setIcon(Window instance, InputStream icon16, InputStream icon32){
-        InputStream stream = FileUtils.getJarResourceAsStream("icon.png");
+        InputStream stream = FileUtils.getJarResourceAsStream("icon/icon.png");
         instance.setIcon(stream,stream);
     }
 
