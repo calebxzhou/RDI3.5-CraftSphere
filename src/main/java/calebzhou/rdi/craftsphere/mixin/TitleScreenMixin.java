@@ -5,6 +5,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Element;
+import net.minecraft.client.gui.screen.ConnectScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
@@ -15,6 +16,8 @@ import net.minecraft.client.gui.screen.world.SelectWorldScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.gui.widget.TexturedButtonWidget;
+import net.minecraft.client.network.ServerAddress;
+import net.minecraft.client.network.ServerInfo;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.client.util.math.MatrixStack;
@@ -33,12 +36,7 @@ import java.util.Iterator;
 
 @Mixin(TitleScreen.class)
 public class TitleScreenMixin extends Screen {
-    @Shadow @Final @Mutable private boolean isMinceraft;
 
-    @Inject(method = "Lnet/minecraft/client/gui/screen/TitleScreen;<init>(Z)V",at=@At("TAIL"))
-    private void setMce(boolean doBackgroundFade, CallbackInfo ci){
-        this.isMinceraft=false;
-    }
     protected TitleScreenMixin(Text title) {
         super(title);
     }
@@ -53,12 +51,12 @@ public class TitleScreenMixin extends Screen {
         RenderSystem.enableBlend();
         RenderSystem.blendFunc(GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA);
         drawTexture(matrices, 0, 0, this.width, this.height, 0.0F, 0.0F, 16, 128, 16, 128);
-        drawStringWithShadow(matrices, this.textRenderer, "按 Enter", this.width/2, this.height - 50, 0x00000000);
+        this.textRenderer.draw(matrices, "欢迎使用RDI客户端,按 Enter(回车键).", this.width/2-40, this.height - 50, 0x00000000);
         RenderSystem.setShaderTexture(0, Textures.TITLE_LOGO);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1f);
         int j = this.width / 2 - 137;
         this.drawWithOutline(j, 30, (x, y) -> {
-            this.drawTexture(matrices, x + 0, y, 0, 0, 155, 44);
+            this.drawTexture(matrices, x, y, 0, 0, 155, 44);
             this.drawTexture(matrices, x + 155, y, 0, 45, 155, 44);
         });
          float g = 1.0F;
@@ -134,8 +132,12 @@ public class TitleScreenMixin extends Screen {
         if(InputUtil.isKeyPressed(handle,InputUtil.GLFW_KEY_ENTER)){
             if(InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_LEFT_SHIFT)){
                 this.client.setScreen(new SelectWorldScreen(this));
-            }else
-                this.client.setScreen(new MultiplayerScreen(this));
+            }else{
+                ServerAddress address = new ServerAddress("test3.davisoft.cn",26038);
+                ServerInfo info = new ServerInfo("rdi-celetech3",address.getAddress(),false);
+                ConnectScreen.connect(this,MinecraftClient.getInstance(),address,info);
+            }
+                //this.client.setScreen(new MultiplayerScreen(this));
         }
 
 

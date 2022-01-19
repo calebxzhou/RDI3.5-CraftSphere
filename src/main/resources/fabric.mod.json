@@ -15,7 +15,6 @@
 
   "license": "CC0-1.0",
   "icon": "assets/rdi-craftsphere/icon.png",
-  "accessWidener" : "modid.accesswidener",
   "environment": "*",
   "entrypoints": {
     "main": [
