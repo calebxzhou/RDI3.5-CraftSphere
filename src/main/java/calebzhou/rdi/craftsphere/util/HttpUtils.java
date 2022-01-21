@@ -1,11 +1,16 @@
 package calebzhou.rdi.craftsphere.util;
 
+import calebzhou.rdi.craftsphere.model.ApiResponse;
 import com.google.gson.Gson;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
@@ -20,9 +25,27 @@ public class HttpUtils {
         return null;
     }
 
-    public static String sendRequest(String type,String shortUrl,String... params){
-        URL url=getFullUrl(shortUrl);
-        String param=concatParams(params);
+
+
+    public static ApiResponse sendRequest(String type, String shortUrl, String... params){
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .method(type, concatParams(params))
+                .uri(URI.create(ADDR + shortUrl))
+                .setHeader("User-Agent", "RDI-MC-Client")
+                .header("Content-Type", "application/x-www-form-urlencoded;charset=utf-8")
+                .build();
+        try {
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            return new Gson().fromJson(response.body(),ApiResponse.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return null;
+        }
+       /* URL url=getFullUrl(shortUrl);
         HttpURLConnection connection = null;
         try {
             connection = (HttpURLConnection) url.openConnection();
@@ -57,8 +80,8 @@ public class HttpUtils {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        connection.disconnect();
-        return result;
+        connection.disconnect();*/
+
     }
     //类名= url POST
     public static <T extends Serializable> void asyncSendObject(T object){
@@ -73,13 +96,13 @@ public class HttpUtils {
     public static <T extends Serializable> void asyncSendObject(String type,String shortUrl, T object, String params){
         ThreadPool.newThread(()-> sendRequest(type,shortUrl, "obj="+new Gson().toJson(object),params));
     }
-    private static String concatParams(String ... params){
+    private static HttpRequest.BodyPublisher concatParams(String ... params){
         StringBuilder sb = new StringBuilder();
         Arrays.stream(params).forEach((param)->{
             sb.append(param);
             sb.append("&");
         });
-        return sb.toString();
+        return HttpRequest.BodyPublishers.ofString(sb.toString());
     }
     /*public static String post(String shortUrl,String... params){
         return doPost(ADDR+shortUrl,concatParams(params));
