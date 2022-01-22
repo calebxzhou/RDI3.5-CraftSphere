@@ -38,8 +38,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.Iterator;
 
 @Mixin(TitleScreen.class)
-public class TitleScreenMixin extends Screen {
-   // private static String weather="正在载入天气预报";
+public abstract class TitleScreenMixin extends Screen {
+    @Shadow public abstract void removed();
+
+    // private static String weather="正在载入天气预报";
     protected TitleScreenMixin(Text title) {
         super(title);
     }
@@ -54,16 +56,16 @@ public class TitleScreenMixin extends Screen {
         RenderSystem.enableBlend();
         RenderSystem.blendFunc(GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA);
         drawTexture(matrices, 0, 0, this.width, this.height, 0.0F, 0.0F, 16, 128, 16, 128);
-        this.textRenderer.draw(matrices, "按 Enter", (this.width/2.0f), this.height - 50, 0x00000000);
+       // this.textRenderer.draw(matrices, "按 Enter", (this.width/2.0f), this.height - 50, 0x00000000);
        // this.textRenderer.draw(matrices, weather, 0, this.height - 25, 0x00000000);
 
-        RenderSystem.setShaderTexture(0, Textures.TITLE_LOGO);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1f);
+       // RenderSystem.setShaderTexture(0, Textures.TITLE_LOGO);
+        //RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1f);
         int j = this.width / 2 - 137;
-        this.drawWithOutline(j, 30, (x, y) -> {
+        /*this.drawWithOutline(j, 30, (x, y) -> {
             this.drawTexture(matrices, x, y, 0, 0, 155, 44);
             this.drawTexture(matrices, x + 155, y, 0, 45, 155, 44);
-        });
+        });*/
          float g = 1.0F;
         int l = MathHelper.ceil(g * 255.0F) << 24;
         if ((l & -67108864) != 0) {
@@ -88,17 +90,17 @@ public class TitleScreenMixin extends Screen {
             ApiResponse response = HttpUtils.sendRequest("GET", "getWeather");
             this.weather=response.getMessage();
         });*/
-        int j = this.height-25;
+        int j = this.height-20;
         /*this.addDrawableChild(new TexturedButtonWidget(this.width / 2 - 124, j + 72 + 12, 20, 20, 0, 106, 20, ButtonWidget.WIDGETS_TEXTURE, 256, 256, (button) -> {
             this.client.setScreen(new LanguageOptionsScreen(this, this.client.options, this.client.getLanguageManager()));
         }, new TranslatableText("narrator.button.language")));*/
-        this.addDrawableChild(new TexturedButtonWidget(this.width -25, j, 20, 20, 0,0,20,Textures.ICON_SETTINGS,32,64, (button) -> {
+        this.addDrawableChild(new TexturedButtonWidget(this.width -20, j, 20, 20, 0,0,20,Textures.ICON_SETTINGS,32,64, (button) -> {
             this.client.setScreen(new OptionsScreen(this, this.client.options));
         }, new TranslatableText("menu.options")));
         /*this.addDrawableChild(new ButtonWidget(this.width / 2 + 2, j + 72 + 12, 98, 20, new TranslatableText("menu.quit"), (button) -> {
             this.client.scheduleStop();
         }));*/
-        this.addDrawableChild(new TexturedButtonWidget(this.width-50, j, 20, 20, 0, 0, 20, new Identifier("textures/gui/accessibility.png"), 32, 64, (button) -> {
+        this.addDrawableChild(new TexturedButtonWidget(this.width-40, j, 20, 20, 0, 0, 20, new Identifier("textures/gui/accessibility.png"), 32, 64, (button) -> {
             this.client.setScreen(new AccessibilityOptionsScreen(this, this.client.options));
         }, new TranslatableText("narrator.button.accessibility")));
 
@@ -138,17 +140,19 @@ public class TitleScreenMixin extends Screen {
     @Overwrite
     public void tick() {
         long handle = MinecraftClient.getInstance().getWindow().getHandle();
+        if(InputUtil.isKeyPressed(handle,InputUtil.GLFW_KEY_F1)){
+            MinecraftClient.getInstance().setScreen(new MultiplayerScreen(this));
+            return;
+        }
+        if(InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_F3)){
+            MinecraftClient.getInstance().setScreen(new SelectWorldScreen(this));
+            return;
+        }
         if(InputUtil.isKeyPressed(handle,InputUtil.GLFW_KEY_ENTER)){
-            if(InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_RIGHT_SHIFT)){
-                this.client.setScreen(new SelectWorldScreen(this));
-            }else if(InputUtil.isKeyPressed(handle,InputUtil.GLFW_KEY_RIGHT_CONTROL)){
-                this.client.setScreen(new MultiplayerScreen(this));
-            }
-            else{
-                ServerAddress address = new ServerAddress("test3.davisoft.cn",26038);
-                ServerInfo info = new ServerInfo("rdi-celetech3",address.getAddress(),false);
-                ConnectScreen.connect(this,MinecraftClient.getInstance(),address,info);
-            }
+            ServerAddress address = new ServerAddress("test3.davisoft.cn",26038);
+            ServerInfo info = new ServerInfo("rdi-celetech3",address.getAddress(),false);
+            ConnectScreen.connect(this,MinecraftClient.getInstance(),address,info);
+
                 //this.client.setScreen(new MultiplayerScreen(this));
         }
 

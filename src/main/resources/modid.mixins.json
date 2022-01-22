@@ -11,7 +11,9 @@
     "TitleScreenClientMixin",
     "TitleScreenMixin",
     "WindowTitleMixin",
-    "MixinGameMenuScreen"
+    "MixinClientLoginHandler",
+    "MixinConnectScreen",
+    "MixinPauseMenu"
   ],
   "injectors": {
     "defaultRequire": 1
