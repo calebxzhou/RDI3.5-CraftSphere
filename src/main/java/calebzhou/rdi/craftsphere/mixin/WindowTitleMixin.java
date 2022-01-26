@@ -12,6 +12,6 @@ public class WindowTitleMixin {
      */
     @Overwrite
     private String getWindowTitle(){
-        return "RDI空岛 3.0Beta3  2022/01/26";
+        return "RDI 天空科技 3.0Beta3  2022/01/26";
     }
 }

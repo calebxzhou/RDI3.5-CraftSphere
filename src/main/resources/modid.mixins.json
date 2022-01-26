@@ -4,16 +4,17 @@
   "package": "calebzhou.rdi.craftsphere.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-
+    "MixinDrawableHelper",
+    "MixinLoggerLoading"
   ],
   "client": [
+    "MixinClientLoginHandler",
+    "MixinConnectScreen",
+    "MixinPauseMenu",
     "SplashMixin",
     "TitleScreenClientMixin",
     "TitleScreenMixin",
-    "WindowTitleMixin",
-    "MixinClientLoginHandler",
-    "MixinConnectScreen",
-    "MixinPauseMenu"
+    "WindowTitleMixin"
   ],
   "injectors": {
     "defaultRequire": 1

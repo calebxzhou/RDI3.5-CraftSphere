@@ -35,6 +35,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 
 @Mixin(TitleScreen.class)
@@ -103,7 +104,21 @@ public abstract class TitleScreenMixin extends Screen {
         this.addDrawableChild(new TexturedButtonWidget(this.width-40, j, 20, 20, 0, 0, 20, new Identifier("textures/gui/accessibility.png"), 32, 64, (button) -> {
             this.client.setScreen(new AccessibilityOptionsScreen(this, this.client.options));
         }, new TranslatableText("narrator.button.accessibility")));
-
+        this.addDrawableChild(new TexturedButtonWidget(this.width-60, j, 20, 20, 0, 0, 20, Textures.ICON_MODMENU, 32, 64, (button) -> {
+            try {
+                this.client.setScreen((Screen) Class.forName("com.terraformersmc.modmenu.gui.ModsScreen").getConstructor(Screen.class).newInstance(this));
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }, new TranslatableText("Mods")));
     }
     /**
      * @author
