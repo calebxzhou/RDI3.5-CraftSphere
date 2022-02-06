@@ -15,7 +15,7 @@ public class PauseScreen extends Screen {
     private final boolean showMenu;
     public PauseScreen(boolean showMenu) {
         super(new LiteralText("菜单"));
-        this.showMenu=showMenu;
+        this.showMenu=true;
     }
 
     @Override

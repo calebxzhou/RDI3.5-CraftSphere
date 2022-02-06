@@ -1,42 +1,55 @@
 package calebzhou.rdi.craftsphere.screen;
 
-import calebzhou.rdi.craftsphere.texture.Textures;
-import net.minecraft.client.gui.screen.SaveLevelScreen;
+import calebzhou.rdi.craftsphere.util.RandomUtils;
+import com.google.common.collect.ImmutableList;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.PresetsScreen;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.ScreenTexts;
 import net.minecraft.client.gui.screen.TitleScreen;
-import net.minecraft.client.gui.screen.option.OptionsScreen;
-import net.minecraft.client.gui.widget.TexturedButtonWidget;
+import net.minecraft.client.gui.screen.option.*;
+import net.minecraft.client.gui.screen.pack.PackScreen;
+import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.world.GeneratorType;
+import net.minecraft.resource.DataPackSettings;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.TranslatableText;
+import net.minecraft.world.Difficulty;
+import net.minecraft.world.GameMode;
+import net.minecraft.world.GameRules;
+import net.minecraft.world.gen.GeneratorOptions;
+import net.minecraft.world.gen.chunk.FlatChunkGeneratorConfig;
+import net.minecraft.world.level.LevelInfo;
 
-public class IslandScreen extends Screen {
-    public IslandScreen() {
-        super(new LiteralText("菜单"));
+import java.util.function.Consumer;
+
+public class IslandScreen extends BasicScreen {
+    public IslandScreen(Screen titleScreen) {
+        super("请选择操作：",titleScreen,true,false);
     }
 
     @Override
     protected void init() {
-            initWidgets();
-    }
-    private void initWidgets(){
-        int w = this.width /2 - 10;
-        int j = this.height / 2 - 50;
-        this.addDrawableChild(new TexturedButtonWidget(w - 25, j, 20, 20, 0,0,20, Textures.ICON_CONTINUE,32,64, (button) -> {
-            this.client.setScreen(null);
-            this.client.mouse.lockCursor();
-        },  new TranslatableText("menu.returnToGame")));
+        this.addDrawableChild(new ButtonWidget(this.width / 2 - 155, this.height / 6 + 48 - 6, 150, 20, new LiteralText("创建新的空岛"), (button) -> {
+            handleCreate();
+        }));
+        this.addDrawableChild(new ButtonWidget(this.width / 2 + 5, this.height / 6 + 48 - 6, 150, 20, new TranslatableText("加入朋友的空岛"), (button) -> {
+        this.client.setScreen(new JoinIslandScreen(this));
+        }));
 
-        this.addDrawableChild(new TexturedButtonWidget(w , j, 20, 20, 0,0,20, Textures.ICON_SETTINGS,32,64, (button) -> {
-            this.client.setScreen(new OptionsScreen(this, this.client.options));
-        }, new TranslatableText("menu.options")));
-        this.addDrawableChild(new TexturedButtonWidget(w + 25, j, 20, 20, 0, 0, 20, Textures.ICON_QUIT, 32, 64, (button) -> {
-            if(this.client.isInSingleplayer())
-                this.client.disconnect(new SaveLevelScreen(new TranslatableText("menu.savingLevel")));
-            else
-                this.client.disconnect();
-            this.client.setScreen(new TitleScreen());
-        }, new TranslatableText("menu.disconnect")));
+    }
+
+    private void handleCreate() {
+        String name = MinecraftClient.getInstance().getSession().getUsername();
+        String iid = RandomUtils.getRandomIslandId();
+        String worldName = "island-"+name+"-"+iid;
+        String superflatPreset = "minecraft:air;minecraft:plains";
+        /*DataPackSettings dataPackSettings =  new DataPackSettings(ImmutableList.of("vanilla"), ImmutableList.of());
+        LevelInfo levelInfo = new LevelInfo(worldName, GameMode.SURVIVAL,false, Difficulty.HARD,false,new GameRules(),dataPackSettings);
+        FlatChunkGeneratorConfig flatChunkGeneratorConfig = PresetsScreen.parsePresetString(registry, superflatPreset, this.config);
+
+        GeneratorType generatorType = GeneratorType.fromGeneratorOptions(GeneratorOptions.createGenerator());*/
     }
 
     @Override
@@ -46,7 +59,7 @@ public class IslandScreen extends Screen {
 
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        drawCenteredText(matrices, this.textRenderer, this.title, this.width / 2, 40, 16777215);
         super.render(matrices, mouseX, mouseY, delta);
+
     }
 }

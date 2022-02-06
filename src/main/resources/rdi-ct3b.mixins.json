@@ -1,0 +1,27 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "calebzhou.rdi.craftsphere.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "MixinAncientChn3"
+  ],
+  "client": [
+    "MixinAncientChineseSupport",
+    "MixinAncientChn2",
+    "MixinClientLoginHandler",
+    "MixinConnectScreen",
+    "MixinDrawableHelper",
+    "MixinFoodDirectEat",
+    "MixinLoggerLoading",
+    "MixinPauseMenu",
+    "MixinPlayerHud",
+    "SplashMixin",
+    "TitleScreenClientMixin",
+    "TitleScreenMixin",
+    "WindowTitleMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

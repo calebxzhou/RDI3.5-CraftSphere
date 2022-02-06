@@ -1,5 +1,6 @@
 package calebzhou.rdi.craftsphere.mixin;
 
+import calebzhou.rdi.craftsphere.ExampleMod;
 import net.minecraft.client.MinecraftClient;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -12,6 +13,6 @@ public class WindowTitleMixin {
      */
     @Overwrite
     private String getWindowTitle(){
-        return "RDI 天空科技 3.0Beta3  2022/01/26";
+        return ExampleMod.MODID_CHN+" "+ ExampleMod.VER;
     }
 }

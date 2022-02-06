@@ -1,7 +1,10 @@
 package calebzhou.rdi.craftsphere.mixin;
 
 import calebzhou.rdi.craftsphere.model.ApiResponse;
+import calebzhou.rdi.craftsphere.screen.IslandScreen;
+import calebzhou.rdi.craftsphere.sound.TitleScreenSound;
 import calebzhou.rdi.craftsphere.texture.Textures;
+import calebzhou.rdi.craftsphere.util.DialogUtils;
 import calebzhou.rdi.craftsphere.util.HttpUtils;
 import calebzhou.rdi.craftsphere.util.ThreadPool;
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -29,17 +32,22 @@ import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
+import org.lwjgl.glfw.GLFW;
+import org.lwjgl.util.tinyfd.TinyFileDialogs;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import javax.swing.*;
+import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 
 @Mixin(TitleScreen.class)
 public abstract class TitleScreenMixin extends Screen {
+    private static boolean isPlayingMusic = false;
     @Shadow public abstract void removed();
 
     // private static String weather="正在载入天气预报";
@@ -63,10 +71,7 @@ public abstract class TitleScreenMixin extends Screen {
        // RenderSystem.setShaderTexture(0, Textures.TITLE_LOGO);
         //RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1f);
         int j = this.width / 2 - 137;
-        /*this.drawWithOutline(j, 30, (x, y) -> {
-            this.drawTexture(matrices, x, y, 0, 0, 155, 44);
-            this.drawTexture(matrices, x + 155, y, 0, 45, 155, 44);
-        });*/
+
          float g = 1.0F;
         int l = MathHelper.ceil(g * 255.0F) << 24;
         if ((l & -67108864) != 0) {
@@ -81,41 +86,31 @@ public abstract class TitleScreenMixin extends Screen {
             }
             super.render(matrices, mouseX, mouseY, delta);
         }
+        if(!isPlayingMusic){
+            MinecraftClient.getInstance().getSoundManager().play(new TitleScreenSound());
+            System.out.println("play music");
+            isPlayingMusic=true;
+        }
     }
     /**
      * @author
      */
     @Overwrite
     public void init() {
-        /*ThreadPool.newThread(()->{
-            ApiResponse response = HttpUtils.sendRequest("GET", "getWeather");
-            this.weather=response.getMessage();
-        });*/
+
+
         int j = this.height-20;
-        /*this.addDrawableChild(new TexturedButtonWidget(this.width / 2 - 124, j + 72 + 12, 20, 20, 0, 106, 20, ButtonWidget.WIDGETS_TEXTURE, 256, 256, (button) -> {
-            this.client.setScreen(new LanguageOptionsScreen(this, this.client.options, this.client.getLanguageManager()));
-        }, new TranslatableText("narrator.button.language")));*/
         this.addDrawableChild(new TexturedButtonWidget(this.width -20, j, 20, 20, 0,0,20,Textures.ICON_SETTINGS,32,64, (button) -> {
             this.client.setScreen(new OptionsScreen(this, this.client.options));
         }, new TranslatableText("menu.options")));
-        /*this.addDrawableChild(new ButtonWidget(this.width / 2 + 2, j + 72 + 12, 98, 20, new TranslatableText("menu.quit"), (button) -> {
-            this.client.scheduleStop();
-        }));*/
         this.addDrawableChild(new TexturedButtonWidget(this.width-40, j, 20, 20, 0, 0, 20, new Identifier("textures/gui/accessibility.png"), 32, 64, (button) -> {
             this.client.setScreen(new AccessibilityOptionsScreen(this, this.client.options));
         }, new TranslatableText("narrator.button.accessibility")));
         this.addDrawableChild(new TexturedButtonWidget(this.width-60, j, 20, 20, 0, 0, 20, Textures.ICON_MODMENU, 32, 64, (button) -> {
             try {
                 this.client.setScreen((Screen) Class.forName("com.terraformersmc.modmenu.gui.ModsScreen").getConstructor(Screen.class).newInstance(this));
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException | ClassNotFoundException e) {
+                DialogUtils.showError("必须安装ModMenu模组以使用本功能！！");
                 e.printStackTrace();
             }
         }, new TranslatableText("Mods")));
@@ -154,6 +149,7 @@ public abstract class TitleScreenMixin extends Screen {
      */
     @Overwrite
     public void tick() {
+
         long handle = MinecraftClient.getInstance().getWindow().getHandle();
         if(InputUtil.isKeyPressed(handle,InputUtil.GLFW_KEY_F1)){
             MinecraftClient.getInstance().setScreen(new MultiplayerScreen(this));
@@ -164,6 +160,7 @@ public abstract class TitleScreenMixin extends Screen {
             return;
         }
         if(InputUtil.isKeyPressed(handle,InputUtil.GLFW_KEY_ENTER)){
+            //MinecraftClient.getInstance().setScreen(new IslandScreen(this));
             ServerAddress address = new ServerAddress("test3.davisoft.cn",26038);
             ServerInfo info = new ServerInfo("rdi-celetech3",address.getAddress(),false);
             ConnectScreen.connect(this,MinecraftClient.getInstance(),address,info);
