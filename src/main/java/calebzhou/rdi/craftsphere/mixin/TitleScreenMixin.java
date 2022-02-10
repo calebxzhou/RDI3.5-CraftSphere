@@ -25,9 +25,11 @@ import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.gui.widget.TexturedButtonWidget;
 import net.minecraft.client.network.ServerAddress;
 import net.minecraft.client.network.ServerInfo;
+import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
@@ -115,11 +117,11 @@ public abstract class TitleScreenMixin extends Screen {
             }
             super.render(matrices, mouseX, mouseY, delta);
         }
-        if(!isPlayingMusic){
+        /*if(!isPlayingMusic){
             MinecraftClient.getInstance().getSoundManager().play(new TitleScreenSound());
             System.out.println("play music");
             isPlayingMusic=true;
-        }
+        }*/
         ++frames;
     }
     /**
@@ -127,7 +129,7 @@ public abstract class TitleScreenMixin extends Screen {
      */
     @Overwrite
     public void init() {
-
+        MinecraftClient.getInstance().options.setSoundVolume(SoundCategory.MUSIC,0);
 
         this.addDrawableChild(new TexturedButtonWidget(this.width -10, this.height-10, 10, 10, 0,0,20,Textures.ICON_SETTINGS,16,32, (button) -> {
             this.client.setScreen(new OptionsScreen(this, this.client.options));
@@ -190,11 +192,11 @@ public abstract class TitleScreenMixin extends Screen {
         }
         if(InputUtil.isKeyPressed(handle,InputUtil.GLFW_KEY_ENTER)){
             //MinecraftClient.getInstance().setScreen(new IslandScreen(this));
-            ServerAddress address = new ServerAddress("test3.davisoft.cn",26038);
+            ServerAddress address = new ServerAddress("test3.davisoft.cn",26088);
             ServerInfo info = new ServerInfo("rdi-celetech3",address.getAddress(),false);
             ConnectScreen.connect(this,MinecraftClient.getInstance(),address,info);
-
-                //this.client.setScreen(new MultiplayerScreen(this));
+            MinecraftClient.getInstance().options.setSoundVolume(SoundCategory.MUSIC,1);
+                //this.cli    ent.setScreen(new MultiplayerScreen(this));
         }
 
 

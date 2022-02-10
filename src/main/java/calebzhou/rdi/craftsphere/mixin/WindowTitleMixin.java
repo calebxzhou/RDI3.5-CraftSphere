@@ -13,6 +13,6 @@ public class WindowTitleMixin {
      */
     @Overwrite
     private String getWindowTitle(){
-        return ExampleMod.MODID_CHN+" "+ ExampleMod.VER;
+        return ExampleMod.MODID_CHN+" "+ ExampleMod.VER_DISPLAY;
     }
 }

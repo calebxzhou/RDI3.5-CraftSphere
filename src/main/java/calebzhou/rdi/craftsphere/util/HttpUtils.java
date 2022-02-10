@@ -15,7 +15,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 public class HttpUtils {
-    private static final String ADDR="http://localhost:26888/api_v1_public/";
+    public static final String ADDR="http://www.davisoft.cn:26888/public";
+    public static final String UPDATE_ADDR="/update";
     public static URL getFullUrl(String shortUrl){
         try {
             return new URL(ADDR + shortUrl);

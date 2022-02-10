@@ -1,5 +1,6 @@
 package calebzhou.rdi.craftsphere.mixin;
 
+import calebzhou.rdi.craftsphere.RdiConfigure;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.resource.language.LanguageDefinition;
@@ -19,10 +20,9 @@ import java.util.Map;
 
 @Mixin(LanguageManager.class)
 public class MixinAncientChineseSupport {
-    @Shadow @Final @Mutable public static String DEFAULT_LANGUAGE_CODE = "zh_cn";
+    @Shadow @Final @Mutable public static String DEFAULT_LANGUAGE_CODE = RdiConfigure.getConfig().setDefaultLanguageToChinese?"zh_cn":"en_us";
     @Shadow @Mutable
-    private static LanguageDefinition ENGLISH_US =
-            new LanguageDefinition("zh_cn", "中国", "简体中文", false);
+    private static LanguageDefinition ENGLISH_US = RdiConfigure.getConfig().setDefaultLanguageToChinese?new LanguageDefinition("zh_cn", "中国", "简体中文", false): new LanguageDefinition("en_us", "US", "English", false);;
 
     @ModifyConstant(
             method = "Lnet/minecraft/client/resource/language/LanguageManager;<init>(Ljava/lang/String;)V",
@@ -31,7 +31,7 @@ public class MixinAncientChineseSupport {
             )
     )
     private static String chn1(String constant){
-        return "zh_cn";
+        return RdiConfigure.getConfig().setDefaultLanguageToChinese?"zh_cn":"en_us";
     }
     @ModifyConstant(
             method = "Lnet/minecraft/client/resource/language/LanguageManager;reload(Lnet/minecraft/resource/ResourceManager;)V",
@@ -40,24 +40,9 @@ public class MixinAncientChineseSupport {
             )
     )
     private static String chn2(String c){
-        return "zh_cn";
+        return RdiConfigure.getConfig().setDefaultLanguageToChinese?"zh_cn":"en_us";
     }
-    /*@Redirect(
-            method = "Lnet/minecraft/client/resource/language/LanguageManager;reload(Lnet/minecraft/resource/ResourceManager;)V",
-            at=@At(value = "INVOKE",
-            target = "Ljava/util/Map;getOrDefault(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
-            ordinal = 0)
-    )
-    private Object reloadIfAncientChn(Map languageDefs, Object currentLanguageCode, Object languageDefinition){
-        System.out.println("当前语言代码"+currentLanguageCode);
-        String code = "lzh";//文言文
-        if(currentLanguageCode.equals(code)){
-            ENGLISH_US=CHN;
-            return CHN;
-        }else{
-            return languageDefs.getOrDefault(currentLanguageCode,languageDefinition);
-        }
-    }*/
+
 }
 @Mixin(Language.class)
 class MixinAncientChn2{
@@ -68,25 +53,21 @@ class MixinAncientChn2{
             constant = @Constant(stringValue = "/assets/minecraft/lang/en_us.json",ordinal = 0)
     )
     private static String cn(String constant){
-        return "/assets/minecraft/lang/zh_cn.json";
+        return RdiConfigure.getConfig().setDefaultLanguageToChinese?"/assets/minecraft/lang/zh_cn.json":"/assets/minecraft/lang/en_us.json";
     }
     @ModifyConstant(
             method = "Lnet/minecraft/util/Language;create()Lnet/minecraft/util/Language;",
             constant = @Constant(stringValue = "/assets/minecraft/lang/en_us.json",ordinal = 1)
     )
     private static String cn1(String constant){
-        return "/assets/minecraft/lang/zh_cn.json";
+        return RdiConfigure.getConfig().setDefaultLanguageToChinese?"/assets/minecraft/lang/zh_cn.json":"/assets/minecraft/lang/en_us.json";
     }
     @ModifyConstant(
             method = "Lnet/minecraft/util/Language;create()Lnet/minecraft/util/Language;",
             constant = @Constant(stringValue = "/assets/minecraft/lang/en_us.json",ordinal = 2)
     )
     private static String cn2(String constant){
-        return "/assets/minecraft/lang/zh_cn.json";
+        return RdiConfigure.getConfig().setDefaultLanguageToChinese?"/assets/minecraft/lang/zh_cn.json":"/assets/minecraft/lang/en_us.json";
     }
 }
-@Mixin(GameOptions.class)
-class MixinAncientChn3{
-    @Shadow @Mutable
-    public String language = "zh_cn";
-}
+

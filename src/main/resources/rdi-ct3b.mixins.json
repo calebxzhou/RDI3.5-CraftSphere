@@ -4,7 +4,13 @@
   "package": "calebzhou.rdi.craftsphere.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "MixinAncientChn3"
+    "AccessSystemDetails",
+    "MixinDisconnectedScreen",
+    "MixinNoUnicodeFonts",
+    "MixinNoUnicodeFonts2",
+    "MixinPlayMusic",
+    "MixinProtocol",
+    "MixinUpdater"
   ],
   "client": [
     "MixinAncientChineseSupport",

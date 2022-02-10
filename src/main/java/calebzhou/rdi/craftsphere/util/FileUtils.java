@@ -18,6 +18,8 @@ import static org.lwjgl.BufferUtils.createByteBuffer;
 import static org.lwjgl.system.MemoryUtil.memSlice;
 
 public class FileUtils {
+    public static final File GAME_FOLDER = new File(".");
+    public static final File MOD_FOLDER = new File(GAME_FOLDER,"mods");
     public static File getJarResourceFile(String fileInJar){
         return new File(getJarResourceFileUrl(fileInJar));
     }

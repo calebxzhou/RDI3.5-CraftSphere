@@ -1,7 +1,27 @@
 {
+  "adventure": {
+    "sounds": [
+      "rdi-craftsphere:adventure"
+    ]
+  },
+  "celeste": {
+    "sounds": [
+      "rdi-craftsphere:celeste"
+    ]
+  },
   "home": {
     "sounds": [
       "rdi-craftsphere:home"
+    ]
+  },
+  "module": {
+    "sounds": [
+      "rdi-craftsphere:module"
+    ]
+  },
+  "resort": {
+    "sounds": [
+      "rdi-craftsphere:resort"
     ]
   }
 }
