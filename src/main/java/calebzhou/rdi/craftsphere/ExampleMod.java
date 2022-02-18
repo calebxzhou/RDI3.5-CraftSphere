@@ -51,27 +51,8 @@ public class ExampleMod implements ModInitializer {
 
 	}
 	public void regEvents(){
-		ClientTickEvents.END_CLIENT_TICK.register(client -> {
-			if(client.isInSingleplayer() || client.getCurrentServerEntry()==null || client.player==null)
-				return;
-			//按下H键返回空岛
-			while (KeyBinds.HOME_KEY.wasPressed()) {
-					KeyBinds.notifyPlayer(KeyBinds.HOME_KEY,client.player);
-					client.player.sendChatMessage("/home");
-			}
-			//按下J键开启缓降
-			while (KeyBinds.SLOWFALL_KEY.wasPressed()) {
+		ClientTickEvents.END_WORLD_TICK.register(KeyBinds::handleKeyActions);
+		ClientTickEvents.END_WORLD_TICK.register(PlayerMotionDetect::detect);
 
-				KeyBinds.notifyPlayer(KeyBinds.SLOWFALL_KEY,client.player);
-					client.player.sendChatMessage("/slowfall 1");
-
-			}
-			//按下G键隔空跳跃
-			while (KeyBinds.LEAP_KEY.wasPressed()) {
-				KeyBinds.notifyPlayer(KeyBinds.LEAP_KEY,client.player);
-				client.player.sendChatMessage("/leap");
-
-			}
-		});
 	}
 }

@@ -22,6 +22,11 @@ public class RdiConfigure implements ConfigData {
             """)
     public boolean playBackgroundMusicOnTitleScreen = true;
 
+    @Comment("""
+            掉落速度多快时，自动开启缓降，防止摔死。速度单位为m/s，设置为-1关闭此功能
+            """)
+    public int autoSlowfallSpeed = 2;
+
     @ConfigEntry.Gui.Excluded
     private transient static boolean isReg = false;
 
