@@ -21,7 +21,8 @@
     ]
   },
   "mixins": [
-    "rdi-ct3b.mixins.json"
+    "rdi-ct3b.mixins.json",
+    "area.mixins.json"
   ],
 
   "depends": {

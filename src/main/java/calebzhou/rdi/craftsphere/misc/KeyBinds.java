@@ -1,5 +1,7 @@
 package calebzhou.rdi.craftsphere.misc;
 
+import calebzhou.rdi.craftsphere.module.area.ModelAreaSelection;
+import calebzhou.rdi.craftsphere.util.DialogUtils;
 import calebzhou.rdi.craftsphere.util.PlayerUtils;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.block.Blocks;
@@ -22,15 +24,15 @@ public class KeyBinds  {
     public static KeyBinding HOME_KEY;
     public static KeyBinding SLOWFALL_KEY;
     public static KeyBinding LEAP_KEY;
+    public static KeyBinding AREA_SELECTION_KEY;
     public static void init(){
         HOME_KEY = KeyBindingHelper.registerKeyBinding(new KeyBinding("回到空岛", InputUtil.Type.KEYSYM,GLFW.GLFW_KEY_H, MODID_CHN));
         SLOWFALL_KEY = KeyBindingHelper.registerKeyBinding(new KeyBinding("缓降", InputUtil.Type.KEYSYM,GLFW.GLFW_KEY_J, MODID_CHN));
         LEAP_KEY = KeyBindingHelper.registerKeyBinding(new KeyBinding("隔空跳跃", InputUtil.Type.KEYSYM,GLFW.GLFW_KEY_G, MODID_CHN));
+        AREA_SELECTION_KEY = KeyBindingHelper.registerKeyBinding(new KeyBinding("显示金锄头选择区域", InputUtil.Type.KEYSYM,GLFW.GLFW_KEY_K, MODID_CHN));
     }
     public static void notifyPlayer(KeyBinding key,ClientPlayerEntity player){
-        SystemToast toast = SystemToast.create(MinecraftClient.getInstance(), SystemToast.Type.TUTORIAL_HINT, new LiteralText("提示"), new TranslatableText("您按下了“"+key.getTranslationKey()+"”快捷键。"));
-        MinecraftClient.getInstance().getToastManager().add(toast);
-       // player.sendMessage(new TranslatableText("您按下了“"+key.getTranslationKey()+"”快捷键。"),false);
+        DialogUtils.showInfoIngame(new TranslatableText("您按下了“"+key.getTranslationKey()+"”快捷键。"));
     }
 
     public static void handleKeyActions(ClientWorld world) {
@@ -61,5 +63,14 @@ public class KeyBinds  {
             KeyBinds.notifyPlayer(KeyBinds.LEAP_KEY,client.player);
             client.player.sendChatMessage("/leap "+lookingAtBlock.asLong());
         }
+        while (KeyBinds.AREA_SELECTION_KEY.wasPressed()){
+            KeyBinds.notifyPlayer(KeyBinds.AREA_SELECTION_KEY,client.player);
+            if(!ModelAreaSelection.displayArea){
+                ModelAreaSelection.displayArea=true;
+            }else{
+                ModelAreaSelection.displayArea=false;
+            }
+        }
+
     }
 }

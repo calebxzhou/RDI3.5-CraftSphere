@@ -1,11 +1,9 @@
 package calebzhou.rdi.craftsphere;
 
 import calebzhou.rdi.craftsphere.misc.KeyBinds;
+import calebzhou.rdi.craftsphere.module.area.EventAreaSelection;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -18,8 +16,8 @@ public class ExampleMod implements ModInitializer {
 	public static final String MODID="rdi-craftsphere";
 	public static final String MODID_CHN="RDI 天空科技";
 	public static final int VERSION=0x3B5;
-	public static final String VER_DISPLAY ="3.0Beta5A (2022-02-12)";
-	public static Item CHECK_ITEM;
+	public static final String VER_DISPLAY ="3.0Beta5B (2022-02-21)";
+	//public static Item CHECK_ITEM;
 
 	public static Identifier[] TITLE_MUSIC_ID = new Identifier[]{
 			new Identifier(MODID,"adventure"),
@@ -27,6 +25,14 @@ public class ExampleMod implements ModInitializer {
 			new Identifier(MODID,"home"),
 			new Identifier(MODID,"module"),
 			new Identifier(MODID,"resort"),
+			new Identifier(MODID,"qpt_01"),
+			new Identifier(MODID,"qpt_02"),
+			new Identifier(MODID,"qpt_03"),
+			new Identifier(MODID,"qpt_04"),
+			new Identifier(MODID,"qpt_05"),
+			new Identifier(MODID,"qpt_06"),
+			new Identifier(MODID,"rk3"),
+			new Identifier(MODID,"rk4"),
 	};
 	public static SoundEvent[] TITLE_MUSIC = Arrays.stream(TITLE_MUSIC_ID).map(SoundEvent::new).toArray(SoundEvent[]::new);
 	// This logger is used to write text to the console and the log file.
@@ -44,8 +50,8 @@ public class ExampleMod implements ModInitializer {
 		}
 
 
-		CHECK_ITEM = new Item(new FabricItemSettings().group(ItemGroup.MISC));
-		Registry.register(Registry.ITEM, new Identifier(MODID, "island"), CHECK_ITEM);
+		/*CHECK_ITEM = new Item(new FabricItemSettings().group(ItemGroup.MISC));
+		Registry.register(Registry.ITEM, new Identifier(MODID, "island"), CHECK_ITEM);*/
 		KeyBinds.init();
 		regEvents();
 
@@ -53,6 +59,6 @@ public class ExampleMod implements ModInitializer {
 	public void regEvents(){
 		ClientTickEvents.END_WORLD_TICK.register(KeyBinds::handleKeyActions);
 		ClientTickEvents.END_WORLD_TICK.register(PlayerMotionDetect::detect);
-
+		new EventAreaSelection();
 	}
 }
