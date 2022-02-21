@@ -16,7 +16,7 @@ public class ExampleMod implements ModInitializer {
 	public static final String MODID="rdi-craftsphere";
 	public static final String MODID_CHN="RDI 天空科技";
 	public static final int VERSION=0x3B5;
-	public static final String VER_DISPLAY ="3.0Beta5B (2022-02-21)";
+	public static final String VER_DISPLAY ="3.0R1 (2022-02-22)";
 	//public static Item CHECK_ITEM;
 
 	public static Identifier[] TITLE_MUSIC_ID = new Identifier[]{

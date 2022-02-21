@@ -9,7 +9,7 @@ import net.minecraft.sound.SoundEvent;
 public class TitleScreenSound extends AbstractSoundInstance {
     public TitleScreenSound(SoundEvent event) {
         super(event, SoundCategory.AMBIENT);
-        this.repeat=true;
+        this.repeat=false;
         this.volume=0.18f;
         this.relative=false;
     }

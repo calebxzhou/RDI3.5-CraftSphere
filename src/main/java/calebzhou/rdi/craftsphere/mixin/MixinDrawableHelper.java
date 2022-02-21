@@ -11,6 +11,8 @@ import static calebzhou.rdi.craftsphere.ExampleMod.MODID;
 
 @Mixin(DrawableHelper.class)
 public class MixinDrawableHelper {
+    //去掉泥土图片显示背景
     @Shadow @Final @Mutable
-    public static Identifier OPTIONS_BACKGROUND_TEXTURE = new Identifier(MODID,"options_background.png");
+    public static Identifier OPTIONS_BACKGROUND_TEXTURE =
+            new Identifier(MODID,"options_background.png");
 }

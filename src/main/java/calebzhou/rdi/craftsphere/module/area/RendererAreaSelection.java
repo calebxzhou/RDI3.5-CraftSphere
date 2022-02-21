@@ -79,6 +79,8 @@ public class RendererAreaSelection implements DebugRenderer.Renderer{
             //p2边竖线 上
             bufferBuilder.vertex(dX + (double)i, dMaxY, dZ+lenZ).color(LIME).next();
             bufferBuilder.vertex(dX + (double)i, dMaxY, dZ+lenZ).color(1.0f, 1.0f, 0.0f, 0.0f).next();
+
+
         }
         for (i = 0; i < lenZ; ++i) {
             bufferBuilder.vertex(dX, dMinY, dZ + (double)i).color(1.0f, 1.0f, 0.0f, 0.0f).next();

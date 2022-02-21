@@ -35,10 +35,10 @@ public class PauseScreen extends Screen {
             this.client.setScreen(new OptionsScreen(this, this.client.options));
         }, new TranslatableText("menu.options")));
         this.addDrawableChild(new TexturedButtonWidget(w + 25, j, 20, 20, 0, 0, 20, Textures.ICON_QUIT, 32, 64, (button) -> {
-            if(this.client.isInSingleplayer())
+            /*if(this.client.isInSingleplayer())
                 this.client.disconnect(new SaveLevelScreen(new TranslatableText("menu.savingLevel")));
             else
-                this.client.disconnect();
+                this.client.disconnect();*/
             this.client.setScreen(new TitleScreen());
         }, new TranslatableText("menu.disconnect")));
     }
@@ -50,6 +50,7 @@ public class PauseScreen extends Screen {
 
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+
         if (this.showMenu) {
             this.renderBackground(matrices);
             drawCenteredText(matrices, this.textRenderer, this.title, this.width / 2, 40, 16777215);
