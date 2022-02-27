@@ -5,14 +5,17 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "AccessDisconnectedScreen",
+    "AccessSplashOverlay",
+    "AccessSpriteAtlasHolder",
     "AccessSystemDetails",
-    "MixinClientPlayNetworkHandler",
     "MixinDisconnectedScreen",
+    "MixinGoNewTitleScreen",
     "MixinNewLoadingOverlay",
     "MixinNoUnicodeFonts",
     "MixinNoUnicodeFonts2",
-    "MixinPlayMusic",
+    "MixinPlayMusicOnJoin",
     "MixinProtocol",
+    "MixinTextFieldWidget",
     "MixinUpdater"
   ],
   "client": [
@@ -23,9 +26,8 @@
     "MixinDrawableHelper",
     "MixinFoodDirectEat",
     "MixinPauseMenu",
-    "MixinPlayerHud",
+    "MixinTabPlayerHud",
     "MixinUsernameChecker",
-    "SplashMixin",
     "TitleScreenMixin",
     "WindowTitleMixin"
   ],

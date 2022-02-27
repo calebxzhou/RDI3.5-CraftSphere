@@ -23,11 +23,9 @@ public class MixinSelectionRenderer {
     at = @At(value = "INVOKE",target = "Lnet/minecraft/client/render/debug/DebugRenderer;render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider$Immediate;DDD)V"),
     locals = LocalCapture.CAPTURE_FAILEXCEPTION)
     private void qaess(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f positionMatrix, CallbackInfo ci){
-        if(!ModelAreaSelection.displayArea) return;
+        if(!ModelAreaSelection.isAreaSelectionMode) return;
         ModelAreaSelection mas = ModelAreaSelection.INSTANCE;
         if(mas.getP1().isEmpty() || mas.getP2().isEmpty()){
-            DialogUtils.showInfoIngame("请选择两个区域点。");
-            ModelAreaSelection.displayArea=false;
             return;
         }
         Vec3d vec3d = camera.getPos();

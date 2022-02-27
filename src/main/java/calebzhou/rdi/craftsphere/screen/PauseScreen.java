@@ -4,8 +4,10 @@ import calebzhou.rdi.craftsphere.texture.Textures;
 import net.minecraft.client.gui.screen.SaveLevelScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
+import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.screen.option.OptionsScreen;
 import net.minecraft.client.gui.widget.TexturedButtonWidget;
+import net.minecraft.client.realms.gui.screen.RealmsMainScreen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
@@ -15,7 +17,7 @@ public class PauseScreen extends Screen {
     private final boolean showMenu;
     public PauseScreen(boolean showMenu) {
         super(new LiteralText("菜单"));
-        this.showMenu=true;
+        this.showMenu=showMenu;
     }
 
     @Override
@@ -35,11 +37,22 @@ public class PauseScreen extends Screen {
             this.client.setScreen(new OptionsScreen(this, this.client.options));
         }, new TranslatableText("menu.options")));
         this.addDrawableChild(new TexturedButtonWidget(w + 25, j, 20, 20, 0, 0, 20, Textures.ICON_QUIT, 32, 64, (button) -> {
-            /*if(this.client.isInSingleplayer())
+            boolean bl = this.client.isInSingleplayer();
+            boolean bl2 = false;
+            button.active = false;
+            this.client.world.disconnect();
+            if (bl) {
                 this.client.disconnect(new SaveLevelScreen(new TranslatableText("menu.savingLevel")));
-            else
-                this.client.disconnect();*/
-            this.client.setScreen(new TitleScreen());
+            } else {
+                this.client.disconnect();
+            }
+
+            TitleScreen titleScreen = new TitleScreen();
+            if (bl) {
+                this.client.setScreen(titleScreen);
+            } else {
+                this.client.setScreen(NewTitleScreen.INSTANCE);
+            }
         }, new TranslatableText("menu.disconnect")));
     }
 

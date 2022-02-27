@@ -13,7 +13,7 @@ public class MixinUpdater {
     @Inject(method = "Lnet/minecraft/client/main/Main;main([Ljava/lang/String;)V",remap = false,at=@At("HEAD"))
     private static void upd(String[] args, CallbackInfo ci){
         ThreadPool.newThread(()->{
-           // Updater.check();
+            Updater.check();
         });
 
     }

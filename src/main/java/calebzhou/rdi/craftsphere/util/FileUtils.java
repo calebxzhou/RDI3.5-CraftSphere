@@ -1,7 +1,6 @@
 package calebzhou.rdi.craftsphere.util;
 
 import calebzhou.rdi.craftsphere.ExampleMod;
-import org.lwjgl.BufferUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,7 +28,7 @@ public class FileUtils {
     }
     public static InputStream getJarResourceAsStream(String fileInJar)
     {
-        return ExampleMod.class.getResourceAsStream("/assets/rdi-craftsphere/"+fileInJar);
+        return ExampleMod.class.getResourceAsStream("/assets/rdict3/"+fileInJar);
     }
     private static ByteBuffer resizeBuffer(ByteBuffer buffer, int newCapacity) {
         ByteBuffer newBuffer = createByteBuffer(newCapacity);

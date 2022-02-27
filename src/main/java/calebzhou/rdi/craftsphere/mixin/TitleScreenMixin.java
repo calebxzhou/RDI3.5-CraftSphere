@@ -55,7 +55,7 @@ public abstract class TitleScreenMixin{
     @Redirect(method = "Lnet/minecraft/client/MinecraftClient;<init>(Lnet/minecraft/client/RunArgs;)V",
     at=@At(value = "INVOKE",target = "Lnet/minecraft/client/MinecraftClient;setScreen(Lnet/minecraft/client/gui/screen/Screen;)V"))
     private void qafdqwd(MinecraftClient instance, Screen screen){
-        instance.setScreen(new NewTitleScreen());
+        instance.setScreen(NewTitleScreen.INSTANCE);
     }
     /**
      * @author

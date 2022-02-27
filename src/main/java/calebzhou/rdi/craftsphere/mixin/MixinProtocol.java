@@ -11,9 +11,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(MinecraftVersion.class)
 public class MixinProtocol {
-    /**
-     * @author
-     */
     @Shadow
     @Final
     @Mutable
@@ -24,7 +21,7 @@ public class MixinProtocol {
             method = "Lnet/minecraft/MinecraftVersion;<init>(Lcom/google/gson/JsonObject;)V",
             at=@At("TAIL")
     )
-    private void asdasdcx(JsonObject json, CallbackInfo ci){
+    private void changeProtocolVersion(JsonObject json, CallbackInfo ci){
         protocolVersion=ExampleMod.VERSION;
     }
 }

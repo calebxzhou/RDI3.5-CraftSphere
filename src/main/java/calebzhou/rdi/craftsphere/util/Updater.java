@@ -21,7 +21,7 @@ public class Updater {
             return;
         }
         if(!data.equals(String.valueOf(ExampleMod.VERSION))){
-            if (DialogUtils.showYesNo("检测到了客户端有更新，请您去群文件下载新版。")) {
+            if (DialogUtils.showYesNo("检测到了客户端有更新，建议您去群文件下载新版。")) {
                 System.exit(0);
             }
         }

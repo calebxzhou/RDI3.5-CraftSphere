@@ -5,6 +5,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.*;
 import net.minecraft.client.render.debug.DebugRenderer;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
@@ -106,5 +107,12 @@ public class RendererAreaSelection implements DebugRenderer.Renderer{
         RenderSystem.lineWidth(2.0f);
         RenderSystem.enableBlend();
         RenderSystem.enableTexture();
+    }
+
+
+    //在游戏画面的右上方显示区域选择信息
+    public static void renderSelectionHud(ClientWorld clientWorld) {
+
+
     }
 }

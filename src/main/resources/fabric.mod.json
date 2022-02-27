@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "rdi-craftsphere",
+  "id": "rdict3",
   "version": "${version}",
 
   "name": "RDI CraftSphere",
@@ -22,7 +22,8 @@
   },
   "mixins": [
     "rdi-ct3b.mixins.json",
-    "area.mixins.json"
+    "area.mixins.json",
+    "mobspawn.mixins.json"
   ],
 
   "depends": {

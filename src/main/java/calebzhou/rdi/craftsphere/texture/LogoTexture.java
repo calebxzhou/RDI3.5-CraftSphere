@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.io.InputStream;
 @Environment(EnvType.CLIENT)
 public class LogoTexture extends ResourceTexture{
-    public static Identifier LOGO= new Identifier("rdi-craftsphere:splash.png");
+    public static Identifier LOGO= new Identifier("rdict3:splash.png");
         public LogoTexture() {
             super(LOGO);
         }

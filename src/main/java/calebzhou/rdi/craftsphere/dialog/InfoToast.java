@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InfoToast implements Toast {
-    private static final long DURATION = 1000L;
+    private static final long DURATION = 3800L;
     private Text title;
     private List<OrderedText> lines;
     private long startTime;
@@ -29,7 +29,12 @@ public class InfoToast implements Toast {
         return width;
     }
 
-    public InfoToast(Text title, List<OrderedText> lines, int width,int textColor) {
+    @Override
+    public int getHeight() {
+        return 20;
+    }
+
+    public InfoToast(Text title, List<OrderedText> lines, int width, int textColor) {
         this.title = title;
         this.lines = lines;
         this.width = width;
@@ -47,7 +52,9 @@ public class InfoToast implements Toast {
             list=new ArrayList<>();
         }
         int i = Math.max(200, list.stream().mapToInt(textRenderer::getWidth).max().orElse(200));
-        return new InfoToast(title, list, i + 30,color);
+        if(title.getString().length()>68)
+            title = new LiteralText(title.asTruncatedString(68));
+        return new InfoToast(title, list, i+30,color);
     }
 
     @Override
@@ -62,19 +69,19 @@ public class InfoToast implements Toast {
         }
         RenderSystem.setShaderTexture(0, TEXTURE);
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-        int i = this.getWidth();
+        int width = this.getWidth();
         int j = 12;
-        if (i == 160 && this.lines.size() <= 1) {
-            manager.drawTexture(matrices, 0, 0, 0, 64, i, this.getHeight());
+        if (width == 160 && this.lines.size() <= 1) {
+            manager.drawTexture(matrices, 0, 0, 0, 64, width, this.getHeight());
         } else {
             k = this.getHeight() + Math.max(0, this.lines.size() - 1) * 12;
             int l = 28;
             int m = Math.min(4, k - 28);
-            this.drawPart(matrices, manager, i, 0, 0, 28);
+            this.drawPart(matrices, manager, width, 0, 0, 28);
             for (int n = 28; n < k - m; n += 10) {
-                this.drawPart(matrices, manager, i, 16, n, Math.min(16, k - n - m));
+                this.drawPart(matrices, manager, width, 16, n, Math.min(16, k - n - m));
             }
-            this.drawPart(matrices, manager, i, 32 - m, k - m, m);
+            this.drawPart(matrices, manager, width, 32 - m, k - m, m);
         }
         if (this.lines == null || this.lines.isEmpty()) {
             manager.getClient().textRenderer.draw(matrices, this.title, 18.0f, 12.0f, textColor);

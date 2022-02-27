@@ -8,10 +8,8 @@ import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.toast.SystemToast;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.math.BlockPos;
 import org.lwjgl.glfw.GLFW;
@@ -24,15 +22,12 @@ public class KeyBinds  {
     public static KeyBinding HOME_KEY;
     public static KeyBinding SLOWFALL_KEY;
     public static KeyBinding LEAP_KEY;
-    public static KeyBinding AREA_SELECTION_KEY;
+   // public static KeyBinding AREA_SELECTION_KEY;
     public static void init(){
         HOME_KEY = KeyBindingHelper.registerKeyBinding(new KeyBinding("回到空岛", InputUtil.Type.KEYSYM,GLFW.GLFW_KEY_H, MODID_CHN));
         SLOWFALL_KEY = KeyBindingHelper.registerKeyBinding(new KeyBinding("缓降", InputUtil.Type.KEYSYM,GLFW.GLFW_KEY_J, MODID_CHN));
         LEAP_KEY = KeyBindingHelper.registerKeyBinding(new KeyBinding("隔空跳跃", InputUtil.Type.KEYSYM,GLFW.GLFW_KEY_G, MODID_CHN));
-        AREA_SELECTION_KEY = KeyBindingHelper.registerKeyBinding(new KeyBinding("显示金锄头选择区域", InputUtil.Type.KEYSYM,GLFW.GLFW_KEY_K, MODID_CHN));
-    }
-    public static void notifyPlayer(KeyBinding key,ClientPlayerEntity player){
-        DialogUtils.showInfoIngame(new TranslatableText("您按下了“"+key.getTranslationKey()+"”快捷键。"));
+     //   AREA_SELECTION_KEY = KeyBindingHelper.registerKeyBinding(new KeyBinding("进入区域选择模式(金锄头)", InputUtil.Type.KEYSYM,GLFW.GLFW_KEY_K, MODID_CHN));
     }
 
     public static void handleKeyActions(ClientWorld world) {
@@ -41,13 +36,11 @@ public class KeyBinds  {
             return;
         //按下H键返回空岛
         while (KeyBinds.HOME_KEY.wasPressed()) {
-            KeyBinds.notifyPlayer(KeyBinds.HOME_KEY,client.player);
             client.player.sendChatMessage("/home");
         }
         //按下J键开启缓降
         while (KeyBinds.SLOWFALL_KEY.wasPressed()) {
 
-            KeyBinds.notifyPlayer(KeyBinds.SLOWFALL_KEY,client.player);
             client.player.sendChatMessage("/slowfall 1");
 
         }
@@ -60,17 +53,15 @@ public class KeyBinds  {
             if(client.player.getWorld().getBlockState(lookingAtBlock).getBlock() == Blocks.AIR){
                 return;
             }
-            KeyBinds.notifyPlayer(KeyBinds.LEAP_KEY,client.player);
             client.player.sendChatMessage("/leap "+lookingAtBlock.asLong());
         }
-        while (KeyBinds.AREA_SELECTION_KEY.wasPressed()){
-            KeyBinds.notifyPlayer(KeyBinds.AREA_SELECTION_KEY,client.player);
-            if(!ModelAreaSelection.displayArea){
-                ModelAreaSelection.displayArea=true;
+        /*while (KeyBinds.AREA_SELECTION_KEY.wasPressed()){
+            if(!ModelAreaSelection.isAreaSelectionMode){
+                ModelAreaSelection.isAreaSelectionMode =true;
             }else{
-                ModelAreaSelection.displayArea=false;
+                ModelAreaSelection.isAreaSelectionMode =false;
             }
-        }
+        }*/
 
     }
 }

@@ -1,5 +1,6 @@
 package calebzhou.rdi.craftsphere.module.area;
 
+import calebzhou.rdi.craftsphere.model.MessageType;
 import calebzhou.rdi.craftsphere.util.DialogUtils;
 import net.minecraft.util.math.BlockPos;
 
@@ -7,7 +8,7 @@ import java.util.Optional;
 
 public class ModelAreaSelection {
     public static final ModelAreaSelection INSTANCE = new ModelAreaSelection();
-    public static boolean displayArea = false;
+    public static boolean isAreaSelectionMode = false;
 
     private BlockPos p1;
     private BlockPos p2;
@@ -17,7 +18,7 @@ public class ModelAreaSelection {
     }
 
     public void setP1(BlockPos p1) {
-        DialogUtils.showInfoIngame("成功设置区域点1："+p1.toShortString());
+        DialogUtils.showInfoIngame("成功设置区域点1："+p1.toShortString(), MessageType.SUCCESS);
         this.p1 = p1;
     }
 
@@ -26,7 +27,7 @@ public class ModelAreaSelection {
     }
 
     public  void setP2(BlockPos p2) {
-        DialogUtils.showInfoIngame("成功设置区域点2："+p2.toShortString());
+        DialogUtils.showInfoIngame("成功设置区域点2："+p2.toShortString(),MessageType.SUCCESS);
         this.p2 = p2;
     }
     public void clear(){

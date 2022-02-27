@@ -8,17 +8,16 @@ import net.minecraft.util.math.Vec3d;
 public class PlayerMotionDetect {
     private static int ticks = 0;
     public static void detect(ClientWorld world) {
-        MinecraftClient client = MinecraftClient.getInstance();
-            double y1 = client.player.getY();
+            double y1 = MinecraftClient.getInstance().player.getY();
             ++ticks;
             if(ticks>20){
-                double y2 = client.player.getY();
+                double y2 = MinecraftClient.getInstance().player.getY();
                 double deltaY = y2-y1;
                 if(deltaY > RdiConfigure.getConfig().autoSlowfallSpeed && RdiConfigure.getConfig().autoSlowfallSpeed>0){
-                    client.player.sendChatMessage("/slowfall 1");
+                    MinecraftClient.getInstance().player.sendChatMessage("/slowfall 1");
                 }
                 if(y2<-80)
-                    client.player.sendChatMessage("/spawn");
+                    MinecraftClient.getInstance().player.sendChatMessage("/spawn");
                 ticks=0;
             }
 

@@ -10,13 +10,14 @@ import net.minecraft.util.math.BlockPos;
 
 public class EventAreaSelection {
     public EventAreaSelection() {
+        //左键单击方块事件
         AttackBlockCallback.EVENT.register(((player, world, hand, pos, direction) -> {
             BlockState blockState = world.getBlockState(pos);
             Block block = blockState.getBlock();
             String pid = player.getUuidAsString();
 
 
-            if(player.getMainHandStack().getItem() == Items.GOLDEN_HOE){
+            if(player.getMainHandStack().getItem() == Items.GOLDEN_HOE &&ModelAreaSelection.isAreaSelectionMode){
                 handleAreaSelection(pos,true);
             }
 
@@ -30,7 +31,7 @@ public class EventAreaSelection {
             String pid = player.getUuidAsString();
 
 
-            if(player.getMainHandStack().getItem() == Items.GOLDEN_HOE){
+            if(player.getMainHandStack().getItem() == Items.GOLDEN_HOE &&ModelAreaSelection.isAreaSelectionMode){
                 handleAreaSelection(blockPos,false);
             }
             return ActionResult.PASS;
