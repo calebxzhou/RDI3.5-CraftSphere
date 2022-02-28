@@ -1,9 +1,8 @@
-package calebzhou.rdi.craftsphere.screen;
+package calebzhou.rdi.craftsphere.module;
 
 import calebzhou.rdi.craftsphere.ExampleMod;
 import calebzhou.rdi.craftsphere.RdiConfigure;
 import calebzhou.rdi.craftsphere.mixin.AccessSystemDetails;
-import calebzhou.rdi.craftsphere.sound.TitleScreenSound;
 import calebzhou.rdi.craftsphere.texture.Textures;
 import calebzhou.rdi.craftsphere.util.DialogUtils;
 import calebzhou.rdi.craftsphere.util.HttpUtils;
@@ -17,7 +16,6 @@ import net.minecraft.client.gui.RotatingCubeMapRenderer;
 import net.minecraft.client.gui.screen.ConnectScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
-import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.screen.option.OptionsScreen;
 import net.minecraft.client.gui.screen.world.SelectWorldScreen;
 import net.minecraft.client.gui.widget.ClickableWidget;
@@ -97,7 +95,7 @@ public class NewTitleScreen extends Screen {
         if(RdiConfigure.getConfig().playBackgroundMusicOnTitleScreen){
             if(!isPlayingMusic){
                 int i = RandomUtils.nextInt(0,6);
-                MinecraftClient.getInstance().getSoundManager().play(new TitleScreenSound(ExampleMod.TITLE_MUSIC[i]));
+                MinecraftClient.getInstance().getSoundManager().play(new GameMusic(ExampleMod.TITLE_MUSIC[i]));
                 ExampleMod.LOGGER.info("play music on title");
                 isPlayingMusic =true;
             }

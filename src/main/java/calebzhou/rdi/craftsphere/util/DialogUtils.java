@@ -1,13 +1,11 @@
 package calebzhou.rdi.craftsphere.util;
 
 import calebzhou.rdi.craftsphere.dialog.InfoToast;
-import calebzhou.rdi.craftsphere.model.MessageType;
+import calebzhou.rdi.craftsphere.module.cmdtip.MessageType;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.toast.SystemToast;
 import net.minecraft.client.toast.ToastManager;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import org.lwjgl.util.tinyfd.TinyFileDialogs;
 
 import java.awt.*;

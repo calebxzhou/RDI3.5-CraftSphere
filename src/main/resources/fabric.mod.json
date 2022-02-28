@@ -21,9 +21,7 @@
     ]
   },
   "mixins": [
-    "rdi-ct3b.mixins.json",
-    "area.mixins.json",
-    "mobspawn.mixins.json"
+    "rdi-ct3b.mixins.json"
   ],
 
   "depends": {

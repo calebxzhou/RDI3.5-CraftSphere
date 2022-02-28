@@ -1,6 +1,6 @@
 package calebzhou.rdi.craftsphere.module.area;
 
-import calebzhou.rdi.craftsphere.model.MessageType;
+import calebzhou.rdi.craftsphere.module.cmdtip.MessageType;
 import calebzhou.rdi.craftsphere.util.DialogUtils;
 import net.minecraft.util.math.BlockPos;
 

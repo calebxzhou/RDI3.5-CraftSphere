@@ -8,15 +8,14 @@
     "AccessSplashOverlay",
     "AccessSpriteAtlasHolder",
     "AccessSystemDetails",
-    "MixinDisconnectedScreen",
     "MixinGoNewTitleScreen",
     "MixinNewLoadingOverlay",
     "MixinNoUnicodeFonts",
     "MixinNoUnicodeFonts2",
-    "MixinPlayMusicOnJoin",
     "MixinProtocol",
     "MixinTextFieldWidget",
-    "MixinUpdater"
+    "MixinToNewTitleScreen",
+    "MixinUpdateChecker"
   ],
   "client": [
     "MixinAncientChineseSupport",
@@ -27,8 +26,6 @@
     "MixinFoodDirectEat",
     "MixinPauseMenu",
     "MixinTabPlayerHud",
-    "MixinUsernameChecker",
-    "TitleScreenMixin",
     "WindowTitleMixin"
   ],
   "injectors": {

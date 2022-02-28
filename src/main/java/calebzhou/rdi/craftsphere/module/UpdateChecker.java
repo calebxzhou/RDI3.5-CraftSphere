@@ -1,18 +1,12 @@
-package calebzhou.rdi.craftsphere.util;
+package calebzhou.rdi.craftsphere.module;
 
 import calebzhou.rdi.craftsphere.ExampleMod;
-import calebzhou.rdi.craftsphere.mixin.AccessSystemDetails;
 import calebzhou.rdi.craftsphere.model.ApiResponse;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.util.SystemDetails;
+import calebzhou.rdi.craftsphere.util.DialogUtils;
+import calebzhou.rdi.craftsphere.util.HttpUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
-public class Updater {
+public class UpdateChecker {
     public static void check(){
         ApiResponse<String> response = HttpUtils.sendRequest("GET", HttpUtils.UPDATE_ADDR);
         String data = response.getMessage();

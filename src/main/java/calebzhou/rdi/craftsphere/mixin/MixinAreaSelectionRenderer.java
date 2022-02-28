@@ -1,8 +1,7 @@
-package calebzhou.rdi.craftsphere.module.area.mixin;
+package calebzhou.rdi.craftsphere.mixin;
 
 import calebzhou.rdi.craftsphere.module.area.RendererAreaSelection;
 import calebzhou.rdi.craftsphere.module.area.ModelAreaSelection;
-import calebzhou.rdi.craftsphere.util.DialogUtils;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Matrix4f;
@@ -16,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(WorldRenderer.class)
-public class MixinSelectionRenderer {
+public class MixinAreaSelectionRenderer {
     @Shadow @Final private BufferBuilderStorage bufferBuilders;
 
     @Inject(method = "render(Lnet/minecraft/client/util/math/MatrixStack;FJZLnet/minecraft/client/render/Camera;Lnet/minecraft/client/render/GameRenderer;Lnet/minecraft/client/render/LightmapTextureManager;Lnet/minecraft/util/math/Matrix4f;)V",

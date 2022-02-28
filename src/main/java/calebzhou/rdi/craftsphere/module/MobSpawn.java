@@ -1,4 +1,4 @@
-package calebzhou.rdi.craftsphere.module.mobspawn;
+package calebzhou.rdi.craftsphere.module;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMaps;

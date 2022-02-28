@@ -1,15 +1,13 @@
 package calebzhou.rdi.craftsphere;
 
 import calebzhou.rdi.craftsphere.misc.KeyBinds;
+import calebzhou.rdi.craftsphere.module.NoDroppingVoid;
 import calebzhou.rdi.craftsphere.module.area.EventAreaSelection;
 import calebzhou.rdi.craftsphere.module.area.RendererAreaSelection;
-import calebzhou.rdi.craftsphere.module.fasttree.FastTree;
+import calebzhou.rdi.craftsphere.module.FastTree;
 import calebzhou.rdi.craftsphere.util.NetworkUtils;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.fabricmc.fabric.impl.screenhandler.Networking;
 import net.minecraft.client.network.ServerAddress;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.sound.SoundEvent;
@@ -17,7 +15,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import oshi.SystemInfo;
 
 import java.util.Arrays;
 
@@ -75,6 +72,7 @@ public class ExampleMod implements ModInitializer {
 		}
 
 		new FastTree();
+		new NoDroppingVoid();
 		/*CHECK_ITEM = new Item(new FabricItemSettings().group(ItemGroup.MISC));
 		Registry.register(Registry.ITEM, new Identifier(MODID, "island"), CHECK_ITEM);*/
 		KeyBinds.init();
@@ -83,7 +81,6 @@ public class ExampleMod implements ModInitializer {
 	}
 	public void regEvents(){
 		ClientTickEvents.END_WORLD_TICK.register(KeyBinds::handleKeyActions);
-		ClientTickEvents.END_WORLD_TICK.register(PlayerMotionDetect::detect);
 		ClientTickEvents.END_WORLD_TICK.register(RendererAreaSelection::renderSelectionHud);
 		new EventAreaSelection();
 	}

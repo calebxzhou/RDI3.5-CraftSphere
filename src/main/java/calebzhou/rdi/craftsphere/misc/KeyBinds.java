@@ -46,14 +46,7 @@ public class KeyBinds  {
         }
         //按下G键隔空跳跃
         while (KeyBinds.LEAP_KEY.wasPressed()) {
-            BlockPos lookingAtBlock = PlayerUtils.getPlayerLookingAtBlock(client.player,false);
-            if(lookingAtBlock==null){
-                return;
-            }
-            if(client.player.getWorld().getBlockState(lookingAtBlock).getBlock() == Blocks.AIR){
-                return;
-            }
-            client.player.sendChatMessage("/leap "+lookingAtBlock.asLong());
+
         }
         /*while (KeyBinds.AREA_SELECTION_KEY.wasPressed()){
             if(!ModelAreaSelection.isAreaSelectionMode){
