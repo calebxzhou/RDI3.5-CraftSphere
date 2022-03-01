@@ -11,6 +11,6 @@ public class MixinPlayMusicOnJoin {
     @Inject(method = "Lnet/minecraft/client/world/ClientWorld;addPlayer(ILnet/minecraft/client/network/AbstractClientPlayerEntity;)V"
             ,at = @At("TAIL"))
     private void qseda(CallbackInfo ci){
-        GameMusic.play();
+        GameMusic.playInGame();
     }
 }

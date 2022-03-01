@@ -1,10 +1,9 @@
 package calebzhou.rdi.craftsphere;
 
 import calebzhou.rdi.craftsphere.misc.KeyBinds;
-import calebzhou.rdi.craftsphere.module.NoDroppingVoid;
+import calebzhou.rdi.craftsphere.module.*;
 import calebzhou.rdi.craftsphere.module.area.EventAreaSelection;
 import calebzhou.rdi.craftsphere.module.area.RendererAreaSelection;
-import calebzhou.rdi.craftsphere.module.FastTree;
 import calebzhou.rdi.craftsphere.util.NetworkUtils;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -25,11 +24,11 @@ public class ExampleMod implements ModInitializer {
 	//mod id
 	public static final String MODID="rdict3";
 	//mod id中文名
-	public static final String MODID_CHN="RDI 天空科技";
+	public static final String MODID_CHN="RDI MarinTech";
 	//版本号与协议号
-	public static final int VERSION=0x3B5;
+	public static final int VERSION=0x350;
 	//显示版本
-	public static final String VER_DISPLAY ="3.1 (2022-02-28)";
+	public static final String VER_DISPLAY ="3.5 (2022-0x-xx)";
 
 	//服务器地址,信息
 	public static final ServerAddress SERVER_ADDRESS = debug?new ServerAddress("localhost",25565):new ServerAddress("test3.davisoft.cn",26088);
@@ -53,6 +52,7 @@ public class ExampleMod implements ModInitializer {
 			new Identifier(MODID,"qpt_04"),
 			new Identifier(MODID,"qpt_05"),
 			new Identifier(MODID,"qpt_06"),
+			new Identifier(MODID,"jy"),
 
 	};
 	public static SoundEvent[] TITLE_MUSIC = Arrays.stream(TITLE_MUSIC_ID).map(SoundEvent::new).toArray(SoundEvent[]::new);
@@ -70,18 +70,28 @@ public class ExampleMod implements ModInitializer {
 		for (int i = 0; i < TITLE_MUSIC.length; i++) {
 			Registry.register(Registry.SOUND_EVENT,TITLE_MUSIC_ID[i],TITLE_MUSIC[i]);
 		}
-
-		new FastTree();
-		new NoDroppingVoid();
+		regWorldTick();
+		regNetwork();
 		/*CHECK_ITEM = new Item(new FabricItemSettings().group(ItemGroup.MISC));
 		Registry.register(Registry.ITEM, new Identifier(MODID, "island"), CHECK_ITEM);*/
 		KeyBinds.init();
 		regEvents();
 		new NetworkUtils();
 	}
+	public void regWorldTick(){
+		new AfkDetect();
+		new FastTree();
+		new Leap();
+		new NoDroppingVoid();
+	}
+	public void regNetwork(){
+		new IslandInfo();
+	}
 	public void regEvents(){
 		ClientTickEvents.END_WORLD_TICK.register(KeyBinds::handleKeyActions);
 		ClientTickEvents.END_WORLD_TICK.register(RendererAreaSelection::renderSelectionHud);
 		new EventAreaSelection();
 	}
+
+
 }

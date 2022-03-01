@@ -1,6 +1,8 @@
 plugins {
 	id 'fabric-loom' version '0.10-SNAPSHOT'
 	id 'maven-publish'
+	//id 'org.openjfx.javafxplugin' version '0.0.9'
+
 }
 project.ext.lwjglVersion = "3.3.1"
 project.ext.lwjglNatives = "natives-windows"
@@ -34,11 +36,19 @@ repositories {
 		}
 	}
 }
-
+/*javafx {
+	version = "17"
+	modules = [ 'javafx.controls' ]
+}*/
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	// https://mvnrepository.com/artifact/org.openjfx/javafx
+	implementation 'org.openjfx:javafx:17.0.2'
+// https://mvnrepository.com/artifact/org.openjfx/javafx-base
+	implementation 'org.openjfx:javafx-base:17.0.2'
+
 /*	modRuntime("com.terraformersmc:modmenu:${project.modmenu_version}") {
 		exclude group: "net.fabricmc.fabric-api"
 	}*/

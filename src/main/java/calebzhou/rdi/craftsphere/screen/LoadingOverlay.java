@@ -6,7 +6,6 @@ import net.fabricmc.fabric.impl.client.indigo.renderer.helper.ColorHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.CubeMapRenderer;
 import net.minecraft.client.gui.RotatingCubeMapRenderer;
-import net.minecraft.client.gui.hud.BackgroundHelper;
 import net.minecraft.client.gui.screen.Overlay;
 import net.minecraft.client.gui.screen.SplashOverlay;
 import net.minecraft.client.gui.screen.TitleScreen;
@@ -119,7 +118,7 @@ public class LoadingOverlay extends Overlay {
     private void renderProgressBar(MatrixStack matrices, int minX, int minY, int maxX, int maxY, float opacity) {
         int i = MathHelper.ceil((float)(maxX - minX - 2) * this.progress);
         int j = Math.round(opacity * 255.0f);
-        int k = BackgroundHelper.ColorMixer.getArgb(j, 255, 255, 255);
+        int k = net.minecraft.util.math.ColorHelper.Argb.getArgb(j, 255, 255, 255);
         SplashOverlay.fill(matrices, minX + 2, minY + 2, minX + i, maxY - 2, k);
         SplashOverlay.fill(matrices, minX + 1, minY, maxX - 1, minY + 1, k);
         SplashOverlay.fill(matrices, minX + 1, maxY, maxX - 1, maxY - 1, k);

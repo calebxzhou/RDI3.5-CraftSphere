@@ -35,7 +35,7 @@ public class BasicScreen extends Screen {
         drawCenteredText(matrices, this.textRenderer, this.title, this.width / 2, 40, 16777215);
         super.render(matrices, mouseX, mouseY, delta);
     }
-    public void onClose() {
+    public void close() {
         this.client.setScreen(this.parentScreen);
     }
 

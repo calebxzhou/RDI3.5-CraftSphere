@@ -94,9 +94,7 @@ public class NewTitleScreen extends Screen {
         ++frames;
         if(RdiConfigure.getConfig().playBackgroundMusicOnTitleScreen){
             if(!isPlayingMusic){
-                int i = RandomUtils.nextInt(0,6);
-                MinecraftClient.getInstance().getSoundManager().play(new GameMusic(ExampleMod.TITLE_MUSIC[i]));
-                ExampleMod.LOGGER.info("play music on title");
+                GameMusic.playOnTitle();
                 isPlayingMusic =true;
             }
 

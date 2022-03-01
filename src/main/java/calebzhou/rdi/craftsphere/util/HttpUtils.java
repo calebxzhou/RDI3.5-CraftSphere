@@ -1,5 +1,6 @@
 package calebzhou.rdi.craftsphere.util;
 
+import calebzhou.rdi.craftsphere.ExampleMod;
 import calebzhou.rdi.craftsphere.model.ApiResponse;
 import com.google.gson.Gson;
 
@@ -15,7 +16,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 public class HttpUtils {
-    public static final String ADDR="http://www.davisoft.cn:26888/public";
+    public static final String ADDR= ExampleMod.debug?"http://localhost:26888/public":"http://www.davisoft.cn:26888/public";
     public static final String UPDATE_ADDR="/update";
     public static URL getFullUrl(String shortUrl){
         try {

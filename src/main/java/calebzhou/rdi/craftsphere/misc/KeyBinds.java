@@ -44,10 +44,7 @@ public class KeyBinds  {
             client.player.sendChatMessage("/slowfall 1");
 
         }
-        //按下G键隔空跳跃
-        while (KeyBinds.LEAP_KEY.wasPressed()) {
 
-        }
         /*while (KeyBinds.AREA_SELECTION_KEY.wasPressed()){
             if(!ModelAreaSelection.isAreaSelectionMode){
                 ModelAreaSelection.isAreaSelectionMode =true;

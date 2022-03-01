@@ -10,6 +10,7 @@
     "AccessSystemDetails",
     "MixinGoNewTitleScreen",
     "MixinNewLoadingOverlay",
+    "MixinNoNetherFog",
     "MixinNoUnicodeFonts",
     "MixinNoUnicodeFonts2",
     "MixinProtocol",
