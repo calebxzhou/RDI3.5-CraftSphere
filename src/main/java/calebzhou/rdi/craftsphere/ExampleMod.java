@@ -28,7 +28,7 @@ public class ExampleMod implements ModInitializer {
 	//版本号与协议号
 	public static final int VERSION=0x350;
 	//显示版本
-	public static final String VER_DISPLAY ="3.5 (2022-0x-xx)";
+	public static final String VER_DISPLAY ="3.5 (2022-06-04)";
 
 	//服务器地址,信息
 	public static final ServerAddress SERVER_ADDRESS = debug?new ServerAddress("localhost",25565):new ServerAddress("test3.davisoft.cn",26088);
