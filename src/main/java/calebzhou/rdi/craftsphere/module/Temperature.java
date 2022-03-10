@@ -44,7 +44,7 @@ public class Temperature implements WorldTickable {
         //护甲保暖值，0都不穿，头盔1，胸甲5，裤子3，鞋2
         int armorVal = wearsArmorPartsValue(player);
         //生物群系温度
-        float bioTemp = player.world.getBiome(player.getBlockPos()).value().getTemperature();
+        float bioTemp = player.world.getBiome(player.getBlockPos()).getTemperature();
         //生物群系的真实温度，摄氏度，https://www.reddit.com/r/Minecraft/comments/3eh7yu/the_rl_temperature_of_minecraft_biomes_revealed/
         double realTemp = (13.6484805403*bioTemp)+7.0879687222;
         //头部位置的光照等级 0~15

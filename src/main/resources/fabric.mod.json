@@ -32,6 +32,6 @@
   },
   "suggests": {
     "another-mod": "*"
-  }
-
+  },
+  "accessWidener" : "rdict3.accesswidener"
 }

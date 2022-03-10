@@ -8,6 +8,7 @@
     "AccessSplashOverlay",
     "AccessSpriteAtlasHolder",
     "AccessSystemDetails",
+    "MixinFixedGamma",
     "MixinGoNewTitleScreen",
     "MixinNewLoadingOverlay",
     "MixinNoNetherFog",
