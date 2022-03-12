@@ -3,8 +3,8 @@ package calebzhou.rdi.craftsphere.module;
 import calebzhou.rdi.craftsphere.RdiConfigure;
 import calebzhou.rdi.craftsphere.util.WorldTickable;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.world.ClientWorld;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
 
 public class NoDroppingVoid implements WorldTickable {
     public NoDroppingVoid() {
@@ -13,8 +13,8 @@ public class NoDroppingVoid implements WorldTickable {
 
    // private static int ticks = 0;
     @Override
-    public void tickWorld(ClientWorld world) {
-        MinecraftClient client = MinecraftClient.getInstance();
+    public void tickWorld(ClientLevel world) {
+        Minecraft client = Minecraft.getInstance();
         double y1 = client.player.getY();
         /*++ticks;
         if(ticks>20){
@@ -24,7 +24,7 @@ public class NoDroppingVoid implements WorldTickable {
                 client.player.sendChatMessage("/slowfall 1");
             }*/
             if(y1<-80)
-                client.player.sendChatMessage("/spawn");
+                client.player.chat("/spawn");
            /* ticks=0;
         }*/
     }

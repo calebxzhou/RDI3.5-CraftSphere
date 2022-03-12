@@ -1,11 +1,11 @@
 package calebzhou.rdi.craftsphere.mixin;
 
 import calebzhou.rdi.craftsphere.ExampleMod;
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.Minecraft;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 
-@Mixin(MinecraftClient.class)
+@Mixin(Minecraft.class)
 public class WindowTitleMixin {
     /**
      * @author

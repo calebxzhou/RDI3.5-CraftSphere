@@ -1,9 +1,9 @@
 package calebzhou.rdi.craftsphere.util;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.world.ClientWorld;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
 
 public interface WorldTickable {
-    MinecraftClient client = MinecraftClient.getInstance();
-    void tickWorld(ClientWorld world);
+    Minecraft client = Minecraft.getInstance();
+    void tickWorld(ClientLevel world);
 }

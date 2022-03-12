@@ -7,11 +7,11 @@ import calebzhou.rdi.craftsphere.module.area.RendererAreaSelection;
 import calebzhou.rdi.craftsphere.util.NetworkUtils;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.minecraft.client.network.ServerAddress;
-import net.minecraft.client.network.ServerInfo;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.client.multiplayer.ServerData;
+import net.minecraft.client.multiplayer.resolver.ServerAddress;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -32,27 +32,27 @@ public class ExampleMod implements ModInitializer {
 
 	//服务器地址,信息
 	public static final ServerAddress SERVER_ADDRESS = debug?new ServerAddress("localhost",25565):new ServerAddress("test3.davisoft.cn",26088);
-	public static final ServerInfo SERVER_INFO = new ServerInfo("rdi-celetech3", SERVER_ADDRESS.getAddress(),false);
+	public static final ServerData SERVER_INFO = new ServerData("rdi-celetech3", SERVER_ADDRESS.getHost(),false);
 
 	//public static Item CHECK_ITEM;
 
 	//当前电脑信息
 
 
-	public static Identifier[] TITLE_MUSIC_ID = new Identifier[]{
-			new Identifier(MODID,"celeste"),
-			new Identifier(MODID,"home"),
-			new Identifier(MODID,"module"),
-			new Identifier(MODID,"resort"),
-			new Identifier(MODID,"rk3"),
-			new Identifier(MODID,"rk4"),
-			new Identifier(MODID,"qpt_01"),
-			new Identifier(MODID,"qpt_02"),
-			new Identifier(MODID,"qpt_03"),
-			new Identifier(MODID,"qpt_04"),
-			new Identifier(MODID,"qpt_05"),
-			new Identifier(MODID,"qpt_06"),
-			new Identifier(MODID,"jy"),
+	public static ResourceLocation[] TITLE_MUSIC_ID = new ResourceLocation[]{
+			new ResourceLocation(MODID,"celeste"),
+			new ResourceLocation(MODID,"home"),
+			new ResourceLocation(MODID,"module"),
+			new ResourceLocation(MODID,"resort"),
+			new ResourceLocation(MODID,"rk3"),
+			new ResourceLocation(MODID,"rk4"),
+			new ResourceLocation(MODID,"qpt_01"),
+			new ResourceLocation(MODID,"qpt_02"),
+			new ResourceLocation(MODID,"qpt_03"),
+			new ResourceLocation(MODID,"qpt_04"),
+			new ResourceLocation(MODID,"qpt_05"),
+			new ResourceLocation(MODID,"qpt_06"),
+			new ResourceLocation(MODID,"jy"),
 
 	};
 	public static SoundEvent[] TITLE_MUSIC = Arrays.stream(TITLE_MUSIC_ID).map(SoundEvent::new).toArray(SoundEvent[]::new);

@@ -2,9 +2,8 @@ package calebzhou.rdi.craftsphere.module.area;
 
 import calebzhou.rdi.craftsphere.module.cmdtip.MessageType;
 import calebzhou.rdi.craftsphere.util.DialogUtils;
-import net.minecraft.util.math.BlockPos;
-
 import java.util.Optional;
+import net.minecraft.core.BlockPos;
 
 public class ModelAreaSelection {
     public static final ModelAreaSelection INSTANCE = new ModelAreaSelection();

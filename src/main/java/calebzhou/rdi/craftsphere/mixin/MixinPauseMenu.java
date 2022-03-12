@@ -1,11 +1,10 @@
 package calebzhou.rdi.craftsphere.mixin;
 
 import calebzhou.rdi.craftsphere.screen.PauseScreen;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.GameMenuScreen;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.sound.SoundManager;
-import net.minecraft.server.integrated.IntegratedServer;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.server.IntegratedServer;
+import net.minecraft.client.sounds.SoundManager;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,28 +13,29 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(MinecraftClient.class)
+@Mixin(Minecraft.class)
 public abstract class MixinPauseMenu {
-    @Shadow @Nullable public Screen currentScreen;
-
-    @Shadow public abstract boolean isIntegratedServerRunning();
-
-    @Shadow private @Nullable IntegratedServer server;
 
     @Shadow public abstract void setScreen(@Nullable Screen screen);
 
     @Shadow @Final private SoundManager soundManager;
 
+    @Shadow @Nullable public Screen screen;
+
+    @Shadow public abstract boolean hasSingleplayerServer();
+
+    @Shadow private @Nullable IntegratedServer singleplayerServer;
+
     /**
      * @author
      */
     @Overwrite
-    public void openPauseMenu(boolean pause) {
-        if (this.currentScreen == null) {
-            boolean bl = this.isIntegratedServerRunning() && !this.server.isRemote();
+    public void pauseGame(boolean pause) {
+        if (screen == null) {
+            boolean bl = hasSingleplayerServer() && !singleplayerServer.isPublished();
             if (bl) {
                 this.setScreen(new PauseScreen(!pause));
-                this.soundManager.pauseAll();
+                this.soundManager.pause();
             } else {
                 this.setScreen(new PauseScreen(true));
             }

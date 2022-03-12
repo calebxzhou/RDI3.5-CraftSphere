@@ -1,17 +1,17 @@
 package calebzhou.rdi.craftsphere.screen;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.util.InputUtil;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.LiteralText;
+import com.mojang.blaze3d.platform.InputConstants;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.TextComponent;
 
 public class BasicScreen extends Screen {
     protected final Screen parentScreen;
     private final boolean exitable;
     private final boolean transparent;
     protected BasicScreen(String title, Screen parentScreen, boolean exitable, boolean transparent) {
-        super(new LiteralText(title));
+        super(new TextComponent(title));
         this.parentScreen = parentScreen;
         this.exitable = exitable;
         this.transparent = transparent;
@@ -20,26 +20,26 @@ public class BasicScreen extends Screen {
     @Override
     public void tick() {
         if(exitable){
-            long handle = MinecraftClient.getInstance().getWindow().getHandle();
-            if(InputUtil.isKeyPressed(handle,InputUtil.GLFW_KEY_ESCAPE)){
-                MinecraftClient.getInstance().setScreen(parentScreen);
+            long handle = Minecraft.getInstance().getWindow().getWindow();
+            if(InputConstants.isKeyDown(handle,InputConstants.KEY_ESCAPE)){
+                Minecraft.getInstance().setScreen(parentScreen);
             }
         }
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+    public void render(PoseStack matrices, int mouseX, int mouseY, float delta) {
         if(!transparent){
             this.renderBackground(matrices);
         }
-        drawCenteredText(matrices, this.textRenderer, this.title, this.width / 2, 40, 16777215);
+        drawCenteredString(matrices, this.font, this.title, this.width / 2, 40, 16777215);
         super.render(matrices, mouseX, mouseY, delta);
     }
     public void close() {
-        this.client.setScreen(this.parentScreen);
+        this.minecraft.setScreen(this.parentScreen);
     }
 
     public void removed() {
-        this.client.keyboard.setRepeatEvents(false);
+        this.minecraft.keyboardHandler.setSendRepeatsToGui(false);
     }
 }

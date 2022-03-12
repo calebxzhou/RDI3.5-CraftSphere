@@ -1,11 +1,17 @@
 package calebzhou.rdi.craftsphere.mixin;
 
 import calebzhou.rdi.craftsphere.module.area.RendererAreaSelection;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Matrix4f;
 import calebzhou.rdi.craftsphere.module.area.ModelAreaSelection;
+import net.minecraft.client.Camera;
 import net.minecraft.client.render.*;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.math.Matrix4f;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderBuffers;
+import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -14,24 +20,24 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-@Mixin(WorldRenderer.class)
+@Mixin(LevelRenderer.class)
 public class MixinAreaSelectionRenderer {
-    @Shadow @Final private BufferBuilderStorage bufferBuilders;
+    @Shadow @Final private RenderBuffers bufferBuilders;
 
     @Inject(method = "render(Lnet/minecraft/client/util/math/MatrixStack;FJZLnet/minecraft/client/render/Camera;Lnet/minecraft/client/render/GameRenderer;Lnet/minecraft/client/render/LightmapTextureManager;Lnet/minecraft/util/math/Matrix4f;)V",
     at = @At(value = "INVOKE",target = "Lnet/minecraft/client/render/debug/DebugRenderer;render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider$Immediate;DDD)V"),
     locals = LocalCapture.CAPTURE_FAILEXCEPTION)
-    private void qaess(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f positionMatrix, CallbackInfo ci){
+    private void qaess(PoseStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightTexture lightmapTextureManager, Matrix4f positionMatrix, CallbackInfo ci){
         if(!ModelAreaSelection.isAreaSelectionMode) return;
         ModelAreaSelection mas = ModelAreaSelection.INSTANCE;
         if(mas.getP1().isEmpty() || mas.getP2().isEmpty()){
             return;
         }
-        Vec3d vec3d = camera.getPos();
-        double d = vec3d.getX();
-        double e = vec3d.getY();
-        double f = vec3d.getZ();
-        VertexConsumerProvider.Immediate immediate = bufferBuilders.getEntityVertexConsumers();
+        Vec3 vec3d = camera.getPosition();
+        double d = vec3d.x();
+        double e = vec3d.y();
+        double f = vec3d.z();
+        MultiBufferSource.BufferSource immediate = bufferBuilders.bufferSource();
 
         RendererAreaSelection.INSTANCE.render(matrices,immediate,d,e,f);
 

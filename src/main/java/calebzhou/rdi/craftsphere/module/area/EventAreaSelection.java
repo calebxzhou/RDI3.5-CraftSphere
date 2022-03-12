@@ -2,11 +2,11 @@ package calebzhou.rdi.craftsphere.module.area;
 
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.Items;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class EventAreaSelection {
     public EventAreaSelection() {
@@ -14,27 +14,27 @@ public class EventAreaSelection {
         AttackBlockCallback.EVENT.register(((player, world, hand, pos, direction) -> {
             BlockState blockState = world.getBlockState(pos);
             Block block = blockState.getBlock();
-            String pid = player.getUuidAsString();
+            String pid = player.getStringUUID();
 
 
-            if(player.getMainHandStack().getItem() == Items.GOLDEN_HOE &&ModelAreaSelection.isAreaSelectionMode){
+            if(player.getMainHandItem().getItem() == Items.GOLDEN_HOE &&ModelAreaSelection.isAreaSelectionMode){
                 handleAreaSelection(pos,true);
             }
 
-            return ActionResult.PASS;
+            return InteractionResult.PASS;
         }));
         //右键单击方块事件
         UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
             BlockPos blockPos = hitResult.getBlockPos();
             BlockState blockState = world.getBlockState(blockPos);
             Block block = blockState.getBlock();
-            String pid = player.getUuidAsString();
+            String pid = player.getStringUUID();
 
 
-            if(player.getMainHandStack().getItem() == Items.GOLDEN_HOE &&ModelAreaSelection.isAreaSelectionMode){
+            if(player.getMainHandItem().getItem() == Items.GOLDEN_HOE &&ModelAreaSelection.isAreaSelectionMode){
                 handleAreaSelection(blockPos,false);
             }
-            return ActionResult.PASS;
+            return InteractionResult.PASS;
         });
     }
     /**

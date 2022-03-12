@@ -1,37 +1,34 @@
 package calebzhou.rdi.craftsphere.texture;
 
 import calebzhou.rdi.craftsphere.util.FileUtils;
+import com.mojang.blaze3d.platform.NativeImage;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.SplashOverlay;
-import net.minecraft.client.resource.metadata.TextureResourceMetadata;
-import net.minecraft.client.texture.NativeImage;
-import net.minecraft.client.texture.ResourceTexture;
-import net.minecraft.resource.DefaultResourcePack;
-import net.minecraft.resource.ResourceManager;
-import net.minecraft.resource.ResourceType;
-import net.minecraft.util.Identifier;
-
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.SimpleTexture;
+import net.minecraft.client.resources.metadata.texture.TextureMetadataSection;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.VanillaPackResources;
+import net.minecraft.server.packs.resources.ResourceManager;
 import java.io.IOException;
 import java.io.InputStream;
 @Environment(EnvType.CLIENT)
-public class LogoTexture extends ResourceTexture{
-    public static Identifier LOGO= new Identifier("rdict3:splash.png");
+public class LogoTexture extends SimpleTexture{
+    public static ResourceLocation LOGO= new ResourceLocation("rdict3:splash.png");
         public LogoTexture() {
             super(LOGO);
         }
 
-        protected ResourceTexture.TextureData loadTextureData(ResourceManager resourceManager) {
-            MinecraftClient minecraftClient = MinecraftClient.getInstance();
-            DefaultResourcePack defaultResourcePack = minecraftClient.getResourcePackProvider().getPack();
+        protected SimpleTexture.TextureImage getTextureImage(ResourceManager resourceManager) {
+            Minecraft minecraftClient = Minecraft.getInstance();
+            VanillaPackResources defaultResourcePack = minecraftClient.getClientPackSource().getVanillaPack();
 
             try {
                 InputStream inputStream = FileUtils.getJarResourceAsStream("splash.png");//defaultResourcePack.open(ResourceType.CLIENT_RESOURCES, LOGO);
 
-                ResourceTexture.TextureData var5;
+                SimpleTexture.TextureImage var5;
                 try {
-                    var5 = new ResourceTexture.TextureData(new TextureResourceMetadata(true, true), NativeImage.read(inputStream));
+                    var5 = new SimpleTexture.TextureImage(new TextureMetadataSection(true, true), NativeImage.read(inputStream));
                 } catch (Throwable var8) {
                     if (inputStream != null) {
                         try {
@@ -50,7 +47,7 @@ public class LogoTexture extends ResourceTexture{
 
                 return var5;
             } catch (IOException var9) {
-                return new ResourceTexture.TextureData(var9);
+                return new SimpleTexture.TextureImage(var9);
             }
         }
 

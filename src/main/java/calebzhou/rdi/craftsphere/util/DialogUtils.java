@@ -2,13 +2,13 @@ package calebzhou.rdi.craftsphere.util;
 
 import calebzhou.rdi.craftsphere.dialog.InfoToast;
 import calebzhou.rdi.craftsphere.module.cmdtip.MessageType;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.toast.ToastManager;
-import net.minecraft.text.LiteralText;
-import net.minecraft.text.Text;
 import org.lwjgl.util.tinyfd.TinyFileDialogs;
 
 import java.awt.*;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.toasts.ToastComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 
 public class DialogUtils {
     public static void showInfoIngame(String msg, MessageType type){
@@ -18,12 +18,12 @@ public class DialogUtils {
             case ERROR -> color= Color.RED.brighter();
             case SUCCESS -> color= Color.GREEN.brighter();
         }
-        showInfoIngame(new LiteralText(msg),color);
+        showInfoIngame(new TextComponent(msg),color);
     }
-    public static void showInfoIngame(Text msg,Color color){
+    public static void showInfoIngame(Component msg,Color color){
         InfoToast toast = InfoToast.create(msg,null,color.getRGB());
-        ToastManager toastManager = MinecraftClient.getInstance().getToastManager();
-        toastManager.add(toast);
+        ToastComponent toastManager = Minecraft.getInstance().getToasts();
+        toastManager.addToast(toast);
     }
     public static void showError(String msg){
         TinyFileDialogs.tinyfd_messageBox("错误",msg,"ok","error",true);
