@@ -12,7 +12,7 @@ public class WindowTitleMixin {
      *  RDI 窗口标题
      */
     @Overwrite
-    private String getWindowTitle(){
+    private String createTitle(){
         return ExampleMod.MODID_CHN+" "+ ExampleMod.VER_DISPLAY;
     }
 }

@@ -15,14 +15,9 @@
     "MixinNoUnicodeFonts",
     "MixinNoUnicodeFonts2",
     "MixinProtocol",
-    "MixinTextFieldWidget",
-    "MixinToNewTitleScreen",
-    "MixinUpdateChecker"
+    "MixinToNewTitleScreen"
   ],
   "client": [
-    "MixinAncientChineseSupport",
-    "MixinAncientChn2",
-    "MixinClientLoginHandler",
     "MixinConnectScreen",
     "MixinNoDirtGuiBackground",
     "MixinFoodDirectEat",

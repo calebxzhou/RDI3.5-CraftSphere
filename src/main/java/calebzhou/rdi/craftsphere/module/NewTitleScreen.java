@@ -2,11 +2,8 @@ package calebzhou.rdi.craftsphere.module;
 
 import calebzhou.rdi.craftsphere.ExampleMod;
 import calebzhou.rdi.craftsphere.RdiConfigure;
-import calebzhou.rdi.craftsphere.mixin.AccessSystemReport;
 import calebzhou.rdi.craftsphere.texture.Textures;
 import calebzhou.rdi.craftsphere.util.DialogUtils;
-import calebzhou.rdi.craftsphere.util.HttpUtils;
-import com.google.gson.GsonBuilder;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -14,8 +11,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
-import java.util.Map;
-import net.minecraft.SystemReport;
+
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -134,9 +130,6 @@ public class NewTitleScreen extends Screen {
         }, new TranslatableComponent("Mods")));
         Minecraft.getInstance().options.setSoundCategoryVolume(SoundSource.MUSIC,0);
 
-        Map<String, String> details = ((AccessSystemReport)new SystemReport()).getEntries();
-        String entityName = Minecraft.getInstance().getUser().getName();
-        HttpUtils.sendRequest("POST","/graphicsDebug","name="+entityName,"obj="+new GsonBuilder().setPrettyPrinting().create().toJson(details));
 
     }
 }

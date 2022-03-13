@@ -10,32 +10,25 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(Minecraft.class)
 public abstract class MixinToNewTitleScreen {
-    @Redirect(method = "Lnet/minecraft/client/MinecraftClient;<init>(Lnet/minecraft/client/RunArgs;)V",
-    at=@At(value = "INVOKE",target = "Lnet/minecraft/client/MinecraftClient;setScreen(Lnet/minecraft/client/gui/screen/Screen;)V"))
+    @Redirect(method = "Lnet/minecraft/client/Minecraft;<init>(Lnet/minecraft/client/main/GameConfig;)V",
+    at=@At(value = "INVOKE",
+            target = "Lnet/minecraft/client/Minecraft;setScreen(Lnet/minecraft/client/gui/screens/Screen;)V"))
     private void qafdqwd(Minecraft instance, Screen screen){
         instance.setScreen(NewTitleScreen.INSTANCE);
-    }
-    /**
-     * @author
-     * 不检查是否允许多人游戏
-     */
-    @Overwrite
-    public boolean isMultiplayerEnabled() {
-        return true;
     }
     /**
      * @author
      * 不开启领域服
      */
     @Overwrite
-    public boolean isRealmsEnabled() {
+    public boolean isConnectedToRealms() {
         return false;
     }
 }
 @Mixin(DeathScreen.class)
 class MixinGoNewTitleScreen {
-    @Redirect(method = "Lnet/minecraft/client/gui/screen/DeathScreen;quitLevel()V",
-            at=@At(target = "Lnet/minecraft/client/MinecraftClient;setScreen(Lnet/minecraft/client/gui/screen/Screen;)V",
+    @Redirect(method = "Lnet/minecraft/client/gui/screens/DeathScreen;exitToTitleScreen()V",
+            at=@At(target = "Lnet/minecraft/client/Minecraft;setScreen(Lnet/minecraft/client/gui/screens/Screen;)V",
                     value = "INVOKE"))
     private void goNewTitleScreenOnDeath(Minecraft instance, Screen screen){
         instance.setScreen(NewTitleScreen.INSTANCE);

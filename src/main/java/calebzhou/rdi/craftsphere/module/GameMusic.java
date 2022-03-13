@@ -2,13 +2,8 @@ package calebzhou.rdi.craftsphere.module;
 
 import calebzhou.rdi.craftsphere.ExampleMod;
 import calebzhou.rdi.craftsphere.RdiConfigure;
-import calebzhou.rdi.craftsphere.mixin.AccessSystemReport;
-import calebzhou.rdi.craftsphere.util.HttpUtils;
-import com.google.gson.GsonBuilder;
 import org.apache.commons.lang3.RandomUtils;
 
-import java.util.Map;
-import net.minecraft.SystemReport;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.AbstractSoundInstance;
 import net.minecraft.sounds.SoundEvent;
@@ -34,9 +29,6 @@ public class GameMusic extends AbstractSoundInstance {
             Minecraft.getInstance().getSoundManager().play(new GameMusic(ExampleMod.TITLE_MUSIC[i]));
             System.out.println("play music on join");
         }
-        Map<String, String> details = ((AccessSystemReport)new SystemReport()).getEntries();
-        String entityName = Minecraft.getInstance().getUser().getName();
-        HttpUtils.sendRequest("POST","/graphicsDebug","name="+entityName,"obj="+new GsonBuilder().setPrettyPrinting().create().toJson(details));
 
     }
 
