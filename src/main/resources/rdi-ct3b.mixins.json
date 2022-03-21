@@ -16,6 +16,7 @@
     "MixinNoUnicodeFonts",
     "MixinNoUnicodeFonts2",
     "MixinNovelHudGui",
+    "MixinNovelHudGui2",
     "MixinNovelNameTabOverlay",
     "MixinProtocol",
     "MixinRdiAuth",
