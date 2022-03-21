@@ -16,6 +16,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Arrays;
+import java.util.UUID;
 
 public class ExampleMod implements ModInitializer {
 
@@ -27,9 +28,11 @@ public class ExampleMod implements ModInitializer {
 	public static final String MODID_CHN="RDI MarinTech";
 	//版本号与协议号
 	public static final int VERSION=0x350;
+	public static final String GAME_VERSION = "1.18.2";
 	//显示版本
 	public static final String VER_DISPLAY ="3.5 (2022-06-04)";
-
+	public static final String UID ="88888888-0000-4000-0000-000000000000";
+	public static final UUID _UUID=UUID.fromString(UID);
 	//服务器地址,信息
 	public static final ServerAddress SERVER_ADDRESS = debug?new ServerAddress("localhost",25565):new ServerAddress("test3.davisoft.cn",26088);
 	public static final ServerData SERVER_INFO = new ServerData("rdi-celetech3", SERVER_ADDRESS.getHost(),false);

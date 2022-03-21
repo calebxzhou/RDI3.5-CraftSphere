@@ -6,21 +6,26 @@
   "mixins": [
     "AccessDisconnectedScreen",
     "AccessSplashOverlay",
-    "AccessTextureAtlasHolder",
     "AccessSystemReport",
+    "AccessTextureAtlasHolder",
+    "MixinChangeGameVersion",
     "MixinFixedGamma",
     "MixinGoNewTitleScreen",
     "MixinNewLoadingOverlay",
     "MixinNoFog",
     "MixinNoUnicodeFonts",
     "MixinNoUnicodeFonts2",
+    "MixinNovelHudGui",
+    "MixinNovelNameTabOverlay",
     "MixinProtocol",
+    "MixinRdiAuth",
+    "MixinRdiAuth2",
     "MixinToNewTitleScreen"
   ],
   "client": [
     "MixinConnectScreen",
-    "MixinNoDirtGuiBackground",
     "MixinFoodDirectEat",
+    "MixinNoDirtGuiBackground",
     "MixinPauseMenu",
     "MixinTabPlayerHud",
     "WindowTitleMixin"

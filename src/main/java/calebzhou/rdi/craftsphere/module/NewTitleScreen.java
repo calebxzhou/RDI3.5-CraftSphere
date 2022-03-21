@@ -130,6 +130,5 @@ public class NewTitleScreen extends Screen {
         }, new TranslatableComponent("Mods")));
         Minecraft.getInstance().options.setSoundCategoryVolume(SoundSource.MUSIC,0);
 
-
     }
 }
