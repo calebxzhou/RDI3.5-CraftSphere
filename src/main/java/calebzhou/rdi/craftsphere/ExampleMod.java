@@ -5,6 +5,9 @@ import calebzhou.rdi.craftsphere.module.*;
 import calebzhou.rdi.craftsphere.module.area.EventAreaSelection;
 import calebzhou.rdi.craftsphere.module.area.RendererAreaSelection;
 import calebzhou.rdi.craftsphere.util.NetworkUtils;
+import com.spinyowl.legui.component.Frame;
+import com.spinyowl.legui.style.Style;
+import com.spinyowl.legui.style.color.ColorConstants;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.multiplayer.ServerData;
@@ -79,6 +82,7 @@ public class ExampleMod implements ModInitializer {
 		Registry.register(Registry.ITEM, new Identifier(MODID, "island"), CHECK_ITEM);*/
 		KeyBinds.init();
 		regEvents();
+
 		new NetworkUtils();
 	}
 	public void regWorldTick(){
