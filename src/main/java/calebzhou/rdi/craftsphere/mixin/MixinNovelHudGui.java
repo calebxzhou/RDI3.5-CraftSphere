@@ -7,6 +7,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.*;
 
 @Mixin(Gui.class)
@@ -35,23 +36,11 @@ class MixinNovelHudGui2 {
     @Shadow @Final @Mutable public NonNullList<ItemStack> items;
 
     /**
-     * @author
+     * @author 9扩展36
      */
     @Overwrite
     public void swapPaint(double d) {
-        if (d > 0.0D) {
-            d = 1.0D;
-        }
-
-        if (d < 0.0D) {
-            d = -1.0D;
-        }
-        for(this.selected = (int)((double)this.selected - d); this.selected < 0; this.selected += NovelHud.STACKS_DISPLAY) {
-        }
-
-        while(this.selected >= NovelHud.STACKS_DISPLAY) {
-            this.selected -= NovelHud.STACKS_DISPLAY;
-        }
+        this.selected=NovelHud.getInstance().swapSlotSelectionOnMouseScroll(selected,d);
 
     }
     /**

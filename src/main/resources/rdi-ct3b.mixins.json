@@ -6,6 +6,7 @@
   "mixins": [
     "AccessDisconnectedScreen",
     "AccessItemRenderer",
+    "AccessKeyEntry",
     "AccessMinecraft",
     "AccessSplashOverlay",
     "AccessSystemReport",
@@ -18,13 +19,17 @@
     "MixinNoFog",
     "MixinNoUnicodeFonts",
     "MixinNoUnicodeFonts2",
+    "MixinNoVanillaKeys",
     "MixinNovelHudGui",
     "MixinNovelHudGui2",
     "MixinNovelNameTabOverlay",
     "MixinProtocol",
     "MixinRdiAuth",
     "MixinRdiAuth2",
-    "MixinToNewTitleScreen"
+    "MixinToNewTitleScreen",
+    "NoVanillaKey2",
+    "NVK3",
+    "NVK4"
   ],
   "client": [
     "MixinConnectScreen",

@@ -3,9 +3,12 @@ package calebzhou.rdi.craftsphere.screen;
 import calebzhou.rdi.craftsphere.mixin.AccessItemRenderer;
 import calebzhou.rdi.craftsphere.mixin.AccessMinecraft;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.CrashReport;
 import net.minecraft.CrashReportCategory;
 import net.minecraft.ReportedException;
@@ -35,8 +38,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HalfTransparentBlock;
 import net.minecraft.world.level.block.StainedGlassPaneBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import org.apache.commons.math3.analysis.function.Min;
 import org.jetbrains.annotations.Nullable;
+import org.lwjgl.glfw.GLFW;
 
 import java.util.Iterator;
 import java.util.List;
@@ -48,91 +51,195 @@ import static calebzhou.rdi.craftsphere.ExampleMod.MODID;
 public class NovelHud extends GuiComponent{
     //要显示的格数，一共显示36个物品
     public static final int STACKS_DISPLAY = 36;
-    private static final ResourceLocation WIDGETS_LOCATION = new ResourceLocation(MODID,"textures/widgets.png");
+    //private static final ResourceLocation WIDGETS_LOCATION = new ResourceLocation(MODID,"textures/widgets.png");
     private static NovelHud INSTANCE = null;
     public float blitOffset=0f;
+    public static boolean jump9slotMode =false;
+    public static boolean jumpSameSlotMode = false;
     public static NovelHud getInstance() {
         if(INSTANCE==null)
             INSTANCE = new NovelHud();
         return INSTANCE;
     }
     private NovelHud(){
+        //按SHIFT和CTRL的监听
+        /*GLFW.glfwSetKeyCallback(Minecraft.getInstance().getWindow().getWindow(),
+                (window, key, scancode, action, mods) -> {
+            if(key==GLFW.GLFW_KEY_LEFT_SHIFT ){
+                if(action==GLFW.GLFW_PRESS)
+                    isShiftPressed=true;
+                else if(action==GLFW.GLFW_RELEASE)
+                    isShiftPressed=false;
+            }else if(key==GLFW.GLFW_KEY_LEFT_CONTROL){
+                if(action==GLFW.GLFW_PRESS)
+                    isCtrlPressed=true;
+                else if(action==GLFW.GLFW_RELEASE)
+                    isCtrlPressed=false;
+            }
+        });*/
     }
+    private void updateKey(){
+        long window = Minecraft.getInstance().getWindow().getWindow();
+        if (InputConstants.isKeyDown(window, GLFW.GLFW_KEY_C)) {
+            jump9slotMode =true;
+        }else if(InputConstants.isKeyDown(window, GLFW.GLFW_KEY_V)){
+            jumpSameSlotMode =true;
+        }else{
+            jump9slotMode =false;
+            jumpSameSlotMode =false;
+        }
+    }
+    //目前选择的格子+9 跳9个模式 哪个是跳起来的
+    private final IntList jump9SlotList = new IntArrayList();
+    private final IntList jumpSameSlotList = new IntArrayList();
     //TODO 根据屏幕宽度自动翻页
     public void render(float f, PoseStack poseStack, Player player, int screenWidth, int screenHeight){
         if (player == null) return;
-        //不显示mc原始的物品栏背景。
-            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        updateKey();
 
-            RenderSystem.setShader(GameRenderer::getPositionTexShader);
-            //RenderSystem.setShaderTexture(0, WIDGETS_LOCATION);
-            ItemStack itemStack = player.getOffhandItem();
-            HumanoidArm humanoidArm = player.getMainArm().getOpposite();
-            //物品栏的起始宽度，这个值越大，往右串的越多
-            int startWidth = 0/*screenWidth / 2*/;
-            int widthOffset = 0;
-            int blitOffset = this.getBlitOffset();
-            /*this.setBlitOffset(-90);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+
+        ItemStack itemStack = player.getOffhandItem();
+        HumanoidArm humanoidArm = player.getMainArm().getOpposite();
+        //物品栏的起始宽度，这个值越大，往右串的越多
+        int startWidth = 0/*screenWidth / 2*/;
+        int widthOffset = 0;
+        int blitOffset = this.getBlitOffset();
+        /*不显示mc原始的物品栏背景。
+            RenderSystem.setShaderTexture(0, WIDGETS_LOCATION);
+            this.setBlitOffset(-90);
             this.blit(poseStack, startWidth - widthOffset, screenHeight - 22, 0, 0, 182, 22);
             this.blit(poseStack, startWidth - widthOffset - 1 + player.getInventory().selected * 20, screenHeight - 22 - 1, 0, 22, 24, 22);
-            */if (!itemStack.isEmpty()) {
-                if (humanoidArm == HumanoidArm.LEFT) {
-                    this.blit(poseStack, startWidth - widthOffset - 29, screenHeight - 23, 24, 22, 29, 24);
-                } else {
-                    this.blit(poseStack, startWidth + widthOffset, screenHeight - 23, 53, 22, 29, 24);
+            */
+        if (!itemStack.isEmpty()) {
+            if (humanoidArm == HumanoidArm.LEFT) {
+                this.blit(poseStack, startWidth - widthOffset - 29, screenHeight - 23, 24, 22, 29, 24);
+            } else {
+                this.blit(poseStack, startWidth + widthOffset, screenHeight - 23, 53, 22, 29, 24);
+            }
+        }
+
+        this.setBlitOffset(blitOffset);
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        int m = 1;
+
+        int stackNumber;
+        int width;
+        int offsetHeight;
+        //格子中间间隔，默认20
+        int gapBetweenStack = 14;
+
+        //目前选择的格子
+        int selectedNumber = player.getInventory().selected;
+        final int slotToJump = 9;
+
+        if(NovelHud.jump9slotMode){
+            int i=selectedNumber;
+            jump9SlotList.add(i);
+            i+=slotToJump;
+            //如果超过了36，多出来的值-36就是初始的
+            if(i>= STACKS_DISPLAY)
+                i = i -STACKS_DISPLAY;
+            jump9SlotList.add(i);
+            i+=slotToJump;
+            if(i>= STACKS_DISPLAY)
+                i = i -STACKS_DISPLAY;
+            jump9SlotList.add(i);
+            i+=slotToJump;
+            if(i>= STACKS_DISPLAY)
+                i = i -STACKS_DISPLAY;
+            jump9SlotList.add(i);
+        }else{
+            if(jump9SlotList.size()!=0)
+                jump9SlotList.clear();
+        }
+
+
+
+
+        for(stackNumber = 0; stackNumber < STACKS_DISPLAY; ++stackNumber) {
+            ItemStack itemSlot = player.getInventory().items.get(stackNumber);
+            ItemStack prevItemSlot;
+            if(NovelHud.jumpSameSlotMode){
+                //0格的上一格是35
+                prevItemSlot = player.getInventory().items.get(stackNumber>0?stackNumber:STACKS_DISPLAY-1);
+            }else{
+                prevItemSlot=null;
+            }
+            width = startWidth - widthOffset + stackNumber * gapBetweenStack+2;
+            //这个参数越高(+)，越往下去 越低(-)，越往上去
+            offsetHeight = screenHeight - 16;
+
+            //已经选中的 物品格，高度 比别的 高，
+            if(selectedNumber ==stackNumber)
+                offsetHeight -=4;
+            //跳9格模式，
+            if(NovelHud.jump9slotMode){
+                if(jump9SlotList.contains(stackNumber)){
+                    offsetHeight-=5;
                 }
             }
+            //跳过同类模式，
+            if(NovelHud.jumpSameSlotMode){
 
-            this.setBlitOffset(blitOffset);
-            RenderSystem.enableBlend();
-            RenderSystem.defaultBlendFunc();
-            int m = 1;
-
-            int stack;
-            int width;
-            int offsetHeight;
-            //格子中间间隔，默认20
-            int gapBetweenStack = 14;
-            //要显示的格数
-            int stacksToDisplay = STACKS_DISPLAY;
-            for(stack = 0; stack < stacksToDisplay; ++stack) {
-                width = startWidth - widthOffset + stack * gapBetweenStack+2;
-                //这个参数越高(+)，越往下去 越低(-)，越往上去
-                offsetHeight = screenHeight - 16;
-                //如果是已经选中的物品格，他会比别的格子稍微高一些，高度
-                if(player.getInventory().selected==stack)
-                    this.renderSlot(width, offsetHeight-5, f, player, player.getInventory().items.get(stack), m++);
-                else
-                    this.renderSlot(width, offsetHeight, f, player, player.getInventory().items.get(stack), m++);
             }
 
-            if (!itemStack.isEmpty()) {
-                stack = screenHeight - 16 - 3;
-                if (humanoidArm == HumanoidArm.LEFT) {
-                    this.renderSlot(startWidth - widthOffset - 26, stack, f, player, itemStack, m++);
-                } else {
-                    this.renderSlot(startWidth + widthOffset + 10, stack, f, player, itemStack, m++);
+
+            this.renderSlot(width, offsetHeight, f, player, itemSlot, m++);
+
+        }
+
+        if (!itemStack.isEmpty()) {
+            stackNumber = screenHeight - 16 - 3;
+            if (humanoidArm == HumanoidArm.LEFT) {
+                this.renderSlot(startWidth - widthOffset - 26, stackNumber, f, player, itemStack, m++);
+            } else {
+                this.renderSlot(startWidth + widthOffset + 10, stackNumber, f, player, itemStack, m++);
+            }
+        }
+
+        if (Minecraft.getInstance().options.attackIndicator == AttackIndicatorStatus.HOTBAR) {
+            float attackStrengthScale = Minecraft.getInstance().player.getAttackStrengthScale(0.0F);
+            if (attackStrengthScale < 1.0F) {
+                width = screenHeight - 20;
+                offsetHeight = startWidth + widthOffset + 6;
+                if (humanoidArm == HumanoidArm.RIGHT) {
+                    offsetHeight = startWidth - widthOffset - 22;
                 }
+
+                RenderSystem.setShaderTexture(0, GuiComponent.GUI_ICONS_LOCATION);
+                int scaledAtkStrength = (int)(attackStrengthScale * 19.0F);
+                RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+                this.blit(poseStack, offsetHeight, width, 0, 94, 18, 18);
+                this.blit(poseStack, offsetHeight, width + 18 - scaledAtkStrength, 18, 112 - scaledAtkStrength, 18, scaledAtkStrength);
             }
+        }
 
-            if (Minecraft.getInstance().options.attackIndicator == AttackIndicatorStatus.HOTBAR) {
-                float attackStrengthScale = Minecraft.getInstance().player.getAttackStrengthScale(0.0F);
-                if (attackStrengthScale < 1.0F) {
-                    width = screenHeight - 20;
-                    offsetHeight = startWidth + widthOffset + 6;
-                    if (humanoidArm == HumanoidArm.RIGHT) {
-                        offsetHeight = startWidth - widthOffset - 22;
-                    }
+        RenderSystem.disableBlend();
+    }
+    //9扩展36，按住shift可以跳9个，按ctrl可以跳同类
 
-                    RenderSystem.setShaderTexture(0, GuiComponent.GUI_ICONS_LOCATION);
-                    int scaledAtkStrength = (int)(attackStrengthScale * 19.0F);
-                    RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-                    this.blit(poseStack, offsetHeight, width, 0, 94, 18, 18);
-                    this.blit(poseStack, offsetHeight, width + 18 - scaledAtkStrength, 18, 112 - scaledAtkStrength, 18, scaledAtkStrength);
-                }
-            }
+    public int swapSlotSelectionOnMouseScroll(int selected,double d){
+        if (d > 0) {
+            d = 1;
+        }
 
-            RenderSystem.disableBlend();
+        if (d < 0) {
+            d = -1;
+        }
+        if(jump9slotMode)
+            d*=9;
+
+        for(selected = (int)((double)selected - d); selected < 0; selected += NovelHud.STACKS_DISPLAY) {
+        }
+
+        while(selected >= NovelHud.STACKS_DISPLAY) {
+
+            selected -= NovelHud.STACKS_DISPLAY;
+        }
+        return selected;
     }
     private void renderSlot(int width, int height, float f, Player player, ItemStack itemStack, int k) {
         if (!itemStack.isEmpty()) {
