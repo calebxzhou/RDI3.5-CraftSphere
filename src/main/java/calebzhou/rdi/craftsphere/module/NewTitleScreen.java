@@ -8,10 +8,6 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-
-import java.lang.reflect.InvocationTargetException;
-import java.util.Iterator;
-
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -25,11 +21,13 @@ import net.minecraft.client.gui.screens.worldselection.SelectWorldScreen;
 import net.minecraft.client.renderer.CubeMap;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.PanoramaRenderer;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.Iterator;
 
 public class NewTitleScreen extends Screen {
     private static boolean isPlayingMusic = false;
@@ -41,7 +39,7 @@ public class NewTitleScreen extends Screen {
 
     public static final NewTitleScreen INSTANCE = new NewTitleScreen();
     private NewTitleScreen() {
-        super(new TextComponent("主界面"));
+        super(Component.literal("主界面"));
     }
 
     public void render(PoseStack matrices, int mouseX, int mouseY, float delta) {
@@ -116,7 +114,7 @@ public class NewTitleScreen extends Screen {
     public void init() {
         this.addRenderableWidget(new ImageButton(this.width -10, this.height-10, 10, 10, 0,0,20, Textures.ICON_SETTINGS,16,32, (button) -> {
             this.minecraft.setScreen(new OptionsScreen(this, this.minecraft.options));
-        }, new TranslatableComponent("menu.options")));
+        }, Component.translatable("menu.options")));
         /*this.addDrawableChild(new TexturedButtonWidget(this.width-40, j, 20, 20, 0, 0, 20, new Identifier("textures/gui/accessibility.png"), 32, 64, (button) -> {
             this.client.setScreen(new AccessibilityOptionsScreen(this, this.client.options));
         }, new TranslatableText("narrator.button.accessibility")));*/
@@ -127,7 +125,7 @@ public class NewTitleScreen extends Screen {
                 DialogUtils.showError("必须安装ModMenu模组以使用本功能！！");
                 e.printStackTrace();
             }
-        }, new TranslatableComponent("Mods")));
+        }, Component.translatable("Mods")));
         Minecraft.getInstance().options.setSoundCategoryVolume(SoundSource.MUSIC,0);
 
     }

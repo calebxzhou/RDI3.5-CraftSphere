@@ -13,9 +13,9 @@ public class MixinNoFog {
     /**
      * @author 没有雾！
      */
-    @Inject(method = "Lnet/minecraft/client/renderer/FogRenderer;setupFog(Lnet/minecraft/client/Camera;Lnet/minecraft/client/renderer/FogRenderer$FogMode;FZ)V",
+    @Inject(method = "Lnet/minecraft/client/renderer/FogRenderer;setupFog(Lnet/minecraft/client/Camera;Lnet/minecraft/client/renderer/FogRenderer$FogMode;FZF)V",
     at = @At("HEAD"), cancellable = true)
-    private static void noFogdebug(Camera camera, FogRenderer.FogMode fogType, float viewDistance, boolean thickFog, CallbackInfo ci){
+    private static void noFogdebug(Camera camera, FogRenderer.FogMode fogMode, float f, boolean bl, float g, CallbackInfo ci){
         if(ExampleMod.debug)
             ci.cancel();
     }

@@ -10,6 +10,7 @@ import net.minecraft.client.resources.metadata.texture.TextureMetadataSection;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.VanillaPackResources;
 import net.minecraft.server.packs.resources.ResourceManager;
+
 import java.io.IOException;
 import java.io.InputStream;
 @Environment(EnvType.CLIENT)
@@ -19,16 +20,16 @@ public class LogoTexture extends SimpleTexture{
             super(LOGO);
         }
 
-        protected SimpleTexture.TextureImage getTextureImage(ResourceManager resourceManager) {
+        protected TextureImage getTextureImage(ResourceManager resourceManager) {
             Minecraft minecraftClient = Minecraft.getInstance();
             VanillaPackResources defaultResourcePack = minecraftClient.getClientPackSource().getVanillaPack();
 
             try {
                 InputStream inputStream = FileUtils.getJarResourceAsStream("splash.png");//defaultResourcePack.open(ResourceType.CLIENT_RESOURCES, LOGO);
 
-                SimpleTexture.TextureImage var5;
+                TextureImage var5;
                 try {
-                    var5 = new SimpleTexture.TextureImage(new TextureMetadataSection(true, true), NativeImage.read(inputStream));
+                    var5 = new TextureImage(new TextureMetadataSection(true, true), NativeImage.read(inputStream));
                 } catch (Throwable var8) {
                     if (inputStream != null) {
                         try {
@@ -47,7 +48,7 @@ public class LogoTexture extends SimpleTexture{
 
                 return var5;
             } catch (IOException var9) {
-                return new SimpleTexture.TextureImage(var9);
+                return new TextureImage(var9);
             }
         }
 

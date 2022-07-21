@@ -1,7 +1,6 @@
 package calebzhou.rdi.craftsphere.module;
 
 import calebzhou.rdi.craftsphere.misc.KeyBinds;
-import calebzhou.rdi.craftsphere.util.NetworkReceivableS2C;
 import calebzhou.rdi.craftsphere.util.NetworkUtils;
 import calebzhou.rdi.craftsphere.util.PlayerUtils;
 import calebzhou.rdi.craftsphere.util.WorldTickable;

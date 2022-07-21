@@ -1,6 +1,5 @@
 package calebzhou.rdi.craftsphere.module;
 
-import calebzhou.rdi.craftsphere.RdiConfigure;
 import calebzhou.rdi.craftsphere.util.WorldTickable;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.Minecraft;
@@ -15,6 +14,9 @@ public class NoDroppingVoid implements WorldTickable {
     @Override
     public void tickWorld(ClientLevel world) {
         Minecraft client = Minecraft.getInstance();
+        if(client.player == null){
+            return;
+        }
         double y1 = client.player.getY();
         /*++ticks;
         if(ticks>20){

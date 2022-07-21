@@ -1,6 +1,9 @@
 package calebzhou.rdi.craftsphere.mixin;
 
 import calebzhou.rdi.craftsphere.screen.LoadingOverlay;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Overlay;
+import net.minecraft.server.packs.resources.ReloadInstance;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.injection.At;
@@ -8,9 +11,6 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.Optional;
 import java.util.function.Consumer;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.Overlay;
-import net.minecraft.server.packs.resources.ReloadInstance;
 
 @Mixin(Minecraft.class)
 public abstract class MixinNewLoadingOverlay {

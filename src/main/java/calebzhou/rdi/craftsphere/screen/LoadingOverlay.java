@@ -3,7 +3,6 @@ package calebzhou.rdi.craftsphere.screen;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.fabricmc.fabric.impl.client.indigo.renderer.helper.ColorHelper;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Overlay;
@@ -14,6 +13,7 @@ import net.minecraft.client.renderer.PanoramaRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ReloadInstance;
 import net.minecraft.util.Mth;
+
 import java.util.Optional;
 import java.util.function.Consumer;
 

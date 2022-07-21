@@ -1,8 +1,8 @@
 package calebzhou.rdi.craftsphere.util;
 
-import static calebzhou.rdi.craftsphere.ExampleMod.MODID;
-
 import net.minecraft.resources.ResourceLocation;
+
+import static calebzhou.rdi.craftsphere.ExampleMod.MODID;
 
 public class IdentifierUtils {
     public static ResourceLocation byClass(Class clazz){

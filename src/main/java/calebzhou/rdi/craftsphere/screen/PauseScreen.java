@@ -1,37 +1,20 @@
 package calebzhou.rdi.craftsphere.screen;
 
-import calebzhou.rdi.craftsphere.ExampleGui;
 import calebzhou.rdi.craftsphere.module.NewTitleScreen;
 import calebzhou.rdi.craftsphere.texture.Textures;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.spinyowl.legui.DefaultInitializer;
-import com.spinyowl.legui.animation.Animator;
-import com.spinyowl.legui.animation.AnimatorProvider;
-import com.spinyowl.legui.component.Component;
-import com.spinyowl.legui.component.Frame;
-import com.spinyowl.legui.style.Style;
-import com.spinyowl.legui.style.color.ColorConstants;
-import com.spinyowl.legui.system.context.Context;
-import com.spinyowl.legui.system.layout.LayoutManager;
-import com.spinyowl.legui.system.renderer.Renderer;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.screens.GenericDirtMessageScreen;
 import net.minecraft.client.gui.screens.OptionsScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.TitleScreen;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
-import org.joml.Vector2i;
-
-import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.opengl.GL11.*;
+import net.minecraft.network.chat.Component;
 
 public class PauseScreen extends Screen {
     private final boolean showMenu;
 
     public PauseScreen(boolean showMenu) {
-        super(new TextComponent("菜单"));
+        super(Component.literal("菜单"));
         this.showMenu=showMenu;
     }
 
@@ -51,18 +34,18 @@ public class PauseScreen extends Screen {
         this.addRenderableWidget(new ImageButton(w - 25, j, 20, 20, 0,0,20, Textures.ICON_CONTINUE,32,64, (button) -> {
             this.minecraft.setScreen(null);
             this.minecraft.mouseHandler.grabMouse();
-        },  new TranslatableComponent("menu.returnToGame")));
+        },  Component.translatable("menu.returnToGame")));
 
         this.addRenderableWidget(new ImageButton(w , j, 20, 20, 0,0,20, Textures.ICON_SETTINGS,32,64, (button) -> {
             this.minecraft.setScreen(new OptionsScreen(this, this.minecraft.options));
-        }, new TranslatableComponent("menu.options")));
+        }, Component.translatable("menu.options")));
         this.addRenderableWidget(new ImageButton(w + 25, j, 20, 20, 0, 0, 20, Textures.ICON_QUIT, 32, 64, (button) -> {
             boolean bl = this.minecraft.isLocalServer();
             boolean bl2 = false;
             button.active = false;
             this.minecraft.level.disconnect();
             if (bl) {
-                this.minecraft.clearLevel(new GenericDirtMessageScreen(new TranslatableComponent("menu.savingLevel")));
+                this.minecraft.clearLevel(new GenericDirtMessageScreen(Component.translatable("menu.savingLevel")));
             } else {
                 this.minecraft.clearLevel();
             }
@@ -73,7 +56,7 @@ public class PauseScreen extends Screen {
             } else {
                 this.minecraft.setScreen(NewTitleScreen.INSTANCE);
             }
-        }, new TranslatableComponent("menu.disconnect")));
+        }, Component.translatable("menu.disconnect")));
     }
 
     @Override

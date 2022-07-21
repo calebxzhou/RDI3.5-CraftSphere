@@ -1,14 +1,13 @@
 package calebzhou.rdi.craftsphere.mixin;
 
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.resources.ResourceLocation;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.Shadow;
 
 import static calebzhou.rdi.craftsphere.ExampleMod.MODID;
-
-import net.minecraft.client.gui.GuiComponent;
-import net.minecraft.resources.ResourceLocation;
 
 @Mixin(GuiComponent.class)
 public class MixinNoDirtGuiBackground {
