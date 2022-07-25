@@ -1,10 +1,6 @@
 package calebzhou.rdi.craftsphere;
 
-import calebzhou.rdi.craftsphere.misc.KeyBinds;
-import calebzhou.rdi.craftsphere.module.IslandInfo;
-import calebzhou.rdi.craftsphere.util.NetworkUtils;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.multiplayer.resolver.ServerAddress;
 import net.minecraft.core.Registry;
@@ -12,8 +8,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.Arrays;
 
 public class ExampleMod implements ModInitializer {
 
@@ -39,7 +33,6 @@ public class ExampleMod implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		regSounds();
-		regNetwork();
 		new EventRegister();
 	}
 	public static SoundEvent titleMusicEvent;
@@ -47,9 +40,6 @@ public class ExampleMod implements ModInitializer {
 		ResourceLocation titleMusic = new ResourceLocation(MODID, "title_sound");
 		titleMusicEvent = new SoundEvent(titleMusic);
 		Registry.register(Registry.SOUND_EVENT, titleMusic, titleMusicEvent);
-	}
-	public void regNetwork(){
-		new IslandInfo();
 	}
 
 

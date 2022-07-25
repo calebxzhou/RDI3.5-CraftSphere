@@ -1,7 +1,6 @@
 package calebzhou.rdi.craftsphere.module;
 
 import calebzhou.rdi.craftsphere.ExampleMod;
-import calebzhou.rdi.craftsphere.RdiConfigure;
 import calebzhou.rdi.craftsphere.texture.Textures;
 import calebzhou.rdi.craftsphere.util.DialogUtils;
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -87,13 +86,11 @@ public class NewTitleScreen extends Screen {
             super.render(matrices, mouseX, mouseY, delta);
         }
         ++frames;
-        if(RdiConfigure.getConfig().playBackgroundMusicOnTitleScreen){
             if(!isPlayingMusic){
                 GameMusic.playOnTitle();
                 isPlayingMusic =true;
             }
 
-        }
     }
     public void tick() {
 

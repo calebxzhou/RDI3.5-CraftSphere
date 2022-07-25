@@ -1,10 +1,12 @@
 package calebzhou.rdi.craftsphere;
 
 import calebzhou.rdi.craftsphere.misc.KeyBinds;
+import calebzhou.rdi.craftsphere.util.DialogUtils;
 import calebzhou.rdi.craftsphere.util.NetworkUtils;
 import calebzhou.rdi.craftsphere.util.PlayerUtils;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientEntityEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
@@ -37,6 +39,16 @@ public class EventRegister {
             danceTree();
             //检查按键事件
             KeyBinds.handleKeyActions(world);
+        });
+        //接收服务器的空岛信息
+        ClientPlayNetworking.registerGlobalReceiver(NetworkPackets.ISLAND_INFO,(client, handler, buf, responseSender) -> {
+            int i = buf.readInt();
+            //接收到了0就提示创建岛屿
+            if(i == 0){
+                if (DialogUtils.showYesNo("没有找到您的岛屿。\n是：立刻创建自己的岛屿\n否：加入朋友的岛屿")) {
+                    client.player.chat("/create");
+                }
+            }
         });
     }
     private int treeScore = 0;
