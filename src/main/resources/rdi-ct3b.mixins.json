@@ -4,28 +4,29 @@
   "package": "calebzhou.rdi.craftsphere.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-
+    "MixinNameChk4Offline",
+    "MixinSendHwSpec"
   ],
   "client": [
     "AccessSplashOverlay",
     "AccessSystemReport",
     "MixinChangeGameVersion",
     "MixinConnectScreen",
-    "MixinFixedGamma",
-    "MixinFoodDirectEat",
     "MixinGoNewTitleScreen",
-    "MixinMouseMiddleKey",
+    "MixinLaglessEat",
+    "MixinLuminChk",
     "MixinNewLoadingOverlay",
+    "MixinNewTitleScreen",
     "MixinNoChatBrackets",
-    "MixinNoDirtGuiBackground",
+    "MixinNoDirtGuiBg",
     "MixinNoFog",
     "MixinNoUnicodeFonts",
     "MixinNoUnicodeFonts2",
-    "MixinPauseMenu",
     "MixinProtocol",
+    "MixinSimplePauseMenu",
+    "MixinSmartMiddleKey",
     "MixinTabPlayerHud",
-    "MixinToNewTitleScreen",
-    "WindowTitleMixin"
+    "MixinWindowTitle"
   ],
   "injectors": {
     "defaultRequire": 1

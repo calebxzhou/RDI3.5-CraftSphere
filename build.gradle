@@ -48,24 +48,10 @@ dependencies {
 	mappings loom.layered() {
 		officialMojangMappings()
 	}//"net.fabricmc:yarn:${project.yarn_mappings}:v2"
+	// https://mvnrepository.com/artifact/org.projectlombok/lombok
+	compileOnly 'org.projectlombok:lombok:1.18.24'
+
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-	// https://mvnrepository.com/artifact/org.apache.commons/commons-math3
-	//implementation 'org.apache.commons:commons-math3:3.6.1'
-	// https://mvnrepository.com/artifact/org.lwjgl/lwjgl-nanovg
-	//implementation 'org.lwjgl:lwjgl-nanovg:3.2.2'
-// https://mvnrepository.com/artifact/org.lwjgl/lwjgl-yoga
-	//implementation 'org.lwjgl:lwjgl-yoga:3.2.2'
-
-	//implementation ("com.spinyowl:legui:${project.legui_version}"){
-		//exclude group: 'org.lwjgl'
-		//exclude group: 'org.lwjgl'//, module: 'commons-collections'
-	//}
-	// https://mvnrepository.com/artifact/org.openjfx/javafx
-// https://mvnrepository.com/artifact/org.openjfx/javafx-base
-
-/*	modRuntime("com.terraformersmc:modmenu:${project.modmenu_version}") {
-		exclude group: "net.fabricmc.fabric-api"
-	}*/
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 	modImplementation("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}")

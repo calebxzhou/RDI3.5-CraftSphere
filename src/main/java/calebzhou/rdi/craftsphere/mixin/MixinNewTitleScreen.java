@@ -9,18 +9,17 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
+//去新的标题界面
 @Mixin(Minecraft.class)
-public abstract class MixinToNewTitleScreen {
+public abstract class MixinNewTitleScreen {
     @Redirect(method = "Lnet/minecraft/client/Minecraft;<init>(Lnet/minecraft/client/main/GameConfig;)V",
     at=@At(value = "INVOKE",
             target = "Lnet/minecraft/client/Minecraft;setScreen(Lnet/minecraft/client/gui/screens/Screen;)V"))
     private void qafdqwd(Minecraft instance, Screen screen){
         instance.setScreen(NewTitleScreen.INSTANCE);
     }
-    /**
-     * @author
-     * 不开启领域服
-     */
+    //不开启领域服
+
     @Overwrite
     public boolean isConnectedToRealms() {
         return false;

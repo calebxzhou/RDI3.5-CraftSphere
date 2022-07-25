@@ -1,8 +1,9 @@
-package calebzhou.rdi.craftsphere.module;
+package calebzhou.rdi.craftsphere.mixin;
 
 import calebzhou.rdi.craftsphere.ExampleMod;
 import it.unimi.dsi.fastutil.objects.ReferenceArrayList;
 import it.unimi.dsi.fastutil.objects.ReferenceList;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
@@ -13,10 +14,36 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.Comparator;
 
-public class MiddleKey {
+//智能中键选取工具
+@Mixin(Minecraft.class)
+public abstract class MixinSmartMiddleKey {
+    @Shadow @Nullable public HitResult hitResult;
+
+    @Shadow @Nullable public LocalPlayer player;
+
+    @Shadow @Nullable public ClientLevel level;
+
+    @Shadow protected abstract void pickBlock();
+
+    @Redirect(method = "Lnet/minecraft/client/Minecraft;handleKeybinds()V",
+    at=@At(value="INVOKE",target = "Lnet/minecraft/client/Minecraft;pickBlock()V"))
+    private void handleMiddleKey(Minecraft mc){
+        //非创造 ， 才能用智能选取工具
+        if(!player.isCreative()){
+            SmartMiddleKey.handle(hitResult,player,level);
+        }else
+            pickBlock();
+
+    }
+}
+class SmartMiddleKey {
 
     //鼠标中键·智能选择挖掘工具
     public static void handle(@Nullable HitResult hitResult, @Nullable LocalPlayer player, @Nullable ClientLevel level){
@@ -66,14 +93,14 @@ public class MiddleKey {
         //找出NBT多的（附魔多的）、
         ItemStack mostNbt = correctItemList.stream()
                 .max(Comparator.comparing(itemStack ->{
-                    if(itemStack==null)
-                        return 0;
-                    if(itemStack.getTag()==null)
-                        return 0;
+                            if(itemStack==null)
+                                return 0;
+                            if(itemStack.getTag()==null)
+                                return 0;
 
-                    return  itemStack.getTag().size();
+                            return  itemStack.getTag().size();
                         }
-                       ))
+                ))
                 .orElse(null);
         if(mostNbt!=null){
             inventory.selected= inventory.findSlotMatchingItem(mostNbt);

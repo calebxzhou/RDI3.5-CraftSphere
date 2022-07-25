@@ -11,8 +11,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
+//简单的暂停菜单
 @Mixin(Minecraft.class)
-public abstract class MixinPauseMenu {
+public abstract class MixinSimplePauseMenu {
 
     @Shadow public abstract void setScreen(@Nullable Screen screen);
 

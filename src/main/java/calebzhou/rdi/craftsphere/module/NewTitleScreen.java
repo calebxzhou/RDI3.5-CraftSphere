@@ -41,7 +41,9 @@ public class NewTitleScreen extends Screen {
     private NewTitleScreen() {
         super(Component.literal("主界面"));
     }
-
+    public boolean shouldCloseOnEsc() {
+        return false;
+    }
     public void render(PoseStack matrices, int mouseX, int mouseY, float delta) {
 
         if (backgroundFadeStart == 0L ) {

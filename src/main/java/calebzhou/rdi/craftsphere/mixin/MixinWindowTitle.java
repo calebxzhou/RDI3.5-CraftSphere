@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 
 @Mixin(Minecraft.class)
-public class WindowTitleMixin {
+public class MixinWindowTitle {
     /**
      * @author
      *  RDI 窗口标题

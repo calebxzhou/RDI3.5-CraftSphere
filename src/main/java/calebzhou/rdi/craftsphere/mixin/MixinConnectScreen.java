@@ -15,13 +15,13 @@ public class MixinConnectScreen {
     @Mutable
     private Component status = Component.literal("载入模组数据...");
 
-    //不在日志中显示connecting to
+    //不在日志中显示connecting to的，防止看出来ip地址
     @ModifyConstant(
             method = "connect(Lnet/minecraft/client/Minecraft;Lnet/minecraft/client/multiplayer/resolver/ServerAddress;)V",
             constant = @Constant(stringValue = "Connecting to {}, {}")
     )
     private String asdas(String asd){
-        return "";
+        return "Connecting";
     }
 
 }

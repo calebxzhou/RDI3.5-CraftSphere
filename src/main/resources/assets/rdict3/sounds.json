@@ -1,7 +1,7 @@
 {
-  "home": {
+  "title_sound": {
     "sounds": [
-      "rdict3:home"
+      "rdict3:title_sound"
     ]
   }
 }
