@@ -18,6 +18,20 @@ public class DialogUtils {
         ToastComponent toastManager = Minecraft.getInstance().getToasts();
         toastManager.addToast(toast);
     }*/
+    public static void main(String[] args) {
+        showErrorPopup(
+                "您没有空岛"
+        );
+    }
+    public static void showInfoPopup(String msg){
+        TinyFileDialogs.tinyfd_notifyPopup("提示",msg,"info");
+    }
+    public static void showWarnPopup(String msg){
+        TinyFileDialogs.tinyfd_notifyPopup("警告",msg,"warning");
+    }
+    public static void showErrorPopup(String msg){
+        TinyFileDialogs.tinyfd_notifyPopup("错误",msg,"error");
+    }
     public static void showError(String msg){
         TinyFileDialogs.tinyfd_messageBox("错误",msg,"ok","error",true);
     }

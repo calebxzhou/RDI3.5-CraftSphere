@@ -20,4 +20,6 @@ public class NetworkPackets {
 
     //岛屿信息
     public static final ResourceLocation ISLAND_INFO =new ResourceLocation(MODID,"island_info");
+    //对话框信息
+    public static final ResourceLocation DIALOG_INFO = new ResourceLocation(MODID,"dialog_info");
 }

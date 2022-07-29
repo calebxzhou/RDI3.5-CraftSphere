@@ -29,16 +29,21 @@ public class EventRegister {
         //客户端世界tick事件
         ClientTickEvents.END_WORLD_TICK.register(world->{
             this.world=world;
-            //虚空防止掉落
-            preventDroppingVoid();
-            //隔空跳跃
-            quickLeap();
-            //检测挂机
-            afkDetect();
-            //跳舞树
-            danceTree();
-            //检查按键事件
-            KeyBinds.handleKeyActions(world);
+            if(Minecraft.getInstance().player!=null){
+                //虚空防止掉落
+                //preventDroppingVoid();
+                //隔空跳跃
+                //quickLeap();
+                //检测挂机
+                //afkDetect();
+                //跳舞树
+                danceTree();
+                //检查按键事件
+                KeyBinds.handleKeyActions(world);
+            }
+
+
+
         });
         //接收服务器的空岛信息
         ClientPlayNetworking.registerGlobalReceiver(NetworkPackets.ISLAND_INFO,(client, handler, buf, responseSender) -> {
@@ -50,9 +55,17 @@ public class EventRegister {
                 }
             }
         });
+        //接收服务器的对话框信息
+        ClientPlayNetworking.registerGlobalReceiver(NetworkPackets.DIALOG_INFO,(client, handler, buf, responseSender) -> {
+            String info = buf.readUtf();
+
+            //接收到了0就提示创建岛屿
+
+        });
     }
     private int treeScore = 0;
     public void danceTree(){
+
         if(world.dimension() != ClientLevel.OVERWORLD)
             return;
         LocalPlayer player = Minecraft.getInstance().player;
@@ -101,8 +114,8 @@ public class EventRegister {
             client.player.chat("/spawn");
         }
     }
-    public void quickLeap(){
-        Minecraft client = Minecraft.getInstance();
+   /* public void quickLeap(){
+         return;
         if (KeyBinds.LEAP_KEY.consumeClick()){
             BlockPos lookingAtBlock = PlayerUtils.getPlayerLookingAtBlock(client.player,false);
             if(lookingAtBlock==null){
@@ -113,11 +126,12 @@ public class EventRegister {
             }
             NetworkUtils.sendPacketToServer(NetworkPackets.LEAP,lookingAtBlock.asLong());
         }
-    }
+    }*/
 
     private int totalAfkTicks =0;
     public void afkDetect(){
         Minecraft client = Minecraft.getInstance();
+        if(client.player==null) return;
         long handle = client.getWindow().getWindow();
         ++totalAfkTicks;
         //触碰键盘，告诉服务器停止挂机
