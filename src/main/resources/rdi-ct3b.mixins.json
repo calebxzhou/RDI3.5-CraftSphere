@@ -12,6 +12,7 @@
     "AccessSystemReport",
     "MixinChangeGameVersion",
     "MixinConnectScreen",
+    "MixinDebugOverlay",
     "MixinGoNewTitleScreen",
     "MixinLaglessEat",
     "MixinLuminChk",

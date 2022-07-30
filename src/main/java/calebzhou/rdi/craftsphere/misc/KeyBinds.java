@@ -27,11 +27,11 @@ public class KeyBinds  {
             return;
         //按下H键返回空岛
         while (KeyBinds.HOME_KEY.consumeClick()) {
-            client.player.chat("/home");
+            client.player.command("home");
         }
         //按下J键开启缓降
         while (KeyBinds.SLOWFALL_KEY.consumeClick()) {
-            client.player.chat("/slowfall 1");
+            client.player.command("slowfall 1");
         }
 
     }
