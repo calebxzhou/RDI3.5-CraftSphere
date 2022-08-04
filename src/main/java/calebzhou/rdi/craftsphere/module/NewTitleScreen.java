@@ -37,7 +37,7 @@ public class NewTitleScreen extends Screen {
     private int frames=0;
 
     public static final NewTitleScreen INSTANCE = new NewTitleScreen();
-    private NewTitleScreen() {
+    public NewTitleScreen() {
         super(Component.literal("主界面"));
     }
     public boolean shouldCloseOnEsc() {
@@ -86,10 +86,10 @@ public class NewTitleScreen extends Screen {
             super.render(matrices, mouseX, mouseY, delta);
         }
         ++frames;
-            if(!isPlayingMusic){
+            /*if(!isPlayingMusic){
                 GameMusic.playOnTitle();
                 isPlayingMusic =true;
-            }
+            }*/
 
     }
     public void tick() {

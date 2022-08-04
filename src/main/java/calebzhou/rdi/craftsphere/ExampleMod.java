@@ -23,7 +23,7 @@ public class ExampleMod implements ModInitializer {
 	//显示版本
 	public static final String VER_DISPLAY ="3.5 - 20220801";
 	//服务器地址,信息
-	public static final ServerAddress SERVER_ADDRESS = debug?new ServerAddress("localhost",25565):new ServerAddress("test3.davisoft.cn",26088);
+	public static final ServerAddress SERVER_ADDRESS = debug?new ServerAddress("localhost",25565):new ServerAddress("test3.davisoft.cn",26085);
 	public static final ServerData SERVER_INFO = new ServerData("rdi-celetech3", SERVER_ADDRESS.getHost(),false);
 
 
@@ -32,7 +32,7 @@ public class ExampleMod implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		regSounds();
+		//regSounds();
 		new EventRegister();
 	}
 	public static SoundEvent titleMusicEvent;

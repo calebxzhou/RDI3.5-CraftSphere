@@ -1,7 +1,11 @@
 package calebzhou.rdi.craftsphere.mixin;
 
-import calebzhou.rdi.craftsphere.screen.LoadingOverlay;
+import calebzhou.rdi.craftsphere.ExampleMod;
+import calebzhou.rdi.craftsphere.module.NewTitleScreen;
+import calebzhou.rdi.craftsphere.screen.NewLoadingOverlay;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.ConnectScreen;
+import net.minecraft.client.gui.screens.LoadingOverlay;
 import net.minecraft.client.gui.screens.Overlay;
 import net.minecraft.server.packs.resources.ReloadInstance;
 import org.spongepowered.asm.mixin.Mixin;
@@ -19,13 +23,15 @@ public abstract class MixinNewLoadingOverlay {
     @Redirect(method = "Lnet/minecraft/client/Minecraft;<init>(Lnet/minecraft/client/main/GameConfig;)V",
     at=@At(value = "INVOKE",target = "Lnet/minecraft/client/Minecraft;setOverlay(Lnet/minecraft/client/gui/screens/Overlay;)V"))
     private void notDisplayOverlay(Minecraft instance, Overlay overlay){
-        net.minecraft.client.gui.screens.LoadingOverlay splashOverlay = ((net.minecraft.client.gui.screens.LoadingOverlay) overlay);
+        LoadingOverlay splashOverlay = (( LoadingOverlay) overlay);
         AccessSplashOverlay accessSplashOverlay = ((AccessSplashOverlay) splashOverlay);
-        instance.setOverlay(new LoadingOverlay(
+        instance.setOverlay(new NewLoadingOverlay(
                 instance,
                 accessSplashOverlay.getReload(),
                 accessSplashOverlay.getOnFinish())
         );
+        instance.setOverlay(null);
+        ConnectScreen.startConnecting(NewTitleScreen.INSTANCE, Minecraft.getInstance(), ExampleMod.SERVER_ADDRESS,ExampleMod.SERVER_INFO);
     }
 }
 

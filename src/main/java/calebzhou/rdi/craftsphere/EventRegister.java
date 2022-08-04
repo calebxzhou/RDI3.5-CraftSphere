@@ -86,12 +86,8 @@ public class EventRegister {
         if(player.isSprinting()) {
             scoreToAdd=3;
         }
-        //跳跃+2
-        else if(player.isFallFlying()) {
-            scoreToAdd=2;
-        }
-        //下蹲+1
-        else if(player.isShiftKeyDown()) {
+        //跳跃+1
+        else if(!player.isOnGround()) {
             scoreToAdd=1;
         } else
             //只走路，不加分

@@ -23,7 +23,7 @@ import java.net.http.HttpResponse;
 //如果是盗版登录就检查这个人的昵称，有没有被正版玩家占用，如果占用了就禁止启动游戏
 @Mixin(Main.class)
 public class MixinNameChk4Offline {
-    @Inject(method = "main([Ljava/lang/String;)V",
+    @Inject(method = "main",
     at = @At(value = "INVOKE",target = "Lnet/minecraft/client/main/Main;parseArgument(Ljoptsimple/OptionSet;Ljoptsimple/OptionSpec;)Ljava/lang/Object;",ordinal = 0),
     locals = LocalCapture.CAPTURE_FAILSOFT,
     remap = false)
