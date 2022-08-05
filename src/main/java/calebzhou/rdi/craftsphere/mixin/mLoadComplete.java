@@ -1,7 +1,9 @@
 package calebzhou.rdi.craftsphere.mixin;
 
 import calebzhou.rdi.craftsphere.ExampleMod;
-import calebzhou.rdi.craftsphere.module.NewTitleScreen;
+import calebzhou.rdi.craftsphere.misc.ServerConnector;
+import calebzhou.rdi.craftsphere.screen.NewTitleScreen;
+import calebzhou.rdi.craftsphere.util.DialogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.ConnectScreen;
 import net.minecraft.client.gui.screens.DeathScreen;
@@ -13,14 +15,14 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 //去新的标题界面
 @Mixin(Minecraft.class)
-public abstract class MixinNewTitleScreen {
-    @Redirect(method = "Lnet/minecraft/client/Minecraft;<init>(Lnet/minecraft/client/main/GameConfig;)V",
+public abstract class mLoadComplete {
+    @Redirect(method = "<init>(Lnet/minecraft/client/main/GameConfig;)V",
     at=@At(value = "INVOKE",
             target = "Lnet/minecraft/client/Minecraft;setScreen(Lnet/minecraft/client/gui/screens/Screen;)V"))
-    private void qafdqwd(Minecraft instance, Screen screen){
+    private void goNewTitleScreen(Minecraft instance, Screen screen){
         instance.setScreen(NewTitleScreen.INSTANCE);
-        ConnectScreen.startConnecting(NewTitleScreen.INSTANCE, Minecraft.getInstance(), ExampleMod.SERVER_ADDRESS,ExampleMod.SERVER_INFO);
-    }
+        ServerConnector.connect();
+        }
     //不开启领域服
 
     @Overwrite
@@ -29,7 +31,7 @@ public abstract class MixinNewTitleScreen {
     }
 }
 @Mixin(DeathScreen.class)
-class MixinGoNewTitleScreen {
+class mDeathNoGoTitle {
     @Redirect(method = "Lnet/minecraft/client/gui/screens/DeathScreen;exitToTitleScreen()V",
             at=@At(target = "Lnet/minecraft/client/Minecraft;setScreen(Lnet/minecraft/client/gui/screens/Screen;)V",
                     value = "INVOKE"))

@@ -5,6 +5,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.LoadingOverlay;
 import net.minecraft.client.gui.screens.Overlay;
 import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.client.renderer.CubeMap;
@@ -47,7 +48,7 @@ public class NewLoadingOverlay extends Overlay {
     }
     @Override
     public void render(PoseStack matrices, int mouseX, int mouseY, float delta) {
-        renderBackground(matrices, delta);
+        //renderBackground(matrices, delta);
         float h;
         int k;
         float g;
@@ -86,8 +87,8 @@ public class NewLoadingOverlay extends Overlay {
         RenderSystem.blendFunc(770, 1);
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, h);
-        net.minecraft.client.gui.screens.LoadingOverlay.blit(matrices, k - q, m - p, q, (int)n, -0.0625f, 0.0f, 120, 60, 120, 120);
-        net.minecraft.client.gui.screens.LoadingOverlay.blit(matrices, k, m - p, q, (int)n, 0.0625f, 60.0f, 120, 60, 120, 120);
+        LoadingOverlay.blit(matrices, k - q, m - p, q, (int)n, -0.0625f, 0.0f, 120, 60, 120, 120);
+        LoadingOverlay.blit(matrices, k, m - p, q, (int)n, 0.0625f, 60.0f, 120, 60, 120, 120);
         RenderSystem.defaultBlendFunc();
         RenderSystem.disableBlend();
         int r = (int)((double)this.client.getWindow().getGuiScaledHeight() * 0.8325);
@@ -117,11 +118,11 @@ public class NewLoadingOverlay extends Overlay {
         int i = Mth.ceil((float)(maxX - minX - 2) * this.progress);
         int j = Math.round(opacity * 255.0f);
         int k = net.minecraft.util.FastColor.ARGB32.color(j, 255, 255, 255);
-        net.minecraft.client.gui.screens.LoadingOverlay.fill(matrices, minX + 2, minY + 2, minX + i, maxY - 2, k);
-        net.minecraft.client.gui.screens.LoadingOverlay.fill(matrices, minX + 1, minY, maxX - 1, minY + 1, k);
-        net.minecraft.client.gui.screens.LoadingOverlay.fill(matrices, minX + 1, maxY, maxX - 1, maxY - 1, k);
-        net.minecraft.client.gui.screens.LoadingOverlay.fill(matrices, minX, minY, minX + 1, maxY, k);
-        net.minecraft.client.gui.screens.LoadingOverlay.fill(matrices, maxX, minY, maxX - 1, maxY, k);
+        LoadingOverlay.fill(matrices, minX + 2, minY + 2, minX + i, maxY - 2, k);
+        LoadingOverlay.fill(matrices, minX + 1, minY, maxX - 1, minY + 1, k);
+        LoadingOverlay.fill(matrices, minX + 1, maxY, maxX - 1, maxY - 1, k);
+        LoadingOverlay.fill(matrices, minX, minY, minX + 1, maxY, k);
+        LoadingOverlay.fill(matrices, maxX, minY, maxX - 1, maxY, k);
     }
     private void renderBackground(PoseStack matrices,float delta){
         int width  = client.getWindow().getGuiScaledWidth();

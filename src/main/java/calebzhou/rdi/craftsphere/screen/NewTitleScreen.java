@@ -1,6 +1,7 @@
-package calebzhou.rdi.craftsphere.module;
+package calebzhou.rdi.craftsphere.screen;
 
 import calebzhou.rdi.craftsphere.ExampleMod;
+import calebzhou.rdi.craftsphere.misc.ServerConnector;
 import calebzhou.rdi.craftsphere.texture.Textures;
 import calebzhou.rdi.craftsphere.util.DialogUtils;
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -104,7 +105,7 @@ public class NewTitleScreen extends Screen {
             return;
         }
         if(InputConstants.isKeyDown(handle,InputConstants.KEY_RETURN)){
-            ConnectScreen.startConnecting(this,Minecraft.getInstance(), ExampleMod.SERVER_ADDRESS,ExampleMod.SERVER_INFO);
+            ServerConnector.connect();
         }
 
 

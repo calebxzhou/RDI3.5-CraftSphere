@@ -7,14 +7,14 @@
     "AccessSplashOverlay",
     "AccessSystemReport",
     "mClientStartup",
-    "mFasterLoginScreen",
+    "mCreateTray",
+    "mDeathNoGoTitle",
+    "mFastCreateMojangUserApiService",
     "MixinChangeGameVersion",
     "MixinConnectScreen",
-    "MixinGoNewTitleScreen",
     "MixinLaglessEat",
     "MixinLuminChk",
     "MixinNewLoadingOverlay",
-    "MixinNewTitleScreen",
     "MixinNoChatBrackets",
     "MixinNoDirtGuiBg",
     "MixinNoUnicodeFonts",
@@ -22,12 +22,19 @@
     "MixinProtocol",
     "MixinSimplePauseMenu",
     "MixinTabPlayerHud",
-    "MixinWindowTitle"
+    "MixinWindowTitle",
+    "mLoadComplete",
+    "mLoginProtocol",
+    "mNoHeadlessMode",
+    "mStartupMusic"
   ],
   "injectors": {
     "defaultRequire": 1
   },
   "mixins": [
-    "mLoginProtocol"
+    "mFinishLoad",
+    "mStartup2",
+    "mStartup3",
+    "mStartup4"
   ]
 }

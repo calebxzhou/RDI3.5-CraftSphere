@@ -28,7 +28,7 @@ public class DialogUtils {
         showMessageBox(type,"",msg);
     }
     public static void showPopup(String type,String msg){
-        showPopup("",type,msg);
+        showPopup(type,"",msg);
     }
     public static void showPopup(String type,String title,String msg){
         TinyFileDialogs.tinyfd_notifyPopup(title,msg,type);

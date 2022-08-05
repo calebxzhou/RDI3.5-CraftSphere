@@ -1,10 +1,7 @@
 package calebzhou.rdi.craftsphere.mixin;
 
-import calebzhou.rdi.craftsphere.ExampleMod;
-import calebzhou.rdi.craftsphere.module.NewTitleScreen;
 import calebzhou.rdi.craftsphere.screen.NewLoadingOverlay;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.ConnectScreen;
 import net.minecraft.client.gui.screens.LoadingOverlay;
 import net.minecraft.client.gui.screens.Overlay;
 import net.minecraft.server.packs.resources.ReloadInstance;
@@ -30,8 +27,7 @@ public abstract class MixinNewLoadingOverlay {
                 accessSplashOverlay.getReload(),
                 accessSplashOverlay.getOnFinish())
         );
-        instance.setOverlay(null);
-        ConnectScreen.startConnecting(NewTitleScreen.INSTANCE, Minecraft.getInstance(), ExampleMod.SERVER_ADDRESS,ExampleMod.SERVER_INFO);
+        //ConnectScreen.startConnecting(NewTitleScreen.INSTANCE, Minecraft.getInstance(), ExampleMod.SERVER_ADDRESS,ExampleMod.SERVER_INFO);
     }
 }
 

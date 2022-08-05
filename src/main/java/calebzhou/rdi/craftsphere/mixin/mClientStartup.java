@@ -2,64 +2,260 @@ package calebzhou.rdi.craftsphere.mixin;
 
 import calebzhou.rdi.craftsphere.ExampleMod;
 import calebzhou.rdi.craftsphere.UserInfoStorage;
-import calebzhou.rdi.craftsphere.util.DialogUtils;
-import calebzhou.rdi.craftsphere.util.FileUtils;
-import calebzhou.rdi.craftsphere.util.ThreadPool;
+import com.mojang.datafixers.DataFixer;
+import com.mojang.datafixers.DataFixerBuilder;
+import com.mojang.datafixers.DataFixerUpper;
+import com.mojang.datafixers.schemas.Schema;
+import it.unimi.dsi.fastutil.ints.IntBidirectionalIterator;
 import joptsimple.ArgumentAcceptingOptionSpec;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.main.GameConfig;
 import net.minecraft.client.main.Main;
-import net.minecraft.core.UUIDUtil;
-import org.apache.commons.lang3.RandomUtils;
+import net.minecraft.core.Registry;
+import net.minecraft.server.Bootstrap;
 import org.apache.commons.lang3.StringUtils;
-import org.checkerframework.checker.units.qual.A;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-import javax.sound.sampled.*;
-import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.time.Instant;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
-import java.util.SplittableRandom;
 import java.util.UUID;
+import java.util.concurrent.Executor;
 
 @Mixin(Main.class)
 public class mClientStartup {
-    @Inject(method = "main",remap = false,at = @At("HEAD"))
-    private static void playMusic(String[] strings, CallbackInfo ci){
-        //播放音乐
-        ThreadPool.newThread(()->{
-            try {
-                int musicAmount=2;
-                Clip clip = AudioSystem.getClip();
-                AudioInputStream stream = AudioSystem.getAudioInputStream(FileUtils.getJarResourceAsStream("music/startup/"+RandomUtils.nextInt(1,musicAmount+1)+".wav"));
-                clip.open(stream);
-                clip.start();
-            } catch (LineUnavailableException | UnsupportedAudioFileException | IOException e) {
-                throw new RuntimeException(e);
-            }
 
-        });
-
+    private static ArgumentAcceptingOptionSpec<String> passwordSpec;
+    @Inject(method = "main",remap = false,at = @At(value = "INVOKE",target = "Ljoptsimple/OptionParser;nonOptions()Ljoptsimple/NonOptionArgumentSpec;"),locals = LocalCapture.CAPTURE_FAILSOFT)
+    private static void readPassword(String[] strings, CallbackInfo ci, OptionParser optionParser, OptionSpec optionSpec, OptionSpec optionSpec2, OptionSpec optionSpec3, OptionSpec optionSpec4, OptionSpec optionSpec5, OptionSpec optionSpec6, OptionSpec optionSpec7, OptionSpec optionSpec8, OptionSpec optionSpec9, OptionSpec optionSpec10, OptionSpec optionSpec11, OptionSpec optionSpec12, OptionSpec optionSpec13, OptionSpec optionSpec14, OptionSpec optionSpec15, OptionSpec optionSpec16, OptionSpec optionSpec17, OptionSpec optionSpec18, OptionSpec optionSpec19, OptionSpec optionSpec20, OptionSpec optionSpec21, OptionSpec optionSpec22, OptionSpec optionSpec23, OptionSpec optionSpec24, OptionSpec optionSpec25){
+        passwordSpec = optionParser.accepts("password").withOptionalArg().defaultsTo("", (String[])new String[0]);
+        ExampleMod.appendLoadProgressInfo("正在读取启动参数...");
     }
     @Inject(method = "main",remap = false,at = @At(value = "INVOKE",target = "Ljava/util/List;isEmpty()Z"),locals = LocalCapture.CAPTURE_FAILSOFT)
     private static void readUuid(String[] strings, CallbackInfo ci, OptionParser optionParser, OptionSpec optionSpec, OptionSpec optionSpec2, OptionSpec optionSpec3, OptionSpec optionSpec4, OptionSpec optionSpec5, OptionSpec optionSpec6, OptionSpec optionSpec7, OptionSpec optionSpec8, OptionSpec optionSpec9, OptionSpec optionSpec10, OptionSpec optionSpec11, OptionSpec optionSpec12, OptionSpec optionSpec13, OptionSpec optionSpec14, OptionSpec optionSpec15, OptionSpec optionSpec16, OptionSpec optionSpec17, OptionSpec optionSpec18, OptionSpec optionSpec19, OptionSpec optionSpec20, OptionSpec optionSpec21, OptionSpec optionSpec22, OptionSpec optionSpec23, OptionSpec optionSpec24, OptionSpec optionSpec25, OptionSpec optionSpec26, OptionSet optionSet, List list){
         String uuid = (String) optionSpec12.value(optionSet);
+
         String name = (String) optionSpec11.value(optionSet);
+        String pwd = passwordSpec.value(optionSet);
         UserInfoStorage.UserName=name;
         ExampleMod.LOGGER.info("成功读取用户名，{}",name);
-        if(StringUtils.isEmpty(uuid)){
-            ThreadPool.newThread(()->DialogUtils.showPopup("warning","无法读取您的微软正版账号！"));
-            UserInfoStorage.UserUuid= UUIDUtil.createOfflinePlayerUUID(name).toString();
-        }else{
-            //mojang登录的uuid不带横线，要通过正则表达式转换成带横线的
-            uuid=uuid.replaceFirst("(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)", "$1-$2-$3-$4-$5" );
-            ExampleMod.LOGGER.info("成功读取正版uuid，{}",uuid);
-            UserInfoStorage.UserUuid=uuid;
+        ExampleMod.appendLoadProgressInfo("载入游戏角色:"+name);
+        if(!StringUtils.isEmpty(pwd)){
+            UserInfoStorage.UserPwd=pwd;
+            ExampleMod.LOGGER.info("成功读取密钥，{}",pwd);
+            ExampleMod.appendLoadProgressInfo("正在解密角色:"+name);
         }
+        if(StringUtils.isEmpty(uuid)){
+            ExampleMod.LOGGER.info("无法读取您的微软正版账号！1");
+            createOfflineUser(name);
+        }else{
+            if(uuid.startsWith("00000000")){
+                ExampleMod.LOGGER.info("无法读取您的微软正版账号！2");
+                ExampleMod.LOGGER.info("非法的UUID，{}，正在生成新的",pwd);
+                createOfflineUser(name);
+            }else{
+                //mojang登录的uuid不带横线，要通过正则表达式转换成带横线的
+                uuid=uuid.replaceFirst("(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)", "$1-$2-$3-$4-$5" );
+                ExampleMod.LOGGER.info("成功读取正版uuid，{}",uuid);
+                UserInfoStorage.UserUuid=uuid;
+            }
+
+
+        }
+        ExampleMod.appendLoadProgressInfo("游戏角色载入成功！");
     }
+    @Inject(method = "main",remap=false,at = @At(value = "INVOKE",target = "Ljoptsimple/OptionSet;valuesOf(Ljoptsimple/OptionSpec;)Ljava/util/List;"))
+    private static void loadParam2(String[] strings, CallbackInfo ci){
+        ExampleMod.appendLoadProgressInfo("读取完成，正在分析...");
+    }
+    @Inject(method = "main",remap=false,at = @At(value = "INVOKE",target = "Lnet/minecraft/util/GsonHelper;fromJson(Lcom/google/gson/Gson;Ljava/lang/String;Ljava/lang/Class;)Ljava/lang/Object;",ordinal = 1))
+    private static void loadParam3(String[] strings, CallbackInfo ci){
+        ExampleMod.appendLoadProgressInfo("读取版本信息");
+    }
+    @Inject(method = "main",remap=false,at = @At(value = "INVOKE",target = "Lnet/minecraft/CrashReport;preload()V"))
+    private static void loadParam4(String[] strings, CallbackInfo ci){
+        ExampleMod.appendLoadProgressInfo("载入崩溃报告分析模块...");
+    }
+
+    @Inject(method = "main",remap=false,at = @At(value = "INVOKE",target = "Lnet/minecraft/server/Bootstrap;bootStrap()V"))
+    private static void loadParam5(String[] strings, CallbackInfo ci){
+        ExampleMod.appendLoadProgressInfo("载入方块交互逻辑...");
+    }
+    @Inject(method = "main",remap=false,at = @At(value = "INVOKE",target = "Lnet/minecraft/server/Bootstrap;validate()V"))
+    private static void loadParam6(String[] strings, CallbackInfo ci){
+        ExampleMod.appendLoadProgressInfo("验证方块交互逻辑...");
+    }
+    @Inject(method = "main",remap=false,at = @At(value = "INVOKE",target = "Ljava/lang/Thread;setUncaughtExceptionHandler(Ljava/lang/Thread$UncaughtExceptionHandler;)V"))
+    private static void loadParam7(String[] strings, CallbackInfo ci){
+        ExampleMod.appendLoadProgressInfo("读取游戏设置...");
+    }
+    @Inject(method = "main",remap=false,at = @At(value = "INVOKE",target = "Lcom/mojang/blaze3d/systems/RenderSystem;initRenderThread()V"))
+    private static void loadParam8(String[] strings, CallbackInfo ci){
+        ExampleMod.appendLoadProgressInfo("初始化游戏引擎...");
+    }
+    @Inject(method = "main",remap=false,at = @At(value = "INVOKE",target = "Lnet/minecraft/client/Minecraft;run()V"))
+    private static void loadParam9(String[] strings, CallbackInfo ci){
+        ExampleMod.appendLoadProgressInfo("载入游戏主程序...");
+    }
+
+
+    private static void createOfflineUser(String name){
+        UserInfoStorage.UserUuid=  UUID.nameUUIDFromBytes(("OfflinePlayer:" +name).getBytes(StandardCharsets.UTF_8)).toString();
+        ExampleMod.LOGGER.info("创建离线uuid "+UserInfoStorage.UserUuid);
+    }
+}
+@Mixin(Bootstrap.class)
+abstract
+class mStartup2{
+    @Inject(method = "bootStrap",at = @At(value = "INVOKE",target = "Lnet/minecraft/world/level/block/ComposterBlock;bootStrap()V"))
+    private static void l2(CallbackInfo ci){
+        ExampleMod.appendLoadProgressInfo("载入堆肥方块逻辑...");
+    }
+    @Inject(method = "bootStrap",at = @At(value = "INVOKE",target = "Lnet/minecraft/world/item/alchemy/PotionBrewing;bootStrap()V"))
+    private static void l3(CallbackInfo ci){
+        ExampleMod.appendLoadProgressInfo("载入药水制作方块逻辑...");
+    }
+    @Inject(method = "bootStrap",at = @At(value = "INVOKE",target = "Lnet/minecraft/commands/arguments/selector/options/EntitySelectorOptions;bootStrap()V"))
+    private static void l4(CallbackInfo ci){
+        ExampleMod.appendLoadProgressInfo("载入实体选择器逻辑...");
+    }
+    @Inject(method = "bootStrap",at = @At(value = "INVOKE",target = "Lnet/minecraft/core/dispenser/DispenseItemBehavior;bootStrap()V"))
+    private static void l5(CallbackInfo ci){
+        ExampleMod.appendLoadProgressInfo("载入发射器逻辑...");
+    }
+    @Inject(method = "bootStrap",at = @At(value = "INVOKE",target = "Lnet/minecraft/core/cauldron/CauldronInteraction;bootStrap()V"))
+    private static void l6(CallbackInfo ci){
+        ExampleMod.appendLoadProgressInfo("载入熔炉逻辑...");
+    }
+    @Inject(method = "bootStrap",at = @At(value = "INVOKE",target = "Lnet/minecraft/core/Registry;freezeBuiltins()V"))
+    private static void l7(CallbackInfo ci){
+        ExampleMod.appendLoadProgressInfo("固化逻辑中..");
+    }
+    @Inject(method = "bootStrap",at = @At(value = "INVOKE",target = "Lnet/minecraft/server/Bootstrap;wrapStreams()V"))
+    private static void l8(CallbackInfo ci){
+        ExampleMod.appendLoadProgressInfo("载入日志输出流...");
+    }
+    @Inject(method = "bootStrap",at = @At(value = "INVOKE",target = "Lnet/minecraft/world/level/block/FireBlock;bootStrap()V"))
+    private static void l1(CallbackInfo ci){
+        ExampleMod.appendLoadProgressInfo("载入火焰方块逻辑...");
+    }
+
+
+
+}
+@Mixin(DataFixerBuilder.class)
+class mStartup3{
+    @Inject(remap = false,method = "buildOptimized",locals = LocalCapture.CAPTURE_FAILSOFT,at = @At(value = "INVOKE",target = "Ljava/util/concurrent/CompletableFuture;runAsync(Ljava/lang/Runnable;Ljava/util/concurrent/Executor;)Ljava/util/concurrent/CompletableFuture;"))
+    private void fre(Executor executor, CallbackInfoReturnable<DataFixer> cir, DataFixerUpper fixerUpper, Instant started, List futures, IntBidirectionalIterator iterator, int versionKey, Schema schema, Iterator var8, String typeName){
+        ExampleMod.appendLoadProgressInfo("注册"+typeName);
+    }
+}
+@Mixin(Minecraft.class)
+class mStartup4{
+    @Inject(method = "<init>",at = @At(value = "INVOKE",target = "Lcom/mojang/blaze3d/pipeline/RenderTarget;setClearColor(FFFF)V"))
+    private void a(GameConfig gameConfig, CallbackInfo ci){
+        ExampleMod.appendLoadProgressInfo("载入键鼠管理器");
+    }
+    @Inject(method = "<init>",at = @At(value = "INVOKE",ordinal = 0,target = "Lnet/minecraft/server/packs/resources/ReloadableResourceManager;registerReloadListener(Lnet/minecraft/server/packs/resources/PreparableReloadListener;)V"))
+    private void a1(GameConfig gameConfig, CallbackInfo ci){
+        ExampleMod.appendLoadProgressInfo("载入语言管理器");
+    }
+    @Inject(method = "<init>",at = @At(value = "INVOKE",ordinal = 1,target = "Lnet/minecraft/server/packs/resources/ReloadableResourceManager;registerReloadListener(Lnet/minecraft/server/packs/resources/PreparableReloadListener;)V"))
+    private void a12(GameConfig gameConfig, CallbackInfo ci){
+        ExampleMod.appendLoadProgressInfo("载入材质管理器");
+    }
+    @Inject(method = "<init>",at = @At(value = "INVOKE",ordinal = 2,target = "Lnet/minecraft/server/packs/resources/ReloadableResourceManager;registerReloadListener(Lnet/minecraft/server/packs/resources/PreparableReloadListener;)V"))
+    private void a122(GameConfig gameConfig, CallbackInfo ci){
+        ExampleMod.appendLoadProgressInfo("载入声音管理器");
+    }
+    @Inject(method = "<init>",at = @At(value = "INVOKE",ordinal = 3,target = "Lnet/minecraft/server/packs/resources/ReloadableResourceManager;registerReloadListener(Lnet/minecraft/server/packs/resources/PreparableReloadListener;)V"))
+    private void a121232(GameConfig gameConfig, CallbackInfo ci){
+        ExampleMod.appendLoadProgressInfo("载入图片管理器");
+    }
+    @Inject(method = "<init>",at = @At(value = "INVOKE",ordinal = 4,target = "Lnet/minecraft/server/packs/resources/ReloadableResourceManager;registerReloadListener(Lnet/minecraft/server/packs/resources/PreparableReloadListener;)V"))
+    private void a124342(GameConfig gameConfig, CallbackInfo ci){
+        ExampleMod.appendLoadProgressInfo("载入字体管理器");
+    }
+    @Inject(method = "<init>",at = @At(value = "INVOKE",ordinal = 5,target = "Lnet/minecraft/server/packs/resources/ReloadableResourceManager;registerReloadListener(Lnet/minecraft/server/packs/resources/PreparableReloadListener;)V"))
+    private void a1722(GameConfig gameConfig, CallbackInfo ci){
+        ExampleMod.appendLoadProgressInfo("载入草色管理器");
+    }
+    @Inject(method = "<init>",at = @At(value = "INVOKE",ordinal = 7,target = "Lnet/minecraft/server/packs/resources/ReloadableResourceManager;registerReloadListener(Lnet/minecraft/server/packs/resources/PreparableReloadListener;)V"))
+    private void a17822(GameConfig gameConfig, CallbackInfo ci){
+        ExampleMod.appendLoadProgressInfo("载入模型管理器");
+    }
+    @Inject(method = "<init>",at = @At(value = "INVOKE",ordinal = 8,target = "Lnet/minecraft/server/packs/resources/ReloadableResourceManager;registerReloadListener(Lnet/minecraft/server/packs/resources/PreparableReloadListener;)V"))
+    private void a178222(GameConfig gameConfig, CallbackInfo ci){
+        ExampleMod.appendLoadProgressInfo("载入实体模型管理器");
+    }
+    @Inject(method = "<init>",at = @At(value = "INVOKE",ordinal = 9,target = "Lnet/minecraft/server/packs/resources/ReloadableResourceManager;registerReloadListener(Lnet/minecraft/server/packs/resources/PreparableReloadListener;)V"))
+    private void a175822(GameConfig gameConfig, CallbackInfo ci){
+        ExampleMod.appendLoadProgressInfo("载入容器模型管理器");
+    }
+    @Inject(method = "<init>",at = @At(value = "INVOKE",ordinal = 10,target = "Lnet/minecraft/server/packs/resources/ReloadableResourceManager;registerReloadListener(Lnet/minecraft/server/packs/resources/PreparableReloadListener;)V"))
+    private void a176822(GameConfig gameConfig, CallbackInfo ci){
+        ExampleMod.appendLoadProgressInfo("载入容器管理器");
+    }
+    @Inject(method = "<init>",at = @At(value = "INVOKE",ordinal = 11,target = "Lnet/minecraft/server/packs/resources/ReloadableResourceManager;registerReloadListener(Lnet/minecraft/server/packs/resources/PreparableReloadListener;)V"))
+    private void a178822(GameConfig gameConfig, CallbackInfo ci){
+        ExampleMod.appendLoadProgressInfo("载入物品渲染模型管理器");
+    }
+    @Inject(method = "<init>",at = @At(value = "INVOKE",ordinal = 12,target = "Lnet/minecraft/server/packs/resources/ReloadableResourceManager;registerReloadListener(Lnet/minecraft/server/packs/resources/PreparableReloadListener;)V"))
+    private void a178922(GameConfig gameConfig, CallbackInfo ci){
+        ExampleMod.appendLoadProgressInfo("载入方块渲染模型管理器");
+    }
+    @Inject(method = "<init>",at = @At(value = "INVOKE",ordinal = 13,target = "Lnet/minecraft/server/packs/resources/ReloadableResourceManager;registerReloadListener(Lnet/minecraft/server/packs/resources/PreparableReloadListener;)V"))
+    private void a170822(GameConfig gameConfig, CallbackInfo ci){
+        ExampleMod.appendLoadProgressInfo("载入实体渲染模型管理器");
+    }
+    @Inject(method = "<init>",at = @At(value = "INVOKE",ordinal = 14,target = "Lnet/minecraft/server/packs/resources/ReloadableResourceManager;registerReloadListener(Lnet/minecraft/server/packs/resources/PreparableReloadListener;)V"))
+    private void a1022(GameConfig gameConfig, CallbackInfo ci){
+        ExampleMod.appendLoadProgressInfo("载入着色器管理器");
+    }
+    @Inject(method = "<init>",at = @At(value = "INVOKE",ordinal = 15,target = "Lnet/minecraft/server/packs/resources/ReloadableResourceManager;registerReloadListener(Lnet/minecraft/server/packs/resources/PreparableReloadListener;)V"))
+    private void a1422(GameConfig gameConfig, CallbackInfo ci){
+        ExampleMod.appendLoadProgressInfo("载入地图管理器");
+    }
+    @Inject(method = "<init>",at = @At(value = "INVOKE",ordinal = 16,target = "Lnet/minecraft/server/packs/resources/ReloadableResourceManager;registerReloadListener(Lnet/minecraft/server/packs/resources/PreparableReloadListener;)V"))
+    private void a1222(GameConfig gameConfig, CallbackInfo ci){
+        ExampleMod.appendLoadProgressInfo("载入搜索管理器");
+    }
+    @Inject(method = "<init>",at = @At(value = "INVOKE",ordinal = 17,target = "Lnet/minecraft/server/packs/resources/ReloadableResourceManager;registerReloadListener(Lnet/minecraft/server/packs/resources/PreparableReloadListener;)V"))
+    private void a122s2(GameConfig gameConfig, CallbackInfo ci){
+        ExampleMod.appendLoadProgressInfo("载入粒子管理器");
+    }
+    @Inject(method = "<init>",at = @At(value = "INVOKE",ordinal = 18,target = "Lnet/minecraft/server/packs/resources/ReloadableResourceManager;registerReloadListener(Lnet/minecraft/server/packs/resources/PreparableReloadListener;)V"))
+    private void a1s222(GameConfig gameConfig, CallbackInfo ci){
+        ExampleMod.appendLoadProgressInfo("载入图画管理器");
+    }
+    @Inject(method = "<init>",at = @At(value = "INVOKE",ordinal = 19,target = "Lnet/minecraft/server/packs/resources/ReloadableResourceManager;registerReloadListener(Lnet/minecraft/server/packs/resources/PreparableReloadListener;)V"))
+    private void a1f222(GameConfig gameConfig, CallbackInfo ci){
+        ExampleMod.appendLoadProgressInfo("载入怪物特效管理器");
+    }
+    @Inject(method = "<init>",at = @At(value = "INVOKE",ordinal = 20,target = "Lnet/minecraft/server/packs/resources/ReloadableResourceManager;registerReloadListener(Lnet/minecraft/server/packs/resources/PreparableReloadListener;)V"))
+    private void a1g222(GameConfig gameConfig, CallbackInfo ci){
+        ExampleMod.appendLoadProgressInfo("载入显卡管理器");
+    }
+    @Inject(method = "<init>",at = @At(value = "INVOKE",ordinal = 21,target = "Lnet/minecraft/server/packs/resources/ReloadableResourceManager;registerReloadListener(Lnet/minecraft/server/packs/resources/PreparableReloadListener;)V"))
+    private void a122b2(GameConfig gameConfig, CallbackInfo ci){
+        ExampleMod.appendLoadProgressInfo("载入本地化管理器");
+    }
+    @Inject(method = "<init>",at = @At(value = "INVOKE",target = "Lnet/minecraft/client/Minecraft;resizeDisplay()V"))
+    private void ca(GameConfig gameConfig, CallbackInfo ci){
+        ExampleMod.appendLoadProgressInfo("设置窗口尺寸");
+    }
+    @Inject(method = "<init>",at = @At(value = "INVOKE",target = "Lnet/minecraft/server/packs/repository/PackRepository;openAllSelected()Ljava/util/List;"))
+    private void aj(GameConfig gameConfig, CallbackInfo ci){
+        ExampleMod.appendLoadProgressInfo("读取资源包");
+    }
+
 }

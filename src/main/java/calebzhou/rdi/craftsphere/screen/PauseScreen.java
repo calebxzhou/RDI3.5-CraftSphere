@@ -1,6 +1,5 @@
 package calebzhou.rdi.craftsphere.screen;
 
-import calebzhou.rdi.craftsphere.module.NewTitleScreen;
 import calebzhou.rdi.craftsphere.texture.Textures;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.ImageButton;
