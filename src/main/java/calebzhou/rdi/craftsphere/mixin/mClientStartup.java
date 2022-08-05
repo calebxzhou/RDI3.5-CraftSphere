@@ -53,7 +53,7 @@ public class mClientStartup {
         UserInfoStorage.UserName=name;
         ExampleMod.LOGGER.info("成功读取用户名，{}",name);
         if(StringUtils.isEmpty(uuid)){
-            ThreadPool.newThread(()->DialogUtils.showWarnPopup("无法读取您的微软正版账号！"));
+            ThreadPool.newThread(()->DialogUtils.showPopup("warning","无法读取您的微软正版账号！"));
             UserInfoStorage.UserUuid= UUIDUtil.createOfflinePlayerUUID(name).toString();
         }else{
             //mojang登录的uuid不带横线，要通过正则表达式转换成带横线的

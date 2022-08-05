@@ -19,26 +19,21 @@ public class DialogUtils {
         toastManager.addToast(toast);
     }*/
     public static void main(String[] args) {
-        showErrorPopup(
-                "您没有空岛"
-        );
+
     }
-    public static void showInfoPopup(String msg){
-        TinyFileDialogs.tinyfd_notifyPopup("提示",msg,"info");
+    public static void showMessageBox(String type,String title,String msg){
+        TinyFileDialogs.tinyfd_messageBox(title,msg,"ok",type,true);
     }
-    public static void showWarnPopup(String msg){
-        TinyFileDialogs.tinyfd_notifyPopup("警告",msg,"warning");
+    public static void showMessageBox(String type,String msg){
+        showMessageBox(type,"",msg);
     }
-    public static void showErrorPopup(String msg){
-        TinyFileDialogs.tinyfd_notifyPopup("错误",msg,"error");
+    public static void showPopup(String type,String msg){
+        showPopup("",type,msg);
     }
-    public static void showError(String msg){
-        TinyFileDialogs.tinyfd_messageBox("错误",msg,"ok","error",true);
+    public static void showPopup(String type,String title,String msg){
+        TinyFileDialogs.tinyfd_notifyPopup(title,msg,type);
     }
-    public static void showInfo(String msg){
-        TinyFileDialogs.tinyfd_messageBox("提示",msg,"ok","info",true);
-    }
-    public static boolean showYesNo(String msg){
+   /* public static boolean showYesNo(String msg){
         return TinyFileDialogs.tinyfd_messageBox("提示",msg,"yesno","question",true);
-    }
+    }*/
 }

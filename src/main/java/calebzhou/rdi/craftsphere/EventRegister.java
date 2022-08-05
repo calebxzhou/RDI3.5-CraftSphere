@@ -46,7 +46,7 @@ public class EventRegister {
 
         });
         //接收服务器的空岛信息
-        ClientPlayNetworking.registerGlobalReceiver(NetworkPackets.ISLAND_INFO,(client, handler, buf, responseSender) -> {
+        /*ClientPlayNetworking.registerGlobalReceiver(NetworkPackets.ISLAND_INFO,(client, handler, buf, responseSender) -> {
             int i = buf.readInt();
             //接收到了0就提示创建岛屿
             if(i == 0){
@@ -54,13 +54,24 @@ public class EventRegister {
                     client.player.chat("/create");
                 }
             }
-        });
+        });*/
         //接收服务器的对话框信息
         ClientPlayNetworking.registerGlobalReceiver(NetworkPackets.DIALOG_INFO,(client, handler, buf, responseSender) -> {
             String info = buf.readUtf();
-
-            //接收到了0就提示创建岛屿
-
+            String[] split = info.split("@");
+            String type= split[0];
+            String title= split[1];
+            String content= split[2];
+            DialogUtils.showMessageBox(type,title,content);
+        });
+        //接收服务器的弹框信息
+        ClientPlayNetworking.registerGlobalReceiver(NetworkPackets.POPUP,(client, handler, buf, responseSender) -> {
+            String info = buf.readUtf();
+            String[] split = info.split("@");
+            String type= split[0];
+            String title= split[1];
+            String content= split[2];
+            DialogUtils.showPopup(type,title,content);
         });
     }
     private int treeScore = 0;

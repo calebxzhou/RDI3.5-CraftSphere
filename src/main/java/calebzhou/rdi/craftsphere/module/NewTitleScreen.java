@@ -121,7 +121,7 @@ public class NewTitleScreen extends Screen {
             try {
                 this.minecraft.setScreen((Screen) Class.forName("com.terraformersmc.modmenu.gui.ModsScreen").getConstructor(Screen.class).newInstance(this));
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException | ClassNotFoundException e) {
-                DialogUtils.showError("必须安装ModMenu模组以使用本功能！！");
+                DialogUtils.showMessageBox("error","必须安装ModMenu模组以使用本功能！！");
                 e.printStackTrace();
             }
         }, Component.translatable("Mods")));

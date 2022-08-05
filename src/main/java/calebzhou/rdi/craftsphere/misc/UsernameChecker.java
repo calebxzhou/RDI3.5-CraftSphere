@@ -13,7 +13,7 @@ import java.net.http.HttpResponse;
 public class UsernameChecker {
 
     public static void check(String userType,String username){
-        if(!userType.equalsIgnoreCase("Mojang")){
+        /*if(!userType.equalsIgnoreCase("Mojang")){
             //离线模式
             ThreadPool.newThread(()->{
                 HttpClient client = HttpClient.newHttpClient();
@@ -34,6 +34,6 @@ public class UsernameChecker {
                 }
             });
 
-        }
+        }*/
     }
 }

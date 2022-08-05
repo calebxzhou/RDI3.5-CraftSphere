@@ -15,7 +15,8 @@ public class NetworkPackets {
     public static final ResourceLocation DANCE_TREE_GROW =new ResourceLocation(MODID,"dance_tree_grow");
     //硬件信息
     public static final ResourceLocation HW_SPEC=new ResourceLocation(MODID,"hw_spec");
-
+    //右下角消息弹框
+    public static final ResourceLocation POPUP=new ResourceLocation(MODID,"popup");
     //S2C 服务端->客户端
 
     //岛屿信息
