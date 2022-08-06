@@ -1,8 +1,6 @@
 package calebzhou.rdi.craftsphere.mixin;
 
-import calebzhou.rdi.craftsphere.ExampleMod;
-import calebzhou.rdi.craftsphere.misc.LoadFinishHandler;
-import calebzhou.rdi.craftsphere.util.DialogUtils;
+import calebzhou.rdi.craftsphere.misc.LoadProgressDisplay;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementList;
 import net.minecraft.resources.ResourceLocation;
@@ -17,6 +15,6 @@ import java.util.Map;
 public class mFinishLoad {
     @Inject(method = "add",at=@At("TAIL"))
     private void finishLoad(Map<ResourceLocation, Advancement.Builder> map, CallbackInfo ci){
-        LoadFinishHandler.handle();
+        LoadProgressDisplay.onFinish();
     }
 }

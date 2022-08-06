@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 //去掉说话的尖括号
 @Mixin(TranslatableContents.class)
-public class MixinNoChatBrackets {
+public class mNoChatBrackets {
     @Mutable
     @Shadow @Final private String key;
 

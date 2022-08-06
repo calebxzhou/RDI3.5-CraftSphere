@@ -48,7 +48,10 @@ public class NewLoadingOverlay extends Overlay {
     }
     @Override
     public void render(PoseStack matrices, int mouseX, int mouseY, float delta) {
-        //renderBackground(matrices, delta);
+        renderBackground(matrices, delta);
+        if (this.reloadCompleteTime > 1) {
+            this.client.setOverlay(null);
+        }
         float h;
         int k;
         float g;

@@ -1,13 +1,8 @@
-package calebzhou.rdi.craftsphere.mixin;
+package calebzhou.rdi.craftsphere.misc;
 
 import calebzhou.rdi.craftsphere.util.FileUtils;
 import calebzhou.rdi.craftsphere.util.ThreadPool;
-import net.minecraft.client.main.Main;
 import org.apache.commons.lang3.RandomUtils;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import javax.sound.sampled.*;
 import java.io.BufferedInputStream;
@@ -17,11 +12,8 @@ import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-@Mixin(Main.class)
-public class mStartupMusic {
-    @Inject(method = "main",remap = false,at = @At("HEAD"))
-    private static void playMusic(String[] strings, CallbackInfo ci){
-        //播放音乐
+public class MusicPlayer {
+    public static void playStartupMusic(){
         ThreadPool.newThread(()->{
             System.out.println("放音乐");
             String yyyyMMdd = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
@@ -44,6 +36,5 @@ public class mStartupMusic {
             }
 
         });
-
     }
 }

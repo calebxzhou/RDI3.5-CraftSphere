@@ -7,34 +7,37 @@
     "AccessSplashOverlay",
     "AccessSystemReport",
     "mClientStartup",
-    "mCreateTray",
     "mDeathNoGoTitle",
-    "mFastCreateMojangUserApiService",
-    "MixinChangeGameVersion",
+    "mFastCreateMojangService",
+    "mFastCreateMojangService2",
+    "mFinishLoad",
+    "mGameVersion",
     "MixinConnectScreen",
     "MixinLaglessEat",
-    "MixinLuminChk",
     "MixinNewLoadingOverlay",
-    "MixinNoChatBrackets",
     "MixinNoDirtGuiBg",
     "MixinNoUnicodeFonts",
     "MixinNoUnicodeFonts2",
     "MixinProtocol",
-    "MixinSimplePauseMenu",
     "MixinTabPlayerHud",
-    "MixinWindowTitle",
     "mLoadComplete",
     "mLoginProtocol",
-    "mNoHeadlessMode",
-    "mStartupMusic"
+    "mLuminChk",
+    "mNoChatBrackets",
+    "mStartup2",
+    "mStartup23",
+    "mStartup3",
+    "mStartup4",
+    "mStartup5",
+    "mStartup6",
+    "mWindowTitle"
   ],
   "injectors": {
     "defaultRequire": 1
   },
   "mixins": [
-    "mFinishLoad",
-    "mStartup2",
-    "mStartup3",
-    "mStartup4"
+    "mCheckModList",
+    "mPauseScreen",
+    "mStartup10"
   ]
 }

@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 //不允许亮度夜视
 @Mixin(Options.class)
-public class MixinLuminChk {
+public class mLuminChk {
     @Final
     @Shadow
     private OptionInstance<Double> gamma;

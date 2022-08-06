@@ -1,6 +1,9 @@
 package calebzhou.rdi.craftsphere.util;
 
+import calebzhou.rdi.craftsphere.misc.RdiSystemTray;
 import org.lwjgl.util.tinyfd.TinyFileDialogs;
+
+import java.awt.*;
 
 
 public class DialogUtils {
@@ -27,11 +30,12 @@ public class DialogUtils {
     public static void showMessageBox(String type,String msg){
         showMessageBox(type,"",msg);
     }
-    public static void showPopup(String type,String msg){
+    public static void showPopup(TrayIcon.MessageType type, String msg){
         showPopup(type,"",msg);
     }
-    public static void showPopup(String type,String title,String msg){
-        TinyFileDialogs.tinyfd_notifyPopup(title,msg,type);
+    public static void showPopup(TrayIcon.MessageType type, String title, String msg){
+        RdiSystemTray.trayIcon.displayMessage(title,msg,type);
+        //TinyFileDialogs.tinyfd_notifyPopup(title,msg,type);
     }
    /* public static boolean showYesNo(String msg){
         return TinyFileDialogs.tinyfd_messageBox("提示",msg,"yesno","question",true);

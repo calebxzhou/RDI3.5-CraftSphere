@@ -18,6 +18,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SaplingBlock;
 import org.lwjgl.glfw.GLFW;
 
+import java.awt.*;
 import java.util.Optional;
 
 //事件注册
@@ -71,7 +72,14 @@ public class EventRegister {
             String type= split[0];
             String title= split[1];
             String content= split[2];
-            DialogUtils.showPopup(type,title,content);
+            TrayIcon.MessageType realType;
+            switch (type){
+                case "info"->realType= TrayIcon.MessageType.INFO;
+                case "warning"->realType= TrayIcon.MessageType.WARNING;
+                case "error"->realType= TrayIcon.MessageType.ERROR;
+                default -> realType= TrayIcon.MessageType.NONE;
+            }
+            DialogUtils.showPopup(realType,title,content);
         });
     }
     private int treeScore = 0;

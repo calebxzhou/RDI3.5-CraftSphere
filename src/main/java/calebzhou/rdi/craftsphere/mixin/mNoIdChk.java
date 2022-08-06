@@ -1,6 +1,7 @@
 package calebzhou.rdi.craftsphere.mixin;
 
 
+import calebzhou.rdi.craftsphere.util.DialogUtils;
 import io.netty.channel.ChannelHandlerContext;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.fabricmc.fabric.impl.registry.sync.RegistrySyncManager;
@@ -18,17 +19,18 @@ import net.minecraft.world.item.crafting.Recipe;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.awt.*;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.function.Consumer;
 
+//客户端与服务端mod列表不匹配也能进服
 @Mixin(RegistrySyncManager.class)
 public abstract class mNoIdChk {
     @Shadow
@@ -82,7 +84,8 @@ class chk2{
         ResourceLocation resourceLocation2 = friendlyByteBuf.readResourceLocation();
         try {
             return Registry.RECIPE_SERIALIZER.getOptional(resourceLocation).get()/*.orElseThrow(() -> new IllegalArgumentException("Unknown recipe serializer " + resourceLocation))*/.fromNetwork(resourceLocation2, friendlyByteBuf);
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | NoSuchElementException e) {
+            DialogUtils.showPopup(TrayIcon.MessageType.ERROR,"客户端与服务器Mod列表不匹配","除聊天外的功能已被禁用，请更新客户端");
             e.printStackTrace();
         }
         return null;
@@ -97,4 +100,27 @@ class chk3{
     public void exceptionCaught(ChannelHandlerContext channelHandlerContext, Throwable throwable, CallbackInfo ci) {
         ci.cancel();
     }
+}
+@Mixin(ResourceLocation.class)
+
+class chk4{
+    //永远返回有效的resources location
+    @Redirect(method = "<init>([Ljava/lang/String;)V",at=@At(value = "INVOKE",target = "Lnet/minecraft/resources/ResourceLocation;isValidPath(Ljava/lang/String;)Z"))
+    private boolean alwaysTrueRL(String string){
+
+        return true;
+    }
+    @Redirect(method = "<init>([Ljava/lang/String;)V",at=@At(value = "INVOKE",target = "Lnet/minecraft/resources/ResourceLocation;isValidNamespace(Ljava/lang/String;)Z"))
+    private boolean alwaysTrueRL2(String string){
+
+        return true;
+    }
+}
+@Mixin(FriendlyByteBuf.class)
+class chk5{
+    @ModifyConstant(method = "readResourceLocation",constant=@Constant(intValue = Short.MAX_VALUE))
+    private int sad(int constant){
+        return Short.MAX_VALUE*5;
+    }
+    //@Redirect(method = "readUtf(I)Ljava/lang/String;",at = @At(value = ""))
 }

@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 //改变游戏版本
 @Mixin(DebugScreenOverlay.class)
-public class MixinChangeGameVersion {
+public class mGameVersion {
     @Redirect(method = "Lnet/minecraft/client/gui/components/DebugScreenOverlay;getGameInformation()Ljava/util/List;",
     at = @At(value = "INVOKE",target = "Lnet/minecraft/WorldVersion;getName()Ljava/lang/String;"))
     private String version(WorldVersion instance){
