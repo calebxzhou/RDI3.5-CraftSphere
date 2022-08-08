@@ -36,7 +36,6 @@
     "defaultRequire": 1
   },
   "mixins": [
-    "mCheckModList",
     "mPauseScreen",
     "mStartup10"
   ]
