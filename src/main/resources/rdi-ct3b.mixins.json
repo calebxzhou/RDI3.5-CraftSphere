@@ -6,7 +6,6 @@
   "client": [
     "AccessSplashOverlay",
     "AccessSystemReport",
-    "mClientStartup",
     "mDeathNoGoTitle",
     "mFastCreateMojangService",
     "mFastCreateMojangService2",
@@ -24,19 +23,20 @@
     "mLoginProtocol",
     "mLuminChk",
     "mNoChatBrackets",
+    "mWindowTitle",
+    "mPauseScreen"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "mixins": [
+    "mClientStartup",
     "mStartup2",
     "mStartup23",
     "mStartup3",
     "mStartup4",
     "mStartup5",
     "mStartup6",
-    "mWindowTitle"
-  ],
-  "injectors": {
-    "defaultRequire": 1
-  },
-  "mixins": [
-    "mPauseScreen",
     "mStartup10"
   ]
 }

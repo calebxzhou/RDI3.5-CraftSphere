@@ -2,6 +2,7 @@ package calebzhou.rdi.craftsphere.misc;
 
 import calebzhou.rdi.craftsphere.ExampleMod;
 import calebzhou.rdi.craftsphere.util.DialogUtils;
+import net.minecraft.Util;
 
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;
@@ -10,40 +11,37 @@ import java.awt.*;
 public class LoadProgressDisplay {
     public static long loadStartTime;
     public static long loadEndTime;
-    public static JTextArea loadProgressInfo = new JTextArea("RDI客户端正在启动....\n");
-    public static JProgressBar loadProgressBar = new JProgressBar();
-    public static JFrame loadProgressFrame = new JFrame("RDI客户端启动中");
+    private static JTextArea loadProgressInfo  ;
+    private static JProgressBar loadProgressBar  ;
+    private static JFrame loadProgressFrame ;
     static {
-        RdiSystemTray.createTray();
-        MusicPlayer.playStartupMusic();
-        loadProgressBar.setMaximum(8000);
-        loadStartTime=System.currentTimeMillis();
-        try {
-            // Set System L&F
-            UIManager.setLookAndFeel(
-                    UIManager.getSystemLookAndFeelClassName());
-        }
-        catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException |
-               IllegalAccessException e) {
-            // handle exception
-            e.printStackTrace();
-        }
-        loadProgressFrame.setLayout(new BorderLayout());
-        loadProgressFrame.setAlwaysOnTop (true);
-        loadProgressFrame.setBounds(0,0,400,300);
-        DefaultCaret caret = (DefaultCaret)loadProgressInfo.getCaret();
-        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-        loadProgressInfo.setCaret(caret);
+        if(Util.getPlatform() == Util.OS.WINDOWS){
+            loadProgressInfo = new JTextArea("RDI客户端正在启动....\n");
+            loadProgressBar = new JProgressBar();
+            loadProgressFrame= new JFrame("RDI客户端启动中");
+            RdiSystemTray.createTray();
 
-        JScrollPane scroll = new JScrollPane (loadProgressInfo,
-                JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+            loadProgressBar.setMaximum(7000);
+            loadStartTime=System.currentTimeMillis();
+            loadProgressFrame.setLayout(new BorderLayout());
+            loadProgressFrame.setAlwaysOnTop (true);
+            loadProgressFrame.setBounds(0,0,400,300);
+            DefaultCaret caret = (DefaultCaret)loadProgressInfo.getCaret();
+            caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+            loadProgressInfo.setCaret(caret);
 
-        loadProgressFrame.add(scroll,BorderLayout.CENTER);
-        loadProgressFrame.add(loadProgressBar,BorderLayout.SOUTH);
-        loadProgressFrame.setLocationRelativeTo(null);
-        loadProgressFrame.setVisible(true);
+            JScrollPane scroll = new JScrollPane (loadProgressInfo,
+                    JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+
+            loadProgressFrame.add(scroll,BorderLayout.CENTER);
+            loadProgressFrame.add(loadProgressBar,BorderLayout.SOUTH);
+            loadProgressFrame.setLocationRelativeTo(null);
+            loadProgressFrame.setVisible(true);
+        }
     }
     public static void appendLoadProgressInfo(String info){
+        if(Util.getPlatform() != Util.OS.WINDOWS)
+            return;
         loadProgressInfo.append(info);
         int barValue = loadProgressBar.getValue();
 
@@ -58,6 +56,8 @@ public class LoadProgressDisplay {
 
     }
     public static void onFinish(){
+        if(Util.getPlatform() != Util.OS.WINDOWS)
+            return;
         if(loadProgressFrame!=null){
             //停止载入界面
             loadEndTime = System.currentTimeMillis();

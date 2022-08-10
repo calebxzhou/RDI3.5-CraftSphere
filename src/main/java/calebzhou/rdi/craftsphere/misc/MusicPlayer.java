@@ -18,6 +18,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class MusicPlayer {
+    static {
+        MusicPlayer.playStartupMusic();
+    }
     public static void playStartupMusic(){
         ThreadPool.newThread(()->{
             System.out.println("放音乐");
@@ -28,18 +31,16 @@ public class MusicPlayer {
                 return;
             }*/
             //musicPlayHistoryFile.createNewFile();
-            int musicAmount=16;
-            //Clip clip = AudioSystem.getClip();
-            InputStream inputStream = FileUtils.getJarResourceAsStream("music/startup/" + RandomUtils.nextInt(1, musicAmount + 1) + ".wav");
-            BufferedInputStream bufferStream = new BufferedInputStream(inputStream);
-            play(bufferStream);
+            int musicAmount=25;
+            //Clip clip = AudioSystem.getClip(); +  +
+            play(new File("mods/rdi/music/startup/"+RandomUtils.nextInt(1, musicAmount + 1)+".aac"));
                 /*AudioInputStream stream = AudioSystem.getAudioInputStream(bufferStream);
                 clip.open(stream);
                 clip.start();*/
 
         });
     }
-    public static void play(InputStream musicFile)
+    public static void play(File musicFile)
     {
         // local vars
         byte[]          b;              // array for the actual audio Data during the playback
@@ -55,7 +56,7 @@ public class MusicPlayer {
         boolean paused=false;
         try
         {
-                cont    = new MP4Container((musicFile)); // open titel with random access
+                cont    = new MP4Container(new RandomAccessFile(musicFile,"r")); // open titel with random access
                 movie   = cont.getMovie();                          // get content from container,
                 List<Track> content = movie.getTracks();
                 if (content.isEmpty())     {

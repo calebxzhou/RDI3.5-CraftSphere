@@ -2,6 +2,7 @@ package calebzhou.rdi.craftsphere.misc;
 
 import calebzhou.rdi.craftsphere.ExampleMod;
 import calebzhou.rdi.craftsphere.util.AwtImageUtils;
+import net.minecraft.Util;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,6 +12,8 @@ public class RdiSystemTray {
 
     public static TrayIcon trayIcon;
     public static void createTray( ){
+        if(Util.getPlatform()!= Util.OS.WINDOWS)
+            return;
         if (!SystemTray.isSupported()) {
             System.out.println("不支持系统托盘！");
             return;
