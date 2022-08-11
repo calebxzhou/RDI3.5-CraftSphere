@@ -1,6 +1,5 @@
 package calebzhou.rdi.craftsphere.misc;
 
-import calebzhou.rdi.craftsphere.ExampleMod;
 import calebzhou.rdi.craftsphere.util.DialogUtils;
 import net.minecraft.Util;
 

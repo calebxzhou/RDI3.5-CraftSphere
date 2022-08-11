@@ -5,7 +5,6 @@ import calebzhou.rdi.craftsphere.UserInfoStorage;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.login.ServerboundHelloPacket;
 import net.minecraft.world.entity.player.ProfilePublicKey;
-import org.checkerframework.checker.units.qual.C;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;

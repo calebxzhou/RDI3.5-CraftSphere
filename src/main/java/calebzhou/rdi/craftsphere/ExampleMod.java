@@ -1,30 +1,10 @@
 package calebzhou.rdi.craftsphere;
 
-import calebzhou.rdi.craftsphere.misc.MusicPlayer;
-import calebzhou.rdi.craftsphere.misc.RdiSystemTray;
-import calebzhou.rdi.craftsphere.util.AwtImageUtils;
-import calebzhou.rdi.craftsphere.util.FileUtils;
-import calebzhou.rdi.craftsphere.util.ThreadPool;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.multiplayer.resolver.ServerAddress;
-import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvent;
-import org.apache.commons.lang3.RandomUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import javax.sound.sampled.*;
-import javax.swing.*;
-import javax.swing.text.DefaultCaret;
-import java.awt.*;
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 public class ExampleMod implements ModInitializer {
 

@@ -20,7 +20,6 @@ import net.minecraft.client.main.GameConfig;
 import net.minecraft.client.main.Main;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.sounds.SoundEngine;
-import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.Bootstrap;
 import org.apache.commons.lang3.StringUtils;

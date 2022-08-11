@@ -4,9 +4,7 @@ import calebzhou.rdi.craftsphere.ExampleMod;
 import calebzhou.rdi.craftsphere.util.AwtImageUtils;
 import net.minecraft.Util;
 
-import javax.swing.*;
 import java.awt.*;
-import java.net.URL;
 
 public class RdiSystemTray {
 

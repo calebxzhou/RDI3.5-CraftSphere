@@ -3,8 +3,6 @@ package calebzhou.rdi.craftsphere;
 import calebzhou.rdi.craftsphere.misc.KeyBinds;
 import calebzhou.rdi.craftsphere.util.DialogUtils;
 import calebzhou.rdi.craftsphere.util.NetworkUtils;
-import calebzhou.rdi.craftsphere.util.PlayerUtils;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientEntityEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.Minecraft;
@@ -12,9 +10,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.game.ClientboundAddPlayerPacket;
 import net.minecraft.world.item.BoneMealItem;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SaplingBlock;
 import org.lwjgl.glfw.GLFW;
 

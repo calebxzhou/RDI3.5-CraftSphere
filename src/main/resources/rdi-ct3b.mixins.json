@@ -1,37 +1,37 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "priority": 1088,
+  "priority": 1989,
   "package": "calebzhou.rdi.craftsphere.mixin",
   "compatibilityLevel": "JAVA_17",
   "client": [
     "AccessSplashOverlay",
     "AccessSystemReport",
-    "mDeathNoGoTitle",
+    "mConnectScreen",
     "mFinishLoad",
     "mGameVersion",
-    "mConnectScreen",
     "mLaglessEat",
-    "mNewLoadingOverlay",
-    "mProtocol",
-    "mTabPlayerHud",
     "mLoadComplete",
     "mLoginProtocol",
+    "mMultiPlayerScreen",
+    "mNewLoadingOverlay",
     "mNoChatBrackets",
-    "mWindowTitle",
-    "mPauseScreen"
+    "mProtocol",
+    "mTabPlayerHud",
+    "mTitleScreen",
+    "mWindowTitle"
   ],
   "injectors": {
     "defaultRequire": 1
   },
   "mixins": [
     "mClientStartup",
+    "mStartup10",
     "mStartup2",
     "mStartup23",
     "mStartup3",
     "mStartup4",
     "mStartup5",
-    "mStartup6",
-    "mStartup10"
+    "mStartup6"
   ]
 }
