@@ -14,7 +14,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 @Mixin(Minecraft.class)
-public abstract class MixinNewLoadingOverlay {
+public abstract class mNewLoadingOverlay {
 
     //不显示mc本身的加载画面
     @Redirect(method = "Lnet/minecraft/client/Minecraft;<init>(Lnet/minecraft/client/main/GameConfig;)V",

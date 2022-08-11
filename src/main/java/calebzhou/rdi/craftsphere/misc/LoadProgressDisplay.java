@@ -15,6 +15,7 @@ public class LoadProgressDisplay {
     private static JProgressBar loadProgressBar  ;
     private static JFrame loadProgressFrame ;
     static {
+        MusicPlayer.playStartupMusic();
         if(Util.getPlatform() == Util.OS.WINDOWS){
             loadProgressInfo = new JTextArea("RDI客户端正在启动....\n");
             loadProgressBar = new JProgressBar();

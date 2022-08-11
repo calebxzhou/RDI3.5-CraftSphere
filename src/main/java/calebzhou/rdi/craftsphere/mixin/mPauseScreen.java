@@ -20,25 +20,13 @@ public class mPauseScreen extends Screen {
         super(component);
     }
 
-    @Inject(method = "createPauseMenu",at = @At(value = "INVOKE",target = "Lnet/minecraft/client/gui/screens/PauseScreen;addRenderableWidget(Lnet/minecraft/client/gui/components/events/GuiEventListener;)Lnet/minecraft/client/gui/components/events/GuiEventListener;"))
+    //暂停菜单点击断开连接 去新的标题界面
+    @Inject(method = "method_19836",at = @At(value = "INVOKE",ordinal = 1,target = "Lnet/minecraft/client/Minecraft;setScreen(Lnet/minecraft/client/gui/screens/Screen;)V"))
     private void goNewTitle(CallbackInfo ci){
-        this.addRenderableWidget(new Button(this.width / 2 - 102, this.height / 4 + 120 + -16, 204, 20, Component.literal("断开连接"), button -> {
-            boolean bl = this.minecraft.isLocalServer();
-            boolean bl2 = this.minecraft.isConnectedToRealms();
-            button.active = false;
-            this.minecraft.level.disconnect();
-            if (bl) {
-                this.minecraft.clearLevel(new GenericDirtMessageScreen(Component.translatable("menu.savingLevel")));
-            } else {
-                this.minecraft.clearLevel();
-            }
-            if (bl) {
-                this.minecraft.setScreen(NewTitleScreen.INSTANCE);
-            } else if (bl2) {
-                this.minecraft.setScreen(NewTitleScreen.INSTANCE);
-            } else {
-                this.minecraft.setScreen(NewTitleScreen.INSTANCE);
-            }
-        }));
+        minecraft.setScreen(NewTitleScreen.INSTANCE);
+    }
+    @Inject(method = "method_19836",at = @At(value = "INVOKE",ordinal = 2,target = "Lnet/minecraft/client/Minecraft;setScreen(Lnet/minecraft/client/gui/screens/Screen;)V"))
+    private void goNewTitle2(CallbackInfo ci){
+        minecraft.setScreen(NewTitleScreen.INSTANCE);
     }
 }

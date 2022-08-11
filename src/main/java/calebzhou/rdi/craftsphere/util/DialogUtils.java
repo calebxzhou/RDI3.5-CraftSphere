@@ -22,9 +22,7 @@ public class DialogUtils {
         ToastComponent toastManager = Minecraft.getInstance().getToasts();
         toastManager.addToast(toast);
     }*/
-    public static void main(String[] args) {
 
-    }
     public static void showMessageBox(String type,String title,String msg){
         TinyFileDialogs.tinyfd_messageBox(title,msg,"ok",type,true);
     }

@@ -14,6 +14,7 @@ import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
 import net.minecraft.CrashReport;
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.main.GameConfig;
 import net.minecraft.client.main.Main;
@@ -44,8 +45,11 @@ import java.util.concurrent.Executor;
 public class mClientStartup {
     @Redirect(method = "<clinit>",at = @At(value = "INVOKE",target = "Ljava/lang/System;setProperty(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;"))
     private static String headlessNo(String key, String value){
-        System.setProperty("java.awt.headless", "false");
-        return "false";
+        if(Util.getPlatform()== Util.OS.WINDOWS){
+            System.setProperty("java.awt.headless", "false");
+            return "false";
+        }
+        return "true";
     }
     private static ArgumentAcceptingOptionSpec<String> passwordSpec;
     @Inject(method = "main",remap = false,at = @At(value = "INVOKE",target = "Ljoptsimple/OptionParser;nonOptions()Ljoptsimple/NonOptionArgumentSpec;"),locals = LocalCapture.CAPTURE_FAILSOFT)

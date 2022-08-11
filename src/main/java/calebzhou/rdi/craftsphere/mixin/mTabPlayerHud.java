@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(PlayerTabOverlay.class)
-public class MixinTabPlayerHud {
+public class mTabPlayerHud {
 
     //旁观模式不显示灰色昵称
     @Overwrite

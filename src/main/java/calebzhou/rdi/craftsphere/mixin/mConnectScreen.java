@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 
 @Mixin(ConnectScreen.class)
-public class MixinConnectScreen {
+public class mConnectScreen {
     @Shadow
     @Mutable
     private Component status = Component.literal("载入模组数据...");

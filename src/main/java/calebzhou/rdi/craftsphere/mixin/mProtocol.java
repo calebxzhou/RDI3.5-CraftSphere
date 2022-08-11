@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(DetectedVersion.class)
-public class MixinProtocol {
+public class mProtocol {
     @Shadow
     @Final
     @Mutable

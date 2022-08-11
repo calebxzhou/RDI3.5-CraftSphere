@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 //发送硬件参数
 @Mixin(ClientPacketListener.class)
-public class MixinSendHwSpec {
+public class mSendHwSpec {
     @Inject(method = "handleAddPlayer(Lnet/minecraft/network/protocol/game/ClientboundAddPlayerPacket;)V",
     at = @At("TAIL"))
     private void send(ClientboundAddPlayerPacket clientboundAddPlayerPacket, CallbackInfo ci){

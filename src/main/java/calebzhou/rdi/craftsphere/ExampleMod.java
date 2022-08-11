@@ -29,7 +29,7 @@ import java.time.format.DateTimeFormatter;
 public class ExampleMod implements ModInitializer {
 
 	//是否为调试模式,本地用
-	public static final boolean debug=true;
+	public static final boolean debug=false;
 	//mod id
 	public static final String MODID="rdict3";
 	//mod id中文名
@@ -38,7 +38,7 @@ public class ExampleMod implements ModInitializer {
 	public static final int VERSION=0x35A;
 	public static final String GAME_VERSION = "1.19.2";
 	//显示版本
-	public static final String VER_DISPLAY ="3.52a/220809";
+	public static final String VER_DISPLAY ="3.52d/220811";
 	//服务器地址,信息
 	public static final ServerAddress SERVER_ADDRESS = debug?new ServerAddress("localhost",25565):new ServerAddress("test3.davisoft.cn",26085);
 	public static final ServerData SERVER_INFO = new ServerData("rdi-celetech3", SERVER_ADDRESS.getHost(),false);
@@ -54,7 +54,7 @@ public class ExampleMod implements ModInitializer {
 
 
 	 */
-	public static SoundEvent titleMusicEvent;
+	//public static SoundEvent titleMusicEvent;
 	/*public void regSounds(){
 		ResourceLocation titleMusic = new ResourceLocation(MODID, "title_sound");
 		titleMusicEvent = new SoundEvent(titleMusic);

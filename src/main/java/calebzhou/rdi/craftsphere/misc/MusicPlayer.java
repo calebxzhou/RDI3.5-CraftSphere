@@ -18,9 +18,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class MusicPlayer {
-    static {
-        MusicPlayer.playStartupMusic();
-    }
+
     public static void playStartupMusic(){
         ThreadPool.newThread(()->{
             System.out.println("放音乐");
