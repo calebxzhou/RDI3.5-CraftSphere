@@ -1,9 +1,13 @@
 package calebzhou.rdi.craftsphere;
 
+import calebzhou.rdi.craftsphere.misc.HwSpec;
 import calebzhou.rdi.craftsphere.misc.KeyBinds;
 import calebzhou.rdi.craftsphere.util.DialogUtils;
 import calebzhou.rdi.craftsphere.util.NetworkUtils;
+import calebzhou.rdi.craftsphere.util.ThreadPool;
+import com.google.gson.Gson;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -23,7 +27,15 @@ public class EventRegister {
     public EventRegister(){
         //初始化按键事件
         KeyBinds.init();
+        //进入服务器发送硬件数据
+        ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
+            ThreadPool.newThread(()->{
+                String info = new Gson().newBuilder().setPrettyPrinting().create().toJson(HwSpec.getSystemSpec());
+                NetworkUtils.sendPacketToServer(NetworkPackets.HW_SPEC,info);
+            });
+        });
         //客户端世界tick事件
+
         ClientTickEvents.END_WORLD_TICK.register(world->{
             this.world=world;
             if(Minecraft.getInstance().player!=null){
@@ -32,7 +44,7 @@ public class EventRegister {
                 //隔空跳跃
                 //quickLeap();
                 //检测挂机
-                //afkDetect();
+                afkDetect();
                 //跳舞树
                 danceTree();
                 //检查按键事件
@@ -76,6 +88,11 @@ public class EventRegister {
                 default -> realType= TrayIcon.MessageType.NONE;
             }
             DialogUtils.showPopup(realType,title,content);
+        });
+        //断开客户端清零挂机时间和跳舞树积分
+        ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
+            treeScore=0;
+            totalAfkTicks=0;
         });
     }
     private int treeScore = 0;
@@ -143,21 +160,25 @@ public class EventRegister {
     public void afkDetect(){
         Minecraft client = Minecraft.getInstance();
         if(client.player==null) return;
-        long handle = client.getWindow().getWindow();
+        BlockPos onPos1 = client.player.getOnPos();
         ++totalAfkTicks;
-        //触碰键盘，告诉服务器停止挂机
-        GLFW.glfwSetKeyCallback(handle, (window, key, scancode, action, mods) -> {
-            totalAfkTicks =0;
-            NetworkUtils.sendPacketToServer(NetworkPackets.AFK_DETECT,client.player.getStringUUID()+",noafk,"+totalAfkTicks);
-        });
+
         //如果达到了挂机时间（5分钟），告诉服务器已经挂机
-        int ticksOnAfk = 20 * 60 * 5;
+        int ticksOnAfk = 20 *10/* 5 * 60*/;
         //三秒发送一次挂机时间
         int sendTicks = 20 * 3;
         if(totalAfkTicks >= ticksOnAfk){
             //三秒发送一次
-            if(totalAfkTicks % sendTicks == 0)
-                NetworkUtils.sendPacketToServer(NetworkPackets.AFK_DETECT,client.player.getStringUUID()+",afk,"+totalAfkTicks);
+            if(totalAfkTicks % sendTicks == 0){
+                NetworkUtils.sendPacketToServer(NetworkPackets.AFK_DETECT,totalAfkTicks);
+                BlockPos onPos2 = client.player.getOnPos();
+                //触碰键盘，告诉服务器停止挂机
+                if(onPos2.compareTo(onPos1) > 0){
+                    totalAfkTicks =0;
+                    NetworkUtils.sendPacketToServer(NetworkPackets.AFK_DETECT,0);
+                }
+
+            }
         }
     }
 }

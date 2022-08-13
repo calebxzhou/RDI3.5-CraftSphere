@@ -18,7 +18,7 @@ public class ExampleMod implements ModInitializer {
 	public static final int VERSION=0x35A;
 	public static final String GAME_VERSION = "1.19.2";
 	//显示版本
-	public static final String VER_DISPLAY ="3.52d/220811";
+	public static final String VER_DISPLAY ="3.6/220813";
 	//服务器地址,信息
 	public static final ServerAddress SERVER_ADDRESS = debug?new ServerAddress("localhost",25565):new ServerAddress("test3.davisoft.cn",26085);
 	public static final ServerData SERVER_INFO = new ServerData("rdi-celetech3", SERVER_ADDRESS.getHost(),false);

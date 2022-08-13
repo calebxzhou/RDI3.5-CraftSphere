@@ -6,5 +6,6 @@
   "rdi.chat.type.announcement": "[%s] %s",
   "rdi.chat.type.admin": "[%s: %s]",
   "rdi.chat.type.team.text": "%s %s: %s",
-  "rdi.chat.type.team.sent": "-> %s %s: %s"
+  "rdi.chat.type.team.sent": "-> %s %s: %s",
+  "rdi.menu.disconnect": "断开连接并保存"
 }
