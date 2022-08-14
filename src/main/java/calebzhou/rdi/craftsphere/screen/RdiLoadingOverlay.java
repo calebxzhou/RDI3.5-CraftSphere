@@ -1,5 +1,6 @@
 package calebzhou.rdi.craftsphere.screen;
 
+import calebzhou.rdi.craftsphere.misc.ServerConnector;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -8,6 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.LoadingOverlay;
 import net.minecraft.client.gui.screens.Overlay;
 import net.minecraft.client.gui.screens.TitleScreen;
+import net.minecraft.client.multiplayer.ServerStatusPinger;
 import net.minecraft.client.renderer.CubeMap;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.PanoramaRenderer;
@@ -20,11 +22,10 @@ import java.util.function.Consumer;
 
 import static calebzhou.rdi.craftsphere.texture.LogoTexture.LOGO;
 
-public class NewLoadingOverlay extends Overlay {
+public class RdiLoadingOverlay extends Overlay {
     public static final CubeMap PANORAMA_CUBE_MAP = new CubeMap(new ResourceLocation("textures/gui/title/background/panorama"));
     private static final ResourceLocation PANORAMA_OVERLAY = new ResourceLocation("textures/gui/title/background/panorama_overlay.png");
     private final PanoramaRenderer backgroundRenderer = new PanoramaRenderer(PANORAMA_CUBE_MAP);
-    private static final int FADE_DURATION = 1000;
     private final boolean reloading=true;
     private float progress;
     private long reloadCompleteTime = -1L;
@@ -37,7 +38,9 @@ public class NewLoadingOverlay extends Overlay {
     private final ReloadInstance reload;
     private final Consumer<Optional<Throwable>> exceptionHandler;
 
-    public NewLoadingOverlay(Minecraft client, ReloadInstance reload, Consumer<Optional<Throwable>> exceptionHandler) {
+    public RdiLoadingOverlay(Minecraft client, ReloadInstance reload, Consumer<Optional<Throwable>> exceptionHandler) {
+        //ping一下服务器提高载入速度
+        ServerConnector.ping();
         this.client=client;
         this.reload = reload;
         this.exceptionHandler = exceptionHandler;
@@ -49,9 +52,9 @@ public class NewLoadingOverlay extends Overlay {
     @Override
     public void render(PoseStack matrices, int mouseX, int mouseY, float delta) {
         renderBackground(matrices, delta);
-        if (this.reloadCompleteTime > 1) {
+        /*if (this.reloadCompleteTime > 1) {
             this.client.setOverlay(null);
-        }
+        }*/
         float h;
         int k;
         float g;

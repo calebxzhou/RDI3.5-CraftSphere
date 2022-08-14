@@ -1,6 +1,6 @@
 package calebzhou.rdi.craftsphere.mixin;
 
-import calebzhou.rdi.craftsphere.screen.PauseScreen;
+import calebzhou.rdi.craftsphere.screen.RdiPauseScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.server.IntegratedServer;
@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.Shadow;
 
 //简单的暂停菜单
 @Mixin(Minecraft.class)
-public abstract class MixinSimplePauseMenu {
+public abstract class mNewPauseMenu {
 
     @Shadow public abstract void setScreen(@Nullable Screen screen);
 
@@ -33,10 +33,10 @@ public abstract class MixinSimplePauseMenu {
         if (screen == null) {
             boolean bl = hasSingleplayerServer() && !singleplayerServer.isPublished();
             if (bl) {
-                this.setScreen(new PauseScreen(!pause));
+                this.setScreen(new RdiPauseScreen(!pause));
                 this.soundManager.pause();
             } else {
-                this.setScreen(new PauseScreen(true));
+                this.setScreen(new RdiPauseScreen(true));
             }
 
         }

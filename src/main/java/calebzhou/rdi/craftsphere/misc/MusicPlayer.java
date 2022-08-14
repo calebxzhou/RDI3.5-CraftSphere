@@ -23,23 +23,25 @@ public class MusicPlayer {
 
     public static void playStartupMusic(){
         ThreadPool.newThread(()->{
-            System.out.println("放音乐");
+            play(new File("mods/rdi/sound/startup.aac"));
             /*String yyyyMMdd = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
             File musicPlayHistoryFile = new File("logs/musicplay_"+yyyyMMdd);
             if(musicPlayHistoryFile.exists()){
                 System.out.println("今天放过了");
                 return;
             }*/
-            //musicPlayHistoryFile.createNewFile();
-            int musicAmount=25;
-            //Clip clip = AudioSystem.getClip(); +  +
-            play(new File("mods/rdi/music/startup/"+RandomUtils.nextInt(1, musicAmount + 1)+".aac"));
-                /*AudioInputStream stream = AudioSystem.getAudioInputStream(bufferStream);
-                clip.open(stream);
-                clip.start();*/
+
+            //3.61再放音乐
+            //int musicAmount=25;
+           // play(new File("mods/rdi/music/startup/"+RandomUtils.nextInt(1, musicAmount + 1)+".aac"));
 
         });
     }
+    public static void playAsync(File musicFile){
+        ThreadPool.newThread(()->play(musicFile));
+    }
+
+
     public static void play(File musicFile)
     {
         // local vars

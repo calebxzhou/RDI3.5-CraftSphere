@@ -14,7 +14,7 @@ public class LoadProgressDisplay {
     private static JProgressBar loadProgressBar  ;
     private static JFrame loadProgressFrame ;
     static {
-        MusicPlayer.playStartupMusic();
+
         if(Util.getPlatform() == Util.OS.WINDOWS){
             loadProgressInfo = new JTextArea("RDI客户端正在启动....\n");
             loadProgressBar = new JProgressBar();
@@ -50,6 +50,10 @@ public class LoadProgressDisplay {
         }else{
             barValue+=50;
         }
+        if(info.contains("启动游戏主线程")){
+            loadProgressFrame.setBounds(loadProgressFrame.getX(),loadProgressFrame.getY()+loadProgressFrame.getHeight(),
+                    loadProgressFrame.getWidth(),loadProgressFrame.getHeight());
+        }
         loadProgressInfo.append("\n");
         loadProgressBar.setValue(barValue);
         loadProgressInfo.setCaretPosition(loadProgressInfo.getDocument().getLength());
@@ -72,6 +76,7 @@ public class LoadProgressDisplay {
                 beyondPlayerRatio=0.999;
             String beyondPerc = String.format("%.2f",beyondPlayerRatio*100);
             DialogUtils.showPopup(TrayIcon.MessageType.INFO,"您本次载入游戏用时"+displayTime+"秒","超越了"+beyondPerc+"%的玩家！");
+            MusicPlayer.playStartupMusic();
         }
     }
 }

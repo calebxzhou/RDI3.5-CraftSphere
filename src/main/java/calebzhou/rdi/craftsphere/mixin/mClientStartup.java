@@ -67,7 +67,7 @@ public class mClientStartup {
         LoadProgressDisplay.appendLoadProgressInfo("载入游戏角色:"+name);
         if(!StringUtils.isEmpty(pwd)){
             UserInfoStorage.UserPwd=pwd;
-            ExampleMod.LOGGER.info("成功读取密钥，{}",pwd);
+            //ExampleMod.LOGGER.info("成功读取密钥，{}",pwd.getBytes(StandardCharsets.UTF_8));
             LoadProgressDisplay.appendLoadProgressInfo("正在解密角色:"+name);
         }
         if(StringUtils.isEmpty(uuid)){

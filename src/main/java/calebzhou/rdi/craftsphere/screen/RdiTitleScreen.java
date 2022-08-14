@@ -1,9 +1,11 @@
 package calebzhou.rdi.craftsphere.screen;
 
 import calebzhou.rdi.craftsphere.ExampleMod;
+import calebzhou.rdi.craftsphere.misc.MusicPlayer;
 import calebzhou.rdi.craftsphere.misc.ServerConnector;
 import calebzhou.rdi.craftsphere.texture.Textures;
 import calebzhou.rdi.craftsphere.util.DialogUtils;
+import com.mojang.authlib.minecraft.client.MinecraftClient;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -13,10 +15,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.events.GuiEventListener;
-import net.minecraft.client.gui.screens.ConnectScreen;
+import net.minecraft.client.gui.screens.AccessibilityOptionsScreen;
 import net.minecraft.client.gui.screens.OptionsScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.TitleScreen;
+import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
 import net.minecraft.client.gui.screens.worldselection.SelectWorldScreen;
 import net.minecraft.client.renderer.CubeMap;
 import net.minecraft.client.renderer.GameRenderer;
@@ -26,19 +29,19 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 
-public class NewTitleScreen extends Screen {
-    private static boolean isPlayingMusic = false;
+public class RdiTitleScreen extends Screen {
     public static final CubeMap PANORAMA_CUBE_MAP = new CubeMap(new ResourceLocation("textures/gui/title/background/panorama"));
     private static final ResourceLocation PANORAMA_OVERLAY = new ResourceLocation("textures/gui/title/background/panorama_overlay.png");
-    private PanoramaRenderer backgroundRenderer = new PanoramaRenderer(PANORAMA_CUBE_MAP);
+    private final PanoramaRenderer backgroundRenderer = new PanoramaRenderer(PANORAMA_CUBE_MAP);
     private long backgroundFadeStart;
     private int frames=0;
 
-    public static final NewTitleScreen INSTANCE = new NewTitleScreen();
-    public NewTitleScreen() {
+    public static final RdiTitleScreen INSTANCE = new RdiTitleScreen();
+    public RdiTitleScreen() {
         super(Component.literal("主界面"));
     }
     public boolean shouldCloseOnEsc() {
@@ -65,16 +68,16 @@ public class NewTitleScreen extends Screen {
             return;
         }
         blit(matrices, 0, 0, this.width, this.height, 0.0F, 0.0F, 16, 128, 16, 128);
-        //if(frames>= 35){
-            this.font.drawShadow(matrices, "按下 Enter", (this.width/2.0f)-30, this.height - 50, 0x00FFFFFF);
-        /*}
+        if(frames>= 35){
+            this.font.drawShadow(matrices, "按  Enter", (this.width/2.0f)-30, this.height - 50, 0x00FFFFFF);
+        }
         if(frames>=70){
             frames=0;
-        }*/
+        }
         int j = this.width / 2 - 137;
 
         int lz = Mth.ceil(g * 255.0F) << 24;
-        if ((lz & -67108864) != 0) {
+        if ((lz & 0xfc000000) != 0) {
 
             Iterator var12 = this.children().iterator();
 
@@ -87,45 +90,52 @@ public class NewTitleScreen extends Screen {
             super.render(matrices, mouseX, mouseY, delta);
         }
         ++frames;
-            /*if(!isPlayingMusic){
-                GameMusic.playOnTitle();
-                isPlayingMusic =true;
-            }*/
 
     }
     public void tick() {
 
         long handle = Minecraft.getInstance().getWindow().getWindow();
-        /*if(InputUtil.isKeyPressed(handle,InputUtil.GLFW_KEY_F1)){
-            MinecraftClient.getInstance().setScreen(new MultiplayerScreen(this));
-            return;
-        }*/
-        if(InputConstants.isKeyDown(handle, InputConstants.KEY_F3)){
-            Minecraft.getInstance().setScreen(new SelectWorldScreen(this));
+        if(InputConstants.isKeyDown(handle, InputConstants.KEY_0)){
+            if(ExampleMod.debug)
+            this.minecraft.setScreen(new JoinMultiplayerScreen(this));
             return;
         }
-        if(InputConstants.isKeyDown(handle,InputConstants.KEY_RETURN)){
-            ServerConnector.connect();
+        if(InputConstants.isKeyDown(handle, InputConstants.KEY_K)){
+            this.minecraft.setScreen(new SelectWorldScreen(this));
+            return;
         }
-
-
-
-    }
-    public void init() {
-        this.addRenderableWidget(new ImageButton(this.width -10, this.height-10, 10, 10, 0,0,20, Textures.ICON_SETTINGS,16,32, (button) -> {
-            this.minecraft.setScreen(new OptionsScreen(this, this.minecraft.options));
-        }, Component.translatable("menu.options")));
-        /*this.addDrawableChild(new TexturedButtonWidget(this.width-40, j, 20, 20, 0, 0, 20, new Identifier("textures/gui/accessibility.png"), 32, 64, (button) -> {
-            this.client.setScreen(new AccessibilityOptionsScreen(this, this.client.options));
-        }, new TranslatableText("narrator.button.accessibility")));*/
-        this.addRenderableWidget(new ImageButton(0, this.height-10, 10, 10, 0, 0, 20, Textures.ICON_MODMENU, 16, 32, (button) -> {
+        if(InputConstants.isKeyDown(handle, InputConstants.KEY_M)){
             try {
                 this.minecraft.setScreen((Screen) Class.forName("com.terraformersmc.modmenu.gui.ModsScreen").getConstructor(Screen.class).newInstance(this));
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException | ClassNotFoundException e) {
                 DialogUtils.showMessageBox("error","必须安装ModMenu模组以使用本功能！！");
                 e.printStackTrace();
             }
-        }, Component.translatable("Mods")));
+            return;
+        }
+        if(InputConstants.isKeyDown(handle, InputConstants.KEY_O)){
+            MusicPlayer.playAsync(new File("mods/rdi/sound/settings.aac"));
+            this.minecraft.setScreen(new OptionsScreen(this, this.minecraft.options));
+            return;
+        }
+        if(InputConstants.isKeyDown(handle,InputConstants.KEY_RETURN)){
+            ServerConnector.connect();
+            Minecraft.getInstance().options.setSoundCategoryVolume(SoundSource.MUSIC,1);
+            MusicPlayer.playAsync(new File("mods/rdi/sound/connect.aac"));
+        }
+
+
+
+    }
+    public void init() {
+        /*
+         this.addRenderableWidget(new ImageButton(this.width -10, this.height-10, 10, 10, 0,0,20, Textures.ICON_SETTINGS,16,32, (button) -> {
+            this.minecraft.setScreen(new OptionsScreen(this, this.minecraft.options));
+        }, Component.translatable("menu.options")));
+        /*this.addDrawableChild(new TexturedButtonWidget(this.width-40, j, 20, 20, 0, 0, 20, new Identifier("textures/gui/accessibility.png"), 32, 64, (button) -> {
+            this.client.setScreen(new AccessibilityOptionsScreen(this, this.client.options));
+        }, new TranslatableText("narrator.button.accessibility")));*/
+
         Minecraft.getInstance().options.setSoundCategoryVolume(SoundSource.MUSIC,0);
 
     }

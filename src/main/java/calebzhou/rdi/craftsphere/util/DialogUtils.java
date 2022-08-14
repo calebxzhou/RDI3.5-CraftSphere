@@ -34,7 +34,7 @@ public class DialogUtils {
     }
     public static void showPopup(TrayIcon.MessageType type, String title, String msg){
         if(Util.getPlatform()== Util.OS.WINDOWS)
-        RdiSystemTray.trayIcon.displayMessage(title,msg,type);
+            RdiSystemTray.trayIcon.displayMessage(title,msg,type);
         //TinyFileDialogs.tinyfd_notifyPopup(title,msg,type);
     }
    /* public static boolean showYesNo(String msg){

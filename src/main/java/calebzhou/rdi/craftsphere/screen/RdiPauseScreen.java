@@ -1,7 +1,8 @@
-package calebzhou.rdi.craftsphere.mixin;
+package calebzhou.rdi.craftsphere.screen;
 
-import calebzhou.rdi.craftsphere.screen.NewTitleScreen;
+import calebzhou.rdi.craftsphere.misc.MusicPlayer;
 import calebzhou.rdi.craftsphere.texture.Textures;
+import calebzhou.rdi.craftsphere.util.DialogUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.screens.GenericDirtMessageScreen;
@@ -10,10 +11,13 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.network.chat.Component;
 
-public class PauseScreen extends Screen {
+import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+
+public class RdiPauseScreen extends Screen {
     private final boolean showMenu;
 
-    public PauseScreen(boolean showMenu) {
+    public RdiPauseScreen(boolean showMenu) {
         super(Component.literal("菜单"));
         this.showMenu=showMenu;
     }
@@ -29,7 +33,7 @@ public class PauseScreen extends Screen {
 
 
 
-        int w = this.width /2 - 10;
+        int w = this.width /2 - 30;
         int j = this.height / 2 - 50;
         this.addRenderableWidget(new ImageButton(w - 25, j, 20, 20, 0,0,20, Textures.ICON_CONTINUE,32,64, (button) -> {
             this.minecraft.setScreen(null);
@@ -37,9 +41,21 @@ public class PauseScreen extends Screen {
         },  Component.translatable("menu.returnToGame")));
 
         this.addRenderableWidget(new ImageButton(w , j, 20, 20, 0,0,20, Textures.ICON_SETTINGS,32,64, (button) -> {
+            MusicPlayer.playAsync(new File("mods/rdi/sound/settings.aac"));
             this.minecraft.setScreen(new OptionsScreen(this, this.minecraft.options));
         }, Component.translatable("menu.options")));
-        this.addRenderableWidget(new ImageButton(w + 25, j, 20, 20, 0, 0, 20, Textures.ICON_QUIT, 32, 64, (button) -> {
+        this.addRenderableWidget(new ImageButton(w+25 , j, 20, 20, 0,0,20, Textures.ICON_MODMENU,32,64, (button) -> {
+            try {
+                this.minecraft.setScreen((Screen) Class.forName("com.terraformersmc.modmenu.gui.ModsScreen").getConstructor(Screen.class).newInstance(this));
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+                     NoSuchMethodException | ClassNotFoundException e) {
+                DialogUtils.showMessageBox("error","必须安装ModMenu模组以使用本功能！！");
+                e.printStackTrace();
+            }
+        }, Component.translatable("menu.options")));
+
+
+        this.addRenderableWidget(new ImageButton(w + 50, j, 20, 20, 0, 0, 20, Textures.ICON_QUIT, 32, 64, (button) -> {
             boolean bl = this.minecraft.isLocalServer();
             boolean bl2 = false;
             button.active = false;
@@ -50,12 +66,8 @@ public class PauseScreen extends Screen {
                 this.minecraft.clearLevel();
             }
 
-            TitleScreen titleScreen = new TitleScreen();
-            if (bl) {
-                this.minecraft.setScreen(titleScreen);
-            } else {
-                this.minecraft.setScreen(NewTitleScreen.INSTANCE);
-            }
+            MusicPlayer.playAsync(new File("mods/rdi/sound/quit.aac"));
+                this.minecraft.setScreen(RdiTitleScreen.INSTANCE);
         }, Component.translatable("menu.disconnect")));
     }
 

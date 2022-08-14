@@ -1,5 +1,6 @@
 package calebzhou.rdi.craftsphere.misc;
 
+import calebzhou.rdi.craftsphere.ExampleMod;
 import com.google.gson.Gson;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
@@ -22,6 +23,7 @@ public class HwSpec implements Serializable {
     public String cpu;
     public String gpu;
     public String mods;
+    public String ver;
 
     public static void main(String[] args) {
         HwSpec systemSpec = HwSpec.getSystemSpec();
@@ -109,6 +111,7 @@ public class HwSpec implements Serializable {
         mods.append("(∑").append(modAmount).append(")");
         spec.mods=(mods.toString());
 
+        spec.ver= ExampleMod.VER_DISPLAY;
         return spec;
     }
 

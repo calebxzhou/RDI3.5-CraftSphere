@@ -9,14 +9,16 @@ import com.google.gson.Gson;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.BoneMealItem;
 import net.minecraft.world.level.block.SaplingBlock;
-import org.lwjgl.glfw.GLFW;
 
 import java.awt.*;
 import java.util.Optional;
@@ -24,78 +26,74 @@ import java.util.Optional;
 //事件注册
 public class EventRegister {
     private ClientLevel world;
+    private int danceTreeCurrentScore = 0;
     public EventRegister(){
         //初始化按键事件
         KeyBinds.init();
         //进入服务器发送硬件数据
-        ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
-            ThreadPool.newThread(()->{
-                String info = new Gson().newBuilder().setPrettyPrinting().create().toJson(HwSpec.getSystemSpec());
-                NetworkUtils.sendPacketToServer(NetworkPackets.HW_SPEC,info);
-            });
-        });
+        ClientPlayConnectionEvents.JOIN.register(this::onJoinServer);
         //客户端世界tick事件
+        ClientTickEvents.END_WORLD_TICK.register(this::onClientWorldTick);
+        ClientPlayNetworking.registerGlobalReceiver(NetworkPackets.DIALOG_INFO,this::onReceiveDialogInfo);
+        ClientPlayNetworking.registerGlobalReceiver(NetworkPackets.POPUP,this::onReceivePopup);
+        ClientPlayConnectionEvents.DISCONNECT.register(this::onDisconnectServer);
+    }
 
-        ClientTickEvents.END_WORLD_TICK.register(world->{
-            this.world=world;
-            if(Minecraft.getInstance().player!=null){
-                //虚空防止掉落
-                //preventDroppingVoid();
-                //隔空跳跃
-                //quickLeap();
-                //检测挂机
-                afkDetect();
-                //跳舞树
-                danceTree();
-                //检查按键事件
-                KeyBinds.handleKeyActions(world);
-            }
+    private void onClientWorldTick(ClientLevel level) {
+        this.world=level;
+        if(Minecraft.getInstance().player==null) return;
 
+        afkDetect();
+        danceTree();
+        KeyBinds.handleKeyActions(world);
+    }
 
-
-        });
-        //接收服务器的空岛信息
-        /*ClientPlayNetworking.registerGlobalReceiver(NetworkPackets.ISLAND_INFO,(client, handler, buf, responseSender) -> {
-            int i = buf.readInt();
-            //接收到了0就提示创建岛屿
-            if(i == 0){
-                if (DialogUtils.showYesNo("没有找到您的岛屿。\n是：立刻创建自己的岛屿\n否：加入朋友的岛屿")) {
-                    client.player.chat("/create");
-                }
-            }
-        });*/
-        //接收服务器的对话框信息
-        ClientPlayNetworking.registerGlobalReceiver(NetworkPackets.DIALOG_INFO,(client, handler, buf, responseSender) -> {
-            String info = buf.readUtf();
-            String[] split = info.split("@");
-            String type= split[0];
-            String title= split[1];
-            String content= split[2];
-            DialogUtils.showMessageBox(type,title,content);
-        });
-        //接收服务器的弹框信息
-        ClientPlayNetworking.registerGlobalReceiver(NetworkPackets.POPUP,(client, handler, buf, responseSender) -> {
-            String info = buf.readUtf();
-            String[] split = info.split("@");
-            String type= split[0];
-            String title= split[1];
-            String content= split[2];
-            TrayIcon.MessageType realType;
-            switch (type){
-                case "info"->realType= TrayIcon.MessageType.INFO;
-                case "warning"->realType= TrayIcon.MessageType.WARNING;
-                case "error"->realType= TrayIcon.MessageType.ERROR;
-                default -> realType= TrayIcon.MessageType.NONE;
-            }
-            DialogUtils.showPopup(realType,title,content);
-        });
-        //断开客户端清零挂机时间和跳舞树积分
-        ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
-            treeScore=0;
-            totalAfkTicks=0;
+    //建立服务器连接
+    private void onJoinServer(ClientPacketListener listener, PacketSender sender, Minecraft minecraft) {
+        ThreadPool.newThread(()->{
+            String info = new Gson().newBuilder().setPrettyPrinting().create().toJson(HwSpec.getSystemSpec());
+            NetworkUtils.sendPacketToServer(NetworkPackets.HW_SPEC,info);
         });
     }
-    private int treeScore = 0;
+
+
+    //断开服务器连接
+    private void onDisconnectServer(ClientPacketListener listener, Minecraft minecraft) {
+        //清零挂机时间和跳舞树积分
+        danceTreeCurrentScore =0;
+        totalAfkTicks=0;
+    }
+
+    //接收服务器的弹框信息
+    private void onReceivePopup(Minecraft minecraft, ClientPacketListener listener, FriendlyByteBuf buf, PacketSender sender) {
+        String info = buf.readUtf();
+        String[] split = info.split("@");
+        String type= split[0];
+        String title= split[1];
+        String content= split[2];
+        TrayIcon.MessageType realType;
+        switch (type){
+            case "info"->realType= TrayIcon.MessageType.INFO;
+            case "warning"->realType= TrayIcon.MessageType.WARNING;
+            case "error"->realType= TrayIcon.MessageType.ERROR;
+            default -> realType= TrayIcon.MessageType.NONE;
+        }
+        DialogUtils.showPopup(realType,title,content);
+
+    }
+
+    //接收服务器的对话框信息
+    private void onReceiveDialogInfo(Minecraft minecraft, ClientPacketListener listener, FriendlyByteBuf buf, PacketSender sender) {
+         String info = buf.readUtf();
+         String[] split = info.split("@");
+         String type= split[0];
+         String title= split[1];
+         String content= split[2];
+         DialogUtils.showMessageBox(type,title,content);
+    }
+
+    //跳舞树
+
     public void danceTree(){
 
         if(world.dimension() != ClientLevel.OVERWORLD)
@@ -125,23 +123,65 @@ public class EventRegister {
             //只走路，不加分
             return;
         if(scoreToAdd>0){
-            treeScore+=scoreToAdd;
-            player.displayClientMessage(Component.literal("树苗生长进度"+ treeScore*5 +"/"+requireScore*5),true);
+            danceTreeCurrentScore +=scoreToAdd;
+            player.displayClientMessage(Component.literal("树苗生长进度"+ danceTreeCurrentScore *5 +"/"+requireScore*5),true);
             final int finalScoreToAdd = scoreToAdd;
             BoneMealItem.addGrowthParticles(world,nearestSapling.get(), finalScoreToAdd *5);
 
         }
-        if(treeScore>requireScore){
+        if(danceTreeCurrentScore >requireScore){
             NetworkUtils.sendPacketToServer(NetworkPackets.DANCE_TREE_GROW,nearestSapling.get().asLong());
-            treeScore=0;
+            danceTreeCurrentScore =0;
         }
     }
-    public void preventDroppingVoid(){
+
+    //多长tick检测一次是否挂机 3秒
+    private final int checkAfkTickTime = 20*3;
+    //两次检测之间的tick
+    private int checkAfkInterval = 0;
+    //总共挂机了多长时间
+    private int totalAfkTicks =0;
+    //如果达到了挂机时间（5分钟），告诉服务器已经挂机
+    final int ticksOnAfk = 20 * 5 * 60;
+    //检测挂机
+    public void afkDetect(){
+        LocalPlayer player = Minecraft.getInstance().player;
+        if(player==null)
+            return;
+        BlockPos pos1 = player.getOnPos();
+        //如果没达到检测挂机的时间 就先不检测
+        if(checkAfkInterval < checkAfkTickTime){
+            ++checkAfkInterval;
+            return;
+        }
+
+        //达到检测挂机时间---
+        BlockPos pos2 = player.getOnPos();
+        //如果3秒之内没有动 就累计挂机tick
+        if(pos2.compareTo(pos1)==0){
+            totalAfkTicks += checkAfkInterval;
+            checkAfkInterval=0;
+        }
+
+        //累计挂机tick达到了规定时间 开始向服务器发送挂机时长
+        if(totalAfkTicks >= ticksOnAfk){
+            NetworkUtils.sendPacketToServer(NetworkPackets.AFK_DETECT,totalAfkTicks);
+            //如果玩家动了 就清除挂机时间
+            if(pos2.compareTo(pos1)>0){
+                totalAfkTicks=0;
+                NetworkUtils.sendPacketToServer(NetworkPackets.AFK_DETECT,0);
+            }
+        }
+
+
+    }
+}
+/*public void preventDroppingVoid(){
         Minecraft client = Minecraft.getInstance();
         if(client.player != null && client.player.getY()<-80){
             client.player.chat("/spawn");
         }
-    }
+    }*/
    /* public void quickLeap(){
          return;
         if (KeyBinds.LEAP_KEY.consumeClick()){
@@ -155,30 +195,3 @@ public class EventRegister {
             NetworkUtils.sendPacketToServer(NetworkPackets.LEAP,lookingAtBlock.asLong());
         }
     }*/
-
-    private int totalAfkTicks =0;
-    public void afkDetect(){
-        Minecraft client = Minecraft.getInstance();
-        if(client.player==null) return;
-        BlockPos onPos1 = client.player.getOnPos();
-        ++totalAfkTicks;
-
-        //如果达到了挂机时间（5分钟），告诉服务器已经挂机
-        int ticksOnAfk = 20 *10/* 5 * 60*/;
-        //三秒发送一次挂机时间
-        int sendTicks = 20 * 3;
-        if(totalAfkTicks >= ticksOnAfk){
-            //三秒发送一次
-            if(totalAfkTicks % sendTicks == 0){
-                NetworkUtils.sendPacketToServer(NetworkPackets.AFK_DETECT,totalAfkTicks);
-                BlockPos onPos2 = client.player.getOnPos();
-                //触碰键盘，告诉服务器停止挂机
-                if(onPos2.compareTo(onPos1) > 0){
-                    totalAfkTicks =0;
-                    NetworkUtils.sendPacketToServer(NetworkPackets.AFK_DETECT,0);
-                }
-
-            }
-        }
-    }
-}
