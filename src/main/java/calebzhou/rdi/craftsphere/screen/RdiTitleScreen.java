@@ -1,11 +1,10 @@
 package calebzhou.rdi.craftsphere.screen;
 
 import calebzhou.rdi.craftsphere.ExampleMod;
+import calebzhou.rdi.craftsphere.FileConst;
 import calebzhou.rdi.craftsphere.misc.MusicPlayer;
 import calebzhou.rdi.craftsphere.misc.ServerConnector;
-import calebzhou.rdi.craftsphere.texture.Textures;
 import calebzhou.rdi.craftsphere.util.DialogUtils;
-import com.mojang.authlib.minecraft.client.MinecraftClient;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -13,9 +12,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.events.GuiEventListener;
-import net.minecraft.client.gui.screens.AccessibilityOptionsScreen;
 import net.minecraft.client.gui.screens.OptionsScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.TitleScreen;
@@ -114,14 +111,14 @@ public class RdiTitleScreen extends Screen {
             return;
         }
         if(InputConstants.isKeyDown(handle, InputConstants.KEY_O)){
-            MusicPlayer.playAsync(new File("mods/rdi/sound/settings.aac"));
+            MusicPlayer.playOggAsync(new File(FileConst.RDI_SOUND_FOLDER,"settings.ogg"));
             this.minecraft.setScreen(new OptionsScreen(this, this.minecraft.options));
             return;
         }
         if(InputConstants.isKeyDown(handle,InputConstants.KEY_RETURN)){
             ServerConnector.connect();
             Minecraft.getInstance().options.setSoundCategoryVolume(SoundSource.MUSIC,1);
-            MusicPlayer.playAsync(new File("mods/rdi/sound/connect.aac"));
+            MusicPlayer.playOggAsync(new File(FileConst.RDI_SOUND_FOLDER,"connect.ogg"));
         }
 
 

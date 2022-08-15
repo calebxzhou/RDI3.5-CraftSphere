@@ -7,41 +7,45 @@ import javax.swing.*;
 import javax.swing.text.DefaultCaret;
 import java.awt.*;
 
-public class LoadProgressDisplay {
-    public static long loadStartTime;
-    public static long loadEndTime;
-    private static JTextArea loadProgressInfo  ;
-    private static JProgressBar loadProgressBar  ;
-    private static JFrame loadProgressFrame ;
-    static {
-
-        if(Util.getPlatform() == Util.OS.WINDOWS){
-            loadProgressInfo = new JTextArea("RDI客户端正在启动....\n");
-            loadProgressBar = new JProgressBar();
-            loadProgressFrame= new JFrame("RDI客户端启动中");
-            RdiSystemTray.createTray();
-
-            loadProgressBar.setMaximum(7000);
-            loadStartTime=System.currentTimeMillis();
-            loadProgressFrame.setLayout(new BorderLayout());
-            loadProgressFrame.setAlwaysOnTop (true);
-            loadProgressFrame.setBounds(0,0,400,300);
-            DefaultCaret caret = (DefaultCaret)loadProgressInfo.getCaret();
-            caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-            loadProgressInfo.setCaret(caret);
-
-            JScrollPane scroll = new JScrollPane (loadProgressInfo,
-                    JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-
-            loadProgressFrame.add(scroll,BorderLayout.CENTER);
-            loadProgressFrame.add(loadProgressBar,BorderLayout.SOUTH);
-            loadProgressFrame.setLocationRelativeTo(null);
-            loadProgressFrame.setVisible(true);
-        }
+public class LoadProgressDisplay extends Thread{
+    public static final LoadProgressDisplay INSTANCE = new LoadProgressDisplay();
+    private long loadStartTime;
+    private long loadEndTime;
+    private JTextArea loadProgressInfo  ;
+    private JProgressBar loadProgressBar  ;
+    private JFrame loadProgressFrame ;
+    private LoadProgressDisplay(){
+        if(Util.getPlatform() != Util.OS.WINDOWS) return;
+        loadProgressInfo = new JTextArea("RDI客户端正在启动....\n");
+        loadProgressBar = new JProgressBar();
+        loadProgressFrame= new JFrame("RDI客户端启动中");
     }
-    public static void appendLoadProgressInfo(String info){
-        if(Util.getPlatform() != Util.OS.WINDOWS)
-            return;
+
+    @Override
+    public void run() {
+        if(Util.getPlatform() != Util.OS.WINDOWS) return;
+        RdiSystemTray.createTray();
+
+        loadProgressBar.setMaximum(7000);
+        loadStartTime=System.currentTimeMillis();
+        loadProgressFrame.setLayout(new BorderLayout());
+        loadProgressFrame.setAlwaysOnTop (true);
+        loadProgressFrame.setBounds(0,0,400,300);
+        DefaultCaret caret = (DefaultCaret)loadProgressInfo.getCaret();
+        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+        loadProgressInfo.setCaret(caret);
+
+        JScrollPane scroll = new JScrollPane (loadProgressInfo,
+                JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+
+        loadProgressFrame.add(scroll,BorderLayout.CENTER);
+        loadProgressFrame.add(loadProgressBar,BorderLayout.SOUTH);
+        loadProgressFrame.setLocationRelativeTo(null);
+        loadProgressFrame.setVisible(true);
+    }
+
+    public void appendLoadProgressInfo(String info){
+        if(Util.getPlatform() != Util.OS.WINDOWS) return;
         loadProgressInfo.append(info);
         int barValue = loadProgressBar.getValue();
 
@@ -59,9 +63,8 @@ public class LoadProgressDisplay {
         loadProgressInfo.setCaretPosition(loadProgressInfo.getDocument().getLength());
 
     }
-    public static void onFinish(){
-        if(Util.getPlatform() != Util.OS.WINDOWS)
-            return;
+    public void onFinish(){
+        if(Util.getPlatform() != Util.OS.WINDOWS) return;
         if(loadProgressFrame!=null){
             //停止载入界面
             loadEndTime = System.currentTimeMillis();
