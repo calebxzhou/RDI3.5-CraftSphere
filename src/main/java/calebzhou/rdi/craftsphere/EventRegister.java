@@ -4,8 +4,10 @@ import calebzhou.rdi.craftsphere.misc.HwSpec;
 import calebzhou.rdi.craftsphere.misc.KeyBinds;
 import calebzhou.rdi.craftsphere.util.DialogUtils;
 import calebzhou.rdi.craftsphere.util.NetworkUtils;
+import calebzhou.rdi.craftsphere.util.PlayerUtils;
 import calebzhou.rdi.craftsphere.util.ThreadPool;
 import com.google.gson.Gson;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -17,16 +19,19 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.BoneMealItem;
 import net.minecraft.world.level.block.SaplingBlock;
 
 import java.awt.*;
+import java.util.List;
 import java.util.Optional;
 
 //事件注册
 public class EventRegister {
-    private ClientLevel world;
     private int danceTreeCurrentScore = 0;
+
     public EventRegister(){
         //初始化按键事件
         KeyBinds.init();
@@ -40,12 +45,47 @@ public class EventRegister {
     }
 
     private void onClientWorldTick(ClientLevel level) {
-        this.world=level;
-        if(Minecraft.getInstance().player==null) return;
+        LocalPlayer player = Minecraft.getInstance().player;
+        if(player ==null) return;
 
-        afkDetect();
-        danceTree();
-        KeyBinds.handleKeyActions(world);
+        afkDetect(player);
+        danceTree(player,level);
+        animalSex(player);
+        KeyBinds.handleKeyActions(level);
+    }
+
+    private int sexTickAmount =0;
+    //繁殖成功所需要的tick数
+    private static final int sexTickAmountNeedToAdult =200;
+    private static final List<EntityType<?>> sexableEntityType=new ObjectArrayList<>();
+    static{
+        sexableEntityType.add(EntityType.PIG);
+        sexableEntityType.add(EntityType.COW);
+        sexableEntityType.add(EntityType.SHEEP);
+        sexableEntityType.add(EntityType.CHICKEN);
+        sexableEntityType.add(EntityType.VILLAGER);
+    }
+    //动物快速繁殖
+    private void animalSex(LocalPlayer player) {
+        //玩家下蹲
+        if(player.isCrouching()) {
+            //获取所面对的生物
+            Entity lookingEntity = PlayerUtils.getPlayerLookingEntity();
+            if(lookingEntity == null) return;
+            EntityType<?> entityType = lookingEntity.getType();
+            if(!sexableEntityType.contains(entityType)) return;
+
+            PlayerUtils.displayClientMessage(player,String.format("动物繁殖进度 %d/%d",++sexTickAmount,sexTickAmountNeedToAdult));
+
+            if(sexTickAmount>=sexTickAmountNeedToAdult){
+                String entityStringUUID = lookingEntity.getStringUUID();
+                NetworkUtils.sendPacketToServer(NetworkPackets.ANIMAL_SEX,entityStringUUID);
+                sexTickAmount=0;
+            }
+
+        }
+
+
     }
 
     //建立服务器连接
@@ -94,11 +134,10 @@ public class EventRegister {
 
     //跳舞树
 
-    public void danceTree(){
+    public void danceTree(LocalPlayer player,ClientLevel world){
 
         if(world.dimension() != ClientLevel.OVERWORLD)
             return;
-        LocalPlayer player = Minecraft.getInstance().player;
         BlockPos onPos = player.getOnPos();
         Optional<BlockPos> nearestSapling = BlockPos.betweenClosedStream(
                 onPos.offset(-5, -2, -5),
@@ -130,7 +169,7 @@ public class EventRegister {
 
         }
         if(danceTreeCurrentScore >requireScore){
-            NetworkUtils.sendPacketToServer(NetworkPackets.DANCE_TREE_GROW,nearestSapling.get().asLong());
+            NetworkUtils.sendPacketToServer(NetworkPackets.DANCE_TREE_GROW,nearestSapling.get().toShortString().replace(" ",""));
             danceTreeCurrentScore =0;
         }
     }
@@ -144,10 +183,8 @@ public class EventRegister {
     //如果达到了挂机时间（5分钟），告诉服务器已经挂机
     final int ticksOnAfk = 20 * 5 * 60;
     //检测挂机
-    public void afkDetect(){
-        LocalPlayer player = Minecraft.getInstance().player;
-        if(player==null)
-            return;
+    public void afkDetect(LocalPlayer player){
+
         BlockPos pos1 = player.getOnPos();
         //如果没达到检测挂机的时间 就先不检测
         if(checkAfkInterval < checkAfkTickTime){
@@ -175,6 +212,7 @@ public class EventRegister {
 
 
     }
+
 }
 /*public void preventDroppingVoid(){
         Minecraft client = Minecraft.getInstance();

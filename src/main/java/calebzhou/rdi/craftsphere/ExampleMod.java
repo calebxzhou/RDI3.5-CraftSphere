@@ -12,6 +12,7 @@ public class ExampleMod implements ModInitializer {
 	static {
 		ThreadPool.newThread(LoadProgressDisplay.INSTANCE::start);
 	}
+
 	//是否为调试模式,本地用
 	public static final boolean debug=true;
 	//mod id
@@ -22,9 +23,7 @@ public class ExampleMod implements ModInitializer {
 	public static final int VERSION=0x35A;
 	public static final String GAME_VERSION = "1.19.2";
 	//显示版本
-	public static final String VER_DISPLAY ="3.6a/220815";
-	//服务器地址,信息
-
+	public static final String VER_DISPLAY ="3.62/220818";
 
 	public static final Logger LOGGER = LogManager.getLogger("Fabric");
 

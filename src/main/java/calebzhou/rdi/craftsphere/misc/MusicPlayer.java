@@ -22,7 +22,7 @@ import java.util.List;
 
 public class MusicPlayer {
 
-
+public static boolean needToPlayEnterGameSound = false;
     public static void playStartupMusic(){
         ThreadPool.newThread(()->{
             playOgg(new File(FileConst.RDI_SOUND_FOLDER,"startup.ogg"));

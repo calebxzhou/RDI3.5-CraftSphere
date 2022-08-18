@@ -33,7 +33,10 @@
     "defaultRequire": 1
   },
   "mixins": [
+    "AccessNatualSpawner",
     "mClientStartup",
+    "mPlayMusic",
+    "mPlayMusic2",
     "mStartup10",
     "mStartup2",
     "mStartup23",

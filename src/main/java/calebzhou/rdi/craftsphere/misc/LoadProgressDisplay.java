@@ -46,6 +46,7 @@ public class LoadProgressDisplay extends Thread{
 
     public void appendLoadProgressInfo(String info){
         if(Util.getPlatform() != Util.OS.WINDOWS) return;
+        if(loadProgressFrame==null) return;
         loadProgressInfo.append(info);
         int barValue = loadProgressBar.getValue();
 
