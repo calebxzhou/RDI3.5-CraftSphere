@@ -117,7 +117,7 @@ public class RdiTitleScreen extends Screen {
         }
         if(InputConstants.isKeyDown(handle,InputConstants.KEY_RETURN)){
             ServerConnector.connect();
-            Minecraft.getInstance().options.setSoundCategoryVolume(SoundSource.MUSIC,1);
+            //Minecraft.getInstance().options.setSoundCategoryVolume(SoundSource.MUSIC,1);
             MusicPlayer.playOggAsync(new File(FileConst.RDI_SOUND_FOLDER,"connect.ogg"));
         }
 

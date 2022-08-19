@@ -14,7 +14,7 @@ public class ExampleMod implements ModInitializer {
 	}
 
 	//是否为调试模式,本地用
-	public static final boolean debug=true;
+	public static final boolean debug=false;
 	//mod id
 	public static final String MODID="rdict3";
 	//mod id中文名

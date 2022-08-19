@@ -41,7 +41,7 @@ public class PlayerUtils {
         return null;
     }
     public static void displayClientMessage(Player player,String msg){
-        displayClientMessage(player, msg, false);
+        displayClientMessage(player, msg);
     }
     public static void displayClientMessage(Player player,String msg,boolean onActionBar){
         displayClientMessage(player,Component.literal(msg),onActionBar);

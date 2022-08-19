@@ -85,7 +85,7 @@ public class HwSpec implements Serializable {
         for (HWDiskStore diskStore : hal.getDiskStores()) {
             float diskSizef =(float) diskStore.getSize() / (1024 * 1024 * 1024f);
             diskTotalSize+=diskSizef;
-            disk.append(String.format("%s(%.2fGB);",diskStore.getModel().replace("(Standard disk drives)",""),diskSizef));
+            disk.append(String.format("%s(%.2fGB);",diskStore.getModel().replace("(Standard disk drives)","").replace("标准磁盘驱动器",""),diskSizef));
         }
         disk.append(String.format("(∑%.2fGB)", diskTotalSize));
         spec.disk=(disk.toString());

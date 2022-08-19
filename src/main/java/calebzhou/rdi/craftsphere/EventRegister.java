@@ -54,7 +54,7 @@ public class EventRegister {
         KeyBinds.handleKeyActions(level);
     }
 
-    private int sexTickAmount =0;
+    private int sexTickAmount =0;boolean needStandUp = false;
     //繁殖成功所需要的tick数
     private static final int sexTickAmountNeedToAdult =200;
     private static final List<EntityType<?>> sexableEntityType=new ObjectArrayList<>();
@@ -67,6 +67,7 @@ public class EventRegister {
     }
     //动物快速繁殖
     private void animalSex(LocalPlayer player) {
+
         //玩家下蹲
         if(player.isCrouching()) {
             //获取所面对的生物
@@ -75,7 +76,11 @@ public class EventRegister {
             EntityType<?> entityType = lookingEntity.getType();
             if(!sexableEntityType.contains(entityType)) return;
 
-            PlayerUtils.displayClientMessage(player,String.format("动物繁殖进度 %d/%d",++sexTickAmount,sexTickAmountNeedToAdult));
+            if(sexTickAmount%5==0)
+                needStandUp=true;
+            if(!needStandUp)
+                ++sexTickAmount;
+            PlayerUtils.displayClientMessage(player,String.format("动物繁殖进度 %d/%d",sexTickAmount,sexTickAmountNeedToAdult),true);
 
             if(sexTickAmount>=sexTickAmountNeedToAdult){
                 String entityStringUUID = lookingEntity.getStringUUID();
@@ -83,6 +88,9 @@ public class EventRegister {
                 sexTickAmount=0;
             }
 
+        } else if(needStandUp) {
+            ++sexTickAmount;
+            needStandUp=false;
         }
 
 
