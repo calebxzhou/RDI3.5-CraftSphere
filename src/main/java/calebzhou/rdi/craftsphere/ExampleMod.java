@@ -23,7 +23,7 @@ public class ExampleMod implements ModInitializer {
 	public static final int VERSION=0x35A;
 	public static final String GAME_VERSION = "1.19.2";
 	//显示版本
-	public static final String VER_DISPLAY ="3.62/220818";
+	public static final String VER_DISPLAY ="3.63/220826";
 
 	public static final Logger LOGGER = LogManager.getLogger("Fabric");
 
