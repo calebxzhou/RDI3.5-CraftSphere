@@ -1,8 +1,7 @@
 plugins {
 	id 'fabric-loom' version '0.12-SNAPSHOT'
 	id 'maven-publish'
-	//id 'org.openjfx.javafxplugin' version '0.0.9'
-
+	//id 'org.openjfx.javafxplugin' version '0.0.13'
 }
 project.ext.lwjglVersion = "3.3.1"
 project.ext.lwjglNatives = "natives-windows"
@@ -13,6 +12,7 @@ archivesBaseName = project.archives_base_name
 version = project.mod_version
 group = project.maven_group
 repositories {
+
 	// Add repositories to retrieve artifacts from in here.
 	// You should only use this when depending on other mods because
 	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
@@ -30,25 +30,59 @@ repositories {
 	maven { url "https://ladysnake.jfrog.io/artifactory/mods" }
 	maven { url = "https://dvs1.progwml6.com/files/maven/" }
 	maven { url = "https://modmaven.dev" }
+	maven {
+		name = "Modrinth"
+		url = "https://api.modrinth.com/maven"
+		content {
+			includeGroup "maven.modrinth"
+		}
+	}
+	maven {
+		url "https://cursemaven.com"
+		content {
+			includeGroup "curse.maven"
+		}
+	}
 }
-/*javafx {
-	version = "17"
-	modules = [ 'javafx.controls' ]
+/* javafx {
+	version = "18.0.2"
+		 modules = [ 'javafx.controls', 'javafx.fxml' ]
 }*/
+
+configurations {
+	//includeModImplementation
+	includeImplementation
+
+	include.extendsFrom includeImplementation
+	//include.extendsFrom includeModImplementation
+
+	implementation.extendsFrom includeImplementation
+	//modImplementation.extendsFrom includeModImplementation
+}
+//不用mc自带的apache http，一会引入一个新版的
+configurations.implementation {
+	exclude group: 'org.apache.httpcomponents', module: 'httpclient'
+	exclude group: 'org.apache.httpcomponents', module: 'httpcore'
+}
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings loom.layered() {
 		officialMojangMappings()
-	}//"net.fabricmc:yarn:${project.yarn_mappings}:v2"
-	// https://mvnrepository.com/artifact/org.projectlombok/lombok
-/*
+	}
+	//新版的 http client okhttp，载入到mod包里
+	// https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
+	includeImplementation( 'com.squareup.okhttp3:okhttp:4.10.0' )
+	includeImplementation( 'com.squareup.okio:okio:3.0.0' )
+	includeImplementation( 'com.squareup.okio:okio-jvm:3.0.0' )
+
+
+
 	modImplementation("maven.modrinth:lazydfu:0.1.3")
 	modImplementation("maven.modrinth:lithium:mc1.19-0.8.1")
-	modImplementation("maven.modrinth:ferritecore:5.0.0")
+	//ferrite core 节省内存
+	modImplementation("curse.maven:project-459857:3824694")
 	modImplementation("maven.modrinth:sodium:mc1.19-0.4.2")
 	modImplementation("maven.modrinth:sodium-extra:mc1.19-0.4.6")
-	modImplementation("maven.modrinth:sodium-extra:mc1.19-0.4.6")
-*/
 
 	modApi "vazkii.patchouli:Patchouli:1.19-73-FABRIC"
 	modImplementation("com.terraformersmc:modmenu:4.0.4")
