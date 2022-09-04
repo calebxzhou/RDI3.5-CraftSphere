@@ -1,6 +1,6 @@
 package calebzhou.rdi.craftsphere.mixin;
 
-import calebzhou.rdi.craftsphere.ExampleMod;
+import calebzhou.rdi.craftsphere.RdiCore;
 import com.mojang.blaze3d.platform.Window;
 import net.minecraft.client.Minecraft;
 import org.spongepowered.asm.mixin.Final;
@@ -18,7 +18,7 @@ public class mWindowTitle {
      */
     @Overwrite
     private String createTitle(){
-        return ExampleMod.MODID_CHN+" "+ ExampleMod.VER_DISPLAY;
+        return RdiCore.MODID_CHN+" "+ RdiCore.VER_DISPLAY;
     }
     @Overwrite
     public void updateTitle() {

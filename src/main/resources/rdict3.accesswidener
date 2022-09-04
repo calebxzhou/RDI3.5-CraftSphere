@@ -1,2 +1,18 @@
 accessWidener	v1	named
 accessible field net/minecraft/world/level/NaturalSpawner   SPAWNING_CATEGORIES [Lnet/minecraft/world/entity/MobCategory;
+accessible method net/minecraft/client/gui/Font renderText (Ljava/lang/String;FFIZLcom/mojang/math/Matrix4f;Lnet/minecraft/client/renderer/MultiBufferSource;ZII)F
+accessible method net/minecraft/client/gui/Font renderChar (Lnet/minecraft/client/gui/font/glyphs/BakedGlyph;ZZFFFLcom/mojang/math/Matrix4f;Lcom/mojang/blaze3d/vertex/VertexConsumer;FFFFI)V
+accessible field net/minecraft/client/gui/screens/ChatScreen input Lnet/minecraft/client/gui/components/EditBox;
+accessible field net/minecraft/client/gui/Font fonts Ljava/util/function/Function;
+accessible field net/minecraft/client/renderer/entity/EntityRenderDispatcher renderers Ljava/util/Map;
+accessible method net/minecraft/client/gui/Font getFontSet (Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/client/gui/font/FontSet; #func_238419_a_
+accessible field net/minecraft/client/Minecraft fontManager  Lnet/minecraft/client/gui/font/FontManager;
+accessible field net/minecraft/client/gui/font/FontManager fontSets Ljava/util/Map;
+accessible field net/minecraft/client/renderer/blockentity/BlockEntityRenderers PROVIDERS Ljava/util/Map;
+accessible field net/minecraft/client/renderer/blockentity/SignRenderer font Lnet/minecraft/client/gui/Font;
+accessible class net/minecraft/client/renderer/RenderType$CompositeState
+accessible class net/minecraft/client/renderer/RenderStateShard$ShaderStateShard
+accessible class net/minecraft/client/renderer/RenderStateShard$TextureStateShard
+accessible class net/minecraft/client/renderer/RenderStateShard$TransparencyStateShard
+accessible class net/minecraft/client/renderer/RenderStateShard$LightmapStateShard
+accessible method net/minecraft/client/renderer/RenderType create (Ljava/lang/String;Lcom/mojang/blaze3d/vertex/VertexFormat;Lcom/mojang/blaze3d/vertex/VertexFormat$Mode;IZZLnet/minecraft/client/renderer/RenderType$CompositeState;)Lnet/minecraft/client/renderer/RenderType$CompositeRenderType;

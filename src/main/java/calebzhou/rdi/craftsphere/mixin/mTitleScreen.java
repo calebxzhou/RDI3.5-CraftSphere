@@ -1,18 +1,13 @@
 package calebzhou.rdi.craftsphere.mixin;
 
-import calebzhou.rdi.craftsphere.ExampleMod;
+import calebzhou.rdi.craftsphere.RdiCore;
 import calebzhou.rdi.craftsphere.misc.ServerConnector;
 import calebzhou.rdi.craftsphere.screen.RdiTitleScreen;
-import com.google.common.util.concurrent.Runnables;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.WorldVersion;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.components.PlainTextButton;
-import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.TitleScreen;
-import net.minecraft.client.gui.screens.WinScreen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -35,7 +30,7 @@ class mTitleScreen {
     }
     @Redirect(method = "render",at = @At(value = "INVOKE",target = "Lnet/minecraft/WorldVersion;getName()Ljava/lang/String;"))
     private String vers(WorldVersion instance){
-        return ExampleMod.GAME_VERSION;
+        return RdiCore.GAME_VERSION;
     }
 
     @Inject(method = "tick",at = @At("TAIL"))

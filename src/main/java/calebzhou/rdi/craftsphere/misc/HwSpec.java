@@ -1,6 +1,6 @@
 package calebzhou.rdi.craftsphere.misc;
 
-import calebzhou.rdi.craftsphere.ExampleMod;
+import calebzhou.rdi.craftsphere.RdiCore;
 import com.google.gson.Gson;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
@@ -111,7 +111,7 @@ public class HwSpec implements Serializable {
         mods.append("(∑").append(modAmount).append(")");
         spec.mods=(mods.toString());
 
-        spec.ver= ExampleMod.VER_DISPLAY;
+        spec.ver= RdiCore.VER_DISPLAY;
         return spec;
     }
 

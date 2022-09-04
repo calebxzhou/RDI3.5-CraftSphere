@@ -7,7 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import org.lwjgl.glfw.GLFW;
 
-import static calebzhou.rdi.craftsphere.ExampleMod.MODID_CHN;
+import static calebzhou.rdi.craftsphere.RdiCore.MODID_CHN;
 
 
 public class KeyBinds  {

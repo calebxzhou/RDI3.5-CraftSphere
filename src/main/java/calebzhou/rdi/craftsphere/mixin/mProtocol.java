@@ -1,6 +1,6 @@
 package calebzhou.rdi.craftsphere.mixin;
 
-import calebzhou.rdi.craftsphere.ExampleMod;
+import calebzhou.rdi.craftsphere.RdiCore;
 import com.google.gson.JsonObject;
 import net.minecraft.DetectedVersion;
 import org.spongepowered.asm.mixin.Final;
@@ -24,6 +24,6 @@ public class mProtocol {
             at=@At("TAIL")
     )
     private void changeProtocolVersion(JsonObject json, CallbackInfo ci){
-        protocolVersion=ExampleMod.VERSION;
+        protocolVersion= RdiCore.VERSION;
     }
 }

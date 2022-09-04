@@ -1,6 +1,6 @@
 package calebzhou.rdi.craftsphere.util;
 
-import calebzhou.rdi.craftsphere.ExampleMod;
+import calebzhou.rdi.craftsphere.RdiCore;
 
 import java.io.File;
 import java.io.InputStream;
@@ -17,7 +17,7 @@ public class FileUtils {
     }
     public static InputStream getJarResourceAsStream(String fileInJar)
     {
-        return ExampleMod.class.getResourceAsStream("/assets/rdict3/"+fileInJar);
+        return RdiCore.class.getResourceAsStream("/assets/rdict3/"+fileInJar);
     }
 
 }

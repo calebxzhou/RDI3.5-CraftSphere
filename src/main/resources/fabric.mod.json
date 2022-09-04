@@ -17,11 +17,13 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "calebzhou.rdi.craftsphere.ExampleMod"
+      "calebzhou.rdi.craftsphere.RdiCore"
     ]
   },
   "mixins": [
-    "rdi-ct3b.mixins.json"
+    "rdi-core.mixins.json",
+    "rdi-emoji.mixins.json",
+    "rdi-chathead.mixins.json"
   ],
 
   "depends": {

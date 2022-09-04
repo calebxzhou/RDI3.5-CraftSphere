@@ -2,7 +2,7 @@ package calebzhou.rdi.craftsphere;
 
 import net.minecraft.resources.ResourceLocation;
 
-import static calebzhou.rdi.craftsphere.ExampleMod.MODID;
+import static calebzhou.rdi.craftsphere.RdiCore.MODID;
 
 //网络包
 public class NetworkPackets {

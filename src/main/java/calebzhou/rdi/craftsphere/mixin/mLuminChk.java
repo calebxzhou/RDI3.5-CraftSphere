@@ -1,9 +1,8 @@
 package calebzhou.rdi.craftsphere.mixin;
 
-import calebzhou.rdi.craftsphere.ExampleMod;
+import calebzhou.rdi.craftsphere.RdiCore;
 import net.minecraft.client.OptionInstance;
 import net.minecraft.client.Options;
-import net.minecraft.world.entity.player.PlayerModelPart;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -24,7 +23,7 @@ public abstract class mLuminChk {
     at = @At("HEAD"))
     private void efACdaew( CallbackInfo ci){
         //如果亮度过高，并且不是调试模式，就会崩
-        if(gamma.get()>1.0 && !ExampleMod.debug){
+        if(gamma.get()>1.0 && !RdiCore.debug){
             gamma().set(1.0);
         }
 

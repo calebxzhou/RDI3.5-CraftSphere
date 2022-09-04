@@ -30,6 +30,7 @@ repositories {
 	maven { url "https://ladysnake.jfrog.io/artifactory/mods" }
 	maven { url = "https://dvs1.progwml6.com/files/maven/" }
 	maven { url = "https://modmaven.dev" }
+	maven { url = "https://maven.parchmentmc.org" }
 	maven {
 		name = "Modrinth"
 		url = "https://api.modrinth.com/maven"
@@ -68,6 +69,7 @@ dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings loom.layered() {
 		officialMojangMappings()
+		parchment("org.parchmentmc.data:parchment-1.19.2:2022.08.14@zip")
 	}
 	//新版的 http client okhttp，载入到mod包里
 	// https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
@@ -81,8 +83,8 @@ dependencies {
 	modImplementation("maven.modrinth:lithium:mc1.19-0.8.1")
 	//ferrite core 节省内存
 	modImplementation("curse.maven:project-459857:3824694")
-	modImplementation("maven.modrinth:sodium:mc1.19-0.4.2")
-	modImplementation("maven.modrinth:sodium-extra:mc1.19-0.4.6")
+	/*modImplementation("maven.modrinth:sodium:mc1.19-0.4.2")
+	modImplementation("maven.modrinth:sodium-extra:mc1.19-0.4.6")*/
 
 	modApi "vazkii.patchouli:Patchouli:1.19-73-FABRIC"
 	modImplementation("com.terraformersmc:modmenu:4.0.4")

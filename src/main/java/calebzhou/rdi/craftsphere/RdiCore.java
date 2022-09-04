@@ -2,19 +2,18 @@ package calebzhou.rdi.craftsphere;
 
 import calebzhou.rdi.craftsphere.misc.LoadProgressDisplay;
 import calebzhou.rdi.craftsphere.util.ThreadPool;
+import calebzhou.rdi.craftsphere.emojiful.EmojiClientProxy;
 import net.fabricmc.api.ModInitializer;
-import net.minecraft.client.multiplayer.ServerData;
-import net.minecraft.client.multiplayer.resolver.ServerAddress;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class ExampleMod implements ModInitializer {
+public class RdiCore implements ModInitializer {
 	static {
 		ThreadPool.newThread(LoadProgressDisplay.INSTANCE::start);
 	}
 
 	//是否为调试模式,本地用
-	public static final boolean debug=false;
+	public static final boolean debug=true;
 	//mod id
 	public static final String MODID="rdict3";
 	//mod id中文名
@@ -30,6 +29,7 @@ public class ExampleMod implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		new EventRegister();
+		EmojiClientProxy.INSTANCE.init();
 
 	}
 	/*

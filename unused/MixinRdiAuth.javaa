@@ -1,6 +1,6 @@
 package calebzhou.rdi.craftsphere.mixin;
 
-import calebzhou.rdi.craftsphere.ExampleMod;
+import calebzhou.rdi.craftsphere.RdiCore;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.client.User;
 import net.minecraft.network.FriendlyByteBuf;

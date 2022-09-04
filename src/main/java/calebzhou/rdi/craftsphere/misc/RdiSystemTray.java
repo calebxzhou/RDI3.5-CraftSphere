@@ -1,6 +1,6 @@
 package calebzhou.rdi.craftsphere.misc;
 
-import calebzhou.rdi.craftsphere.ExampleMod;
+import calebzhou.rdi.craftsphere.RdiCore;
 import calebzhou.rdi.craftsphere.util.AwtImageUtils;
 import net.minecraft.Util;
 
@@ -17,12 +17,12 @@ public class RdiSystemTray {
             return;
         }
         //final PopupMenu popup = new PopupMenu();
-        Image iconImage = AwtImageUtils.createImage("/assets/rdict3/icon/icon.gif", ExampleMod.MODID_CHN);
+        Image iconImage = AwtImageUtils.createImage("/assets/rdict3/icon/icon.gif", RdiCore.MODID_CHN);
         int trayIconWidth = new TrayIcon(iconImage).getSize().width;
         Image scaledInstance = iconImage.getScaledInstance(trayIconWidth, -1, Image.SCALE_SMOOTH);
-        trayIcon = new TrayIcon(scaledInstance,ExampleMod.MODID_CHN);
+        trayIcon = new TrayIcon(scaledInstance, RdiCore.MODID_CHN);
         final SystemTray tray = SystemTray.getSystemTray();
-        trayIcon.setToolTip(ExampleMod.MODID_CHN);
+        trayIcon.setToolTip(RdiCore.MODID_CHN);
         // Create a pop-up menu components
         /*MenuItem aboutItem = new MenuItem("About");
         CheckboxMenuItem cb1 = new CheckboxMenuItem("Set auto size");

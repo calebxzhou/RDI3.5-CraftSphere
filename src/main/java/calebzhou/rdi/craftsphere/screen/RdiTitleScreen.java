@@ -1,6 +1,6 @@
 package calebzhou.rdi.craftsphere.screen;
 
-import calebzhou.rdi.craftsphere.ExampleMod;
+import calebzhou.rdi.craftsphere.RdiCore;
 import calebzhou.rdi.craftsphere.FileConst;
 import calebzhou.rdi.craftsphere.misc.MusicPlayer;
 import calebzhou.rdi.craftsphere.misc.ServerConnector;
@@ -93,7 +93,7 @@ public class RdiTitleScreen extends Screen {
 
         long handle = Minecraft.getInstance().getWindow().getWindow();
         if(InputConstants.isKeyDown(handle, InputConstants.KEY_0)){
-            if(ExampleMod.debug)
+            if(RdiCore.debug)
             this.minecraft.setScreen(new JoinMultiplayerScreen(this));
             return;
         }

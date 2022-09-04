@@ -1,6 +1,6 @@
 package calebzhou.rdi.craftsphere.mixin;
 
-import calebzhou.rdi.craftsphere.ExampleMod;
+import calebzhou.rdi.craftsphere.RdiCore;
 import calebzhou.rdi.craftsphere.UserInfoStorage;
 import calebzhou.rdi.craftsphere.misc.LoadProgressDisplay;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -64,7 +64,7 @@ public class mClientStartup {
         String name = (String) optionSpec11.value(optionSet);
         String pwd = passwordSpec.value(optionSet);
         UserInfoStorage.UserName=name;
-        ExampleMod.LOGGER.info("成功读取用户名，{}",name);
+        RdiCore.LOGGER.info("成功读取用户名，{}",name);
         LoadProgressDisplay.INSTANCE.appendLoadProgressInfo("载入游戏角色:"+name);
         if(!StringUtils.isEmpty(pwd)){
             UserInfoStorage.UserPwd=pwd;
@@ -72,17 +72,17 @@ public class mClientStartup {
             LoadProgressDisplay.INSTANCE.appendLoadProgressInfo("正在解密角色:"+name);
         }
         if(StringUtils.isEmpty(uuid)){
-            ExampleMod.LOGGER.info("无法读取您的微软正版账号！1");
+            RdiCore.LOGGER.info("无法读取您的微软正版账号！1");
             createOfflineUser(name);
         }else{
             if(uuid.startsWith("00000000")){
-                ExampleMod.LOGGER.info("无法读取您的微软正版账号！2");
-                ExampleMod.LOGGER.info("非法的UUID，{}，正在生成新的",pwd);
+                RdiCore.LOGGER.info("无法读取您的微软正版账号！2");
+                RdiCore.LOGGER.info("非法的UUID，{}，正在生成新的",pwd);
                 createOfflineUser(name);
             }else{
                 //mojang登录的uuid不带横线，要通过正则表达式转换成带横线的
                 uuid=uuid.replaceFirst("(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)", "$1-$2-$3-$4-$5" );
-                ExampleMod.LOGGER.info("成功读取正版uuid，{}",uuid);
+                RdiCore.LOGGER.info("成功读取正版uuid，{}",uuid);
                 UserInfoStorage.UserUuid=uuid;
             }
 
@@ -97,7 +97,7 @@ public class mClientStartup {
 
     private static void createOfflineUser(String name){
         UserInfoStorage.UserUuid=  UUID.nameUUIDFromBytes(("OfflinePlayer:" +name).getBytes(StandardCharsets.UTF_8)).toString();
-        ExampleMod.LOGGER.info("创建离线uuid "+UserInfoStorage.UserUuid);
+        RdiCore.LOGGER.info("创建离线uuid "+UserInfoStorage.UserUuid);
     }
 }
 @Mixin(RenderSystem.class)

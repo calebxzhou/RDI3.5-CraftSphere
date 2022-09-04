@@ -5,7 +5,7 @@ import calebzhou.rdi.craftsphere.util.NetworkReceivableS2C;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.resources.ResourceLocation;
 
-import static calebzhou.rdi.craftsphere.ExampleMod.MODID;
+import static calebzhou.rdi.craftsphere.RdiCore.MODID;
 
 public class CommandTips implements NetworkReceivableS2C {
     public static final ResourceLocation COMMAND_STATUS_NETWORK =new ResourceLocation(MODID,"command_status");
