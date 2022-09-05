@@ -18,6 +18,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.Widget;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratedElementType;
@@ -32,7 +33,7 @@ import net.minecraft.util.Mth;
 import org.jetbrains.annotations.Nullable;
 
 @Environment(EnvType.CLIENT)
-public class RdiChatEditBox extends AbstractWidget implements Widget, GuiEventListener {
+public class RdiChatEditBox extends EditBox implements Widget, GuiEventListener {
     public static final int BACKWARDS = -1;
     public static final int FORWARDS = 1;
     private static final int CURSOR_INSERT_WIDTH = 1;
@@ -63,11 +64,11 @@ public class RdiChatEditBox extends AbstractWidget implements Widget, GuiEventLi
     private BiFunction<String, Integer, FormattedCharSequence> formatter;
 
     public RdiChatEditBox(Font font, int i, int j, int k, int l, Component component) {
-        this(font, i, j, k, l, (net.minecraft.client.gui.components.EditBox)null, component);
+        this(font, i, j, k, l, null, component);
     }
 
     public RdiChatEditBox(Font font, int i, int j, int k, int l, @Nullable net.minecraft.client.gui.components.EditBox editBox, Component component) {
-        super(i, j, k, l, component);
+        super(font,i, j, k, l, component);
         this.value = "";
         this.maxLength = 32;
         this.bordered = true;
@@ -86,12 +87,12 @@ public class RdiChatEditBox extends AbstractWidget implements Widget, GuiEventLi
 
     }
 
-    public void setResponder(Consumer<String> consumer) {
-        this.responder = consumer;
+    public void setResponder(Consumer<String> responder) {
+        this.responder = responder;
     }
 
-    public void setFormatter(BiFunction<String, Integer, FormattedCharSequence> biFunction) {
-        this.formatter = biFunction;
+    public void setFormatter(BiFunction<String, Integer, FormattedCharSequence> textFormatter) {
+        this.formatter = textFormatter;
     }
 
     public void tick() {
@@ -103,17 +104,17 @@ public class RdiChatEditBox extends AbstractWidget implements Widget, GuiEventLi
         return Component.translatable("gui.narrate.editBox", component, this.value);
     }
 
-    public void setValue(String string) {
-        if (this.filter.test(string)) {
-            if (string.length() > this.maxLength) {
-                this.value = string.substring(0, this.maxLength);
+    public void setValue(String text) {
+        if (this.filter.test(text)) {
+            if (text.length() > this.maxLength) {
+                this.value = text.substring(0, this.maxLength);
             } else {
-                this.value = string;
+                this.value = text;
             }
 
             this.moveCursorToEnd();
             this.setHighlightPos(this.cursorPos);
-            this.onValueChange(string);
+            this.onValueChange(text);
         }
     }
 
@@ -131,119 +132,141 @@ public class RdiChatEditBox extends AbstractWidget implements Widget, GuiEventLi
         this.filter = predicate;
     }
 
-    public void insertText(String string) {
+    public void insertText(String textToWrite) {
         int i = Math.min(this.cursorPos, this.highlightPos);
         int j = Math.max(this.cursorPos, this.highlightPos);
         int k = this.maxLength - this.value.length() - (i - j);
-        String string2 = SharedConstants.filterText(string);
-        int l = string2.length();
+        String string = SharedConstants.filterText(textToWrite);
+        int l = string.length();
         if (k < l) {
-            string2 = string2.substring(0, k);
+            string = string.substring(0, k);
             l = k;
         }
 
-        String string3 = (new StringBuilder(this.value)).replace(i, j, string2).toString();
-        if (this.filter.test(string3)) {
-            this.value = string3;
+        String string2 = (new StringBuilder(this.value)).replace(i, j, string).toString();
+        if (this.filter.test(string2)) {
+            this.value = string2;
             this.setCursorPosition(i + l);
             this.setHighlightPos(this.cursorPos);
             this.onValueChange(this.value);
         }
     }
 
-    private void onValueChange(String string) {
+    private void onValueChange(String newText) {
         if (this.responder != null) {
-            this.responder.accept(string);
+            this.responder.accept(newText);
         }
 
     }
 
-    private void deleteText(int i) {
+    private void deleteText(int count) {
         if (Screen.hasControlDown()) {
-            this.deleteWords(i);
+            this.deleteWords(count);
         } else {
-            this.deleteChars(i);
+            this.deleteChars(count);
         }
 
     }
 
-    public void deleteWords(int i) {
+
+    /**
+     * Deletes the given number of words from the current cursor's position, unless there is currently a selection, in which case the selection is deleted instead.
+     */
+    public void deleteWords(int num) {
         if (!this.value.isEmpty()) {
             if (this.highlightPos != this.cursorPos) {
                 this.insertText("");
             } else {
-                this.deleteChars(this.getWordPosition(i) - this.cursorPos);
+                this.deleteChars(this.getWordPosition(num) - this.cursorPos);
             }
         }
     }
 
-    public void deleteChars(int i) {
+    /**
+     * Deletes the given number of characters from the current cursor's position, unless there is currently a selection, in which case the selection is deleted instead.
+     */
+    public void deleteChars(int num) {
         if (!this.value.isEmpty()) {
             if (this.highlightPos != this.cursorPos) {
                 this.insertText("");
             } else {
-                int j = this.getCursorPos(i);
-                int k = Math.min(j, this.cursorPos);
-                int l = Math.max(j, this.cursorPos);
-                if (k != l) {
-                    String string = (new StringBuilder(this.value)).delete(k, l).toString();
+                int i = this.getCursorPos(num);
+                int j = Math.min(i, this.cursorPos);
+                int k = Math.max(i, this.cursorPos);
+                if (j != k) {
+                    String string = (new StringBuilder(this.value)).delete(j, k).toString();
                     if (this.filter.test(string)) {
                         this.value = string;
-                        this.moveCursorTo(k);
+                        this.moveCursorTo(j);
                     }
                 }
             }
         }
     }
 
-    public int getWordPosition(int i) {
-        return this.getWordPosition(i, this.getCursorPosition());
+    /**
+     * Gets the starting index of the word at the specified number of words away from the cursor position.
+     */
+    public int getWordPosition(int numWords) {
+        return this.getWordPosition(numWords, this.getCursorPosition());
     }
 
-    private int getWordPosition(int i, int j) {
-        return this.getWordPosition(i, j, true);
+    /**
+     * Gets the starting index of the word at a distance of the specified number of words away from the given position.
+     */
+    private int getWordPosition(int n, int pos) {
+        return this.getWordPosition(n, pos, true);
     }
 
-    private int getWordPosition(int i, int j, boolean bl) {
-        int k = j;
-        boolean bl2 = i < 0;
-        int l = Math.abs(i);
+    /**
+     * Like getNthWordFromPos (which wraps this), but adds option for skipping consecutive spaces
+     */
+    private int getWordPosition(int n, int pos, boolean skipWs) {
+        int i = pos;
+        boolean bl = n < 0;
+        int j = Math.abs(n);
 
-        for(int m = 0; m < l; ++m) {
-            if (!bl2) {
-                int n = this.value.length();
-                k = this.value.indexOf(32, k);
-                if (k == -1) {
-                    k = n;
+        for(int k = 0; k < j; ++k) {
+            if (!bl) {
+                int l = this.value.length();
+                i = this.value.indexOf(32, i);
+                if (i == -1) {
+                    i = l;
                 } else {
-                    while(bl && k < n && this.value.charAt(k) == ' ') {
-                        ++k;
+                    while(skipWs && i < l && this.value.charAt(i) == ' ') {
+                        ++i;
                     }
                 }
             } else {
-                while(bl && k > 0 && this.value.charAt(k - 1) == ' ') {
-                    --k;
+                while(skipWs && i > 0 && this.value.charAt(i - 1) == ' ') {
+                    --i;
                 }
 
-                while(k > 0 && this.value.charAt(k - 1) != ' ') {
-                    --k;
+                while(i > 0 && this.value.charAt(i - 1) != ' ') {
+                    --i;
                 }
             }
         }
 
-        return k;
+        return i;
     }
 
-    public void moveCursor(int i) {
-        this.moveCursorTo(this.getCursorPos(i));
+    /**
+     * Moves the text cursor by a specified number of characters and clears the selection
+     */
+    public void moveCursor(int delta) {
+        this.moveCursorTo(this.getCursorPos(delta));
     }
 
-    private int getCursorPos(int i) {
-        return Util.offsetByCodepoints(this.value, this.cursorPos, i);
+    private int getCursorPos(int delta) {
+        return Util.offsetByCodepoints(this.value, this.cursorPos, delta);
     }
 
-    public void moveCursorTo(int i) {
-        this.setCursorPosition(i);
+    /**
+     * Sets the current position of the cursor.
+     */
+    public void moveCursorTo(int pos) {
+        this.setCursorPosition(pos);
         if (!this.shiftPressed) {
             this.setHighlightPos(this.cursorPos);
         }
@@ -251,37 +274,43 @@ public class RdiChatEditBox extends AbstractWidget implements Widget, GuiEventLi
         this.onValueChange(this.value);
     }
 
-    public void setCursorPosition(int i) {
-        this.cursorPos = Mth.clamp((int)i, (int)0, (int)this.value.length());
+    public void setCursorPosition(int pos) {
+        this.cursorPos = Mth.clamp((int)pos, (int)0, (int)this.value.length());
     }
 
+    /**
+     * Moves the cursor to the very start of this text box.
+     */
     public void moveCursorToStart() {
         this.moveCursorTo(0);
     }
 
+    /**
+     * Moves the cursor to the very end of this text box.
+     */
     public void moveCursorToEnd() {
         this.moveCursorTo(this.value.length());
     }
 
-    public boolean keyPressed(int i, int j, int k) {
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if (!this.canConsumeInput()) {
             return false;
         } else {
             this.shiftPressed = Screen.hasShiftDown();
-            if (Screen.isSelectAll(i)) {
+            if (Screen.isSelectAll(keyCode)) {
                 this.moveCursorToEnd();
                 this.setHighlightPos(0);
                 return true;
-            } else if (Screen.isCopy(i)) {
+            } else if (Screen.isCopy(keyCode)) {
                 Minecraft.getInstance().keyboardHandler.setClipboard(this.getHighlighted());
                 return true;
-            } else if (Screen.isPaste(i)) {
+            } else if (Screen.isPaste(keyCode)) {
                 if (this.isEditable) {
                     this.insertText(Minecraft.getInstance().keyboardHandler.getClipboard());
                 }
 
                 return true;
-            } else if (Screen.isCut(i)) {
+            } else if (Screen.isCut(keyCode)) {
                 Minecraft.getInstance().keyboardHandler.setClipboard(this.getHighlighted());
                 if (this.isEditable) {
                     this.insertText("");
@@ -289,11 +318,11 @@ public class RdiChatEditBox extends AbstractWidget implements Widget, GuiEventLi
 
                 return true;
             } else {
-                switch (i) {
+                switch (keyCode) {
                     case 259:
                         if (this.isEditable) {
                             this.shiftPressed = false;
-                            this.deleteText(BACKWARDS);
+                            this.deleteText(-1);
                             this.shiftPressed = Screen.hasShiftDown();
                         }
 
@@ -315,7 +344,7 @@ public class RdiChatEditBox extends AbstractWidget implements Widget, GuiEventLi
                         return true;
                     case 262:
                         if (Screen.hasControlDown()) {
-                            this.moveCursorTo(this.getWordPosition(FORWARDS));
+                            this.moveCursorTo(this.getWordPosition(1));
                         } else {
                             this.moveCursor(1);
                         }
@@ -323,9 +352,9 @@ public class RdiChatEditBox extends AbstractWidget implements Widget, GuiEventLi
                         return true;
                     case 263:
                         if (Screen.hasControlDown()) {
-                            this.moveCursorTo(this.getWordPosition(BACKWARDS));
+                            this.moveCursorTo(this.getWordPosition(-1));
                         } else {
-                            this.moveCursor(BACKWARDS);
+                            this.moveCursor(-1);
                         }
 
                         return true;
@@ -344,12 +373,12 @@ public class RdiChatEditBox extends AbstractWidget implements Widget, GuiEventLi
         return this.isVisible() && this.isFocused() && this.isEditable();
     }
 
-    public boolean charTyped(char c, int i) {
+    public boolean charTyped(char codePoint, int modifiers) {
         if (!this.canConsumeInput()) {
             return false;
-        } else if (SharedConstants.isAllowedChatCharacter(c)) {
+        } else if (SharedConstants.isAllowedChatCharacter(codePoint)) {
             if (this.isEditable) {
-                this.insertText(Character.toString(c));
+                this.insertText(Character.toString(codePoint));
             }
 
             return true;
@@ -358,23 +387,23 @@ public class RdiChatEditBox extends AbstractWidget implements Widget, GuiEventLi
         }
     }
 
-    public boolean mouseClicked(double d, double e, int i) {
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (!this.isVisible()) {
             return false;
         } else {
-            boolean bl = d >= (double)this.x && d < (double)(this.x + this.width) && e >= (double)this.y && e < (double)(this.y + this.height);
+            boolean bl = mouseX >= (double)this.x && mouseX < (double)(this.x + this.width) && mouseY >= (double)this.y && mouseY < (double)(this.y + this.height);
             if (this.canLoseFocus) {
                 this.setFocus(bl);
             }
 
-            if (this.isFocused() && bl && i == 0) {
-                int j = Mth.floor(d) - this.x;
+            if (this.isFocused() && bl && button == 0) {
+                int i = Mth.floor(mouseX) - this.x;
                 if (this.bordered) {
-                    j -= 4;
+                    i -= 4;
                 }
 
                 String string = this.font.plainSubstrByWidth(this.value.substring(this.displayPos), this.getInnerWidth());
-                this.moveCursorTo(this.font.plainSubstrByWidth(string, j).length() + this.displayPos);
+                this.moveCursorTo(this.font.plainSubstrByWidth(string, i).length() + this.displayPos);
                 return true;
             } else {
                 return false;
@@ -382,52 +411,55 @@ public class RdiChatEditBox extends AbstractWidget implements Widget, GuiEventLi
         }
     }
 
-    public void setFocus(boolean bl) {
-        this.setFocused(bl);
+    /**
+     * Sets focus to this gui element
+     */
+    public void setFocus(boolean isFocused) {
+        this.setFocused(isFocused);
     }
 
-    public void renderButton(PoseStack poseStack, int i, int j, float f) {
+    public void renderButton(PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
         if (this.isVisible()) {
-            int k;
+            int i;
             if (this.isBordered()) {
-                k = this.isFocused() ? BORDER_COLOR_FOCUSED : BORDER_COLOR;
-                fill(poseStack, this.x - 1, this.y - 1, this.x + this.width + 1, this.y + this.height + 1, k);
-                fill(poseStack, this.x, this.y, this.x + this.width, this.y + this.height, BACKGROUND_COLOR);
+                i = this.isFocused() ? -1 : -6250336;
+                fill(poseStack, this.x - 1, this.y - 1, this.x + this.width + 1, this.y + this.height + 1, i);
+                fill(poseStack, this.x, this.y, this.x + this.width, this.y + this.height, -16777216);
             }
 
-            k = this.isEditable ? this.textColor : this.textColorUneditable;
-            int l = this.cursorPos - this.displayPos;
-            int m = this.highlightPos - this.displayPos;
+            i = this.isEditable ? this.textColor : this.textColorUneditable;
+            int j = this.cursorPos - this.displayPos;
+            int k = this.highlightPos - this.displayPos;
             String string = this.font.plainSubstrByWidth(this.value.substring(this.displayPos), this.getInnerWidth());
-            boolean bl = l >= 0 && l <= string.length();
+            boolean bl = j >= 0 && j <= string.length();
             boolean bl2 = this.isFocused() && this.frame / 6 % 2 == 0 && bl;
-            int n = this.bordered ? this.x + 4 : this.x;
-            int o = this.bordered ? this.y + (this.height - 8) / 2 : this.y;
-            int p = n;
-            if (m > string.length()) {
-                m = string.length();
+            int l = this.bordered ? this.x + 4 : this.x;
+            int m = this.bordered ? this.y + (this.height - 8) / 2 : this.y;
+            int n = l;
+            if (k > string.length()) {
+                k = string.length();
             }
 
             if (!string.isEmpty()) {
-                String string2 = bl ? string.substring(0, l) : string;
-                p = this.font.drawShadow(poseStack, (FormattedCharSequence)this.formatter.apply(string2, this.displayPos), (float)n, (float)o, k);
+                String string2 = bl ? string.substring(0, j) : string;
+                n = this.font.drawShadow(poseStack, (FormattedCharSequence)this.formatter.apply(string2, this.displayPos), (float)l, (float)m, i);
             }
 
             boolean bl3 = this.cursorPos < this.value.length() || this.value.length() >= this.getMaxLength();
-            int q = p;
+            int o = n;
             if (!bl) {
-                q = l > 0 ? n + this.width : n;
+                o = j > 0 ? l + this.width : l;
             } else if (bl3) {
-                q = p - 1;
-                --p;
+                o = n - 1;
+                --n;
             }
 
-            if (!string.isEmpty() && bl && l < string.length()) {
-                this.font.drawShadow(poseStack, (FormattedCharSequence)this.formatter.apply(string.substring(l), this.cursorPos), (float)p, (float)o, k);
+            if (!string.isEmpty() && bl && j < string.length()) {
+                this.font.drawShadow(poseStack, (FormattedCharSequence)this.formatter.apply(string.substring(j), this.cursorPos), (float)n, (float)m, i);
             }
 
             if (!bl3 && this.suggestion != null) {
-                this.font.drawShadow(poseStack, this.suggestion, (float)(q - 1), (float)o, -8355712);
+                this.font.drawShadow(poseStack, this.suggestion, (float)(o - 1), (float)m, -8355712);
             }
 
             int var10002;
@@ -435,48 +467,51 @@ public class RdiChatEditBox extends AbstractWidget implements Widget, GuiEventLi
             int var10004;
             if (bl2) {
                 if (bl3) {
-                    var10002 = o - 1;
-                    var10003 = q + 1;
-                    var10004 = o + 1;
+                    var10002 = m - 1;
+                    var10003 = o + 1;
+                    var10004 = m + 1;
                     Objects.requireNonNull(this.font);
-                    GuiComponent.fill(poseStack, q, var10002, var10003, var10004 + 9, CURSOR_INSERT_COLOR);
+                    GuiComponent.fill(poseStack, o, var10002, var10003, var10004 + 9, -3092272);
                 } else {
-                    this.font.drawShadow(poseStack, "_", (float)q, (float)o, k);
+                    this.font.drawShadow(poseStack, "|", (float)o, (float)m, i);
                 }
             }
 
-            if (m != l) {
-                int r = n + this.font.width(string.substring(0, m));
-                var10002 = o - 1;
-                var10003 = r - 1;
-                var10004 = o + 1;
+            if (k != j) {
+                int p = l + this.font.width(string.substring(0, k));
+                var10002 = m - 1;
+                var10003 = p - 1;
+                var10004 = m + 1;
                 Objects.requireNonNull(this.font);
-                this.renderHighlight(q, var10002, var10003, var10004 + 9);
+                this.renderHighlight(o, var10002, var10003, var10004 + 9);
             }
 
         }
     }
 
-    private void renderHighlight(int i, int j, int k, int l) {
-        int m;
-        if (i < k) {
-            m = i;
-            i = k;
-            k = m;
+    /**
+     * Draws the blue selection box.
+     */
+    private void renderHighlight(int startX, int startY, int endX, int endY) {
+        int i;
+        if (startX < endX) {
+            i = startX;
+            startX = endX;
+            endX = i;
         }
 
-        if (j < l) {
-            m = j;
-            j = l;
-            l = m;
+        if (startY < endY) {
+            i = startY;
+            startY = endY;
+            endY = i;
         }
 
-        if (k > this.x + this.width) {
-            k = this.x + this.width;
+        if (endX > this.x + this.width) {
+            endX = this.x + this.width;
         }
 
-        if (i > this.x + this.width) {
-            i = this.x + this.width;
+        if (startX > this.x + this.width) {
+            startX = this.x + this.width;
         }
 
         Tesselator tesselator = Tesselator.getInstance();
@@ -487,59 +522,80 @@ public class RdiChatEditBox extends AbstractWidget implements Widget, GuiEventLi
         RenderSystem.enableColorLogicOp();
         RenderSystem.logicOp(GlStateManager.LogicOp.OR_REVERSE);
         bufferBuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
-        bufferBuilder.vertex((double)i, (double)l, 0.0).endVertex();
-        bufferBuilder.vertex((double)k, (double)l, 0.0).endVertex();
-        bufferBuilder.vertex((double)k, (double)j, 0.0).endVertex();
-        bufferBuilder.vertex((double)i, (double)j, 0.0).endVertex();
+        bufferBuilder.vertex((double)startX, (double)endY, 0.0).endVertex();
+        bufferBuilder.vertex((double)endX, (double)endY, 0.0).endVertex();
+        bufferBuilder.vertex((double)endX, (double)startY, 0.0).endVertex();
+        bufferBuilder.vertex((double)startX, (double)startY, 0.0).endVertex();
         tesselator.end();
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.disableColorLogicOp();
         RenderSystem.enableTexture();
     }
 
-    public void setMaxLength(int i) {
-        this.maxLength = i;
-        if (this.value.length() > i) {
-            this.value = this.value.substring(0, i);
+    /**
+     * Sets the maximum length for the text in this text box. If the current text is longer than this length, the current text will be trimmed.
+     */
+    public void setMaxLength(int length) {
+        this.maxLength = length;
+        if (this.value.length() > length) {
+            this.value = this.value.substring(0, length);
             this.onValueChange(this.value);
         }
 
     }
 
+    /**
+     * returns the maximum number of character that can be contained in this textbox
+     */
     private int getMaxLength() {
         return this.maxLength;
     }
 
+    /**
+     * returns the current position of the cursor
+     */
     public int getCursorPosition() {
         return this.cursorPos;
     }
 
+    /**
+     * Gets whether the background and outline of this text box should be drawn (true if so).
+     */
     private boolean isBordered() {
         return this.bordered;
     }
 
-    public void setBordered(boolean bl) {
-        this.bordered = bl;
+    /**
+     * Sets whether or not the background and outline of this text box should be drawn.
+     */
+    public void setBordered(boolean enableBackgroundDrawing) {
+        this.bordered = enableBackgroundDrawing;
     }
 
-    public void setTextColor(int i) {
-        this.textColor = i;
+    /**
+     * Sets the color to use when drawing this text box's text. A different color is used if this text box is disabled.
+     */
+    public void setTextColor(int color) {
+        this.textColor = color;
     }
 
-    public void setTextColorUneditable(int i) {
-        this.textColorUneditable = i;
+    /**
+     * Sets the color to use for text in this text box when this text box is disabled.
+     */
+    public void setTextColorUneditable(int color) {
+        this.textColorUneditable = color;
     }
 
-    public boolean changeFocus(boolean bl) {
-        return this.visible && this.isEditable ? super.changeFocus(bl) : false;
+    public boolean changeFocus(boolean focus) {
+        return this.visible && this.isEditable ? super.changeFocus(focus) : false;
     }
 
-    public boolean isMouseOver(double d, double e) {
-        return this.visible && d >= (double)this.x && d < (double)(this.x + this.width) && e >= (double)this.y && e < (double)(this.y + this.height);
+    public boolean isMouseOver(double mouseX, double mouseY) {
+        return this.visible && mouseX >= (double)this.x && mouseX < (double)(this.x + this.width) && mouseY >= (double)this.y && mouseY < (double)(this.y + this.height);
     }
 
-    protected void onFocusedChanged(boolean bl) {
-        if (bl) {
+    protected void onFocusedChanged(boolean focused) {
+        if (focused) {
             this.frame = 0;
         }
 
@@ -549,62 +605,80 @@ public class RdiChatEditBox extends AbstractWidget implements Widget, GuiEventLi
         return this.isEditable;
     }
 
-    public void setEditable(boolean bl) {
-        this.isEditable = bl;
+    /**
+     * Sets whether this text box is enabled. Disabled text boxes cannot be typed in.
+     */
+    public void setEditable(boolean enabled) {
+        this.isEditable = enabled;
     }
 
+    /**
+     * returns the width of the textbox depending on if background drawing is enabled
+     */
     public int getInnerWidth() {
         return this.isBordered() ? this.width - 8 : this.width;
     }
 
-    public void setHighlightPos(int i) {
-        int j = this.value.length();
-        this.highlightPos = Mth.clamp((int)i, (int)0, (int)j);
+    /**
+     * Sets the position of the selection anchor (the selection anchor and the cursor position mark the edges of the selection). If the anchor is set beyond the bounds of the current text, it will be put back inside.
+     */
+    public void setHighlightPos(int position) {
+        int i = this.value.length();
+        this.highlightPos = Mth.clamp((int)position, (int)0, (int)i);
         if (this.font != null) {
-            if (this.displayPos > j) {
-                this.displayPos = j;
+            if (this.displayPos > i) {
+                this.displayPos = i;
             }
 
-            int k = this.getInnerWidth();
-            String string = this.font.plainSubstrByWidth(this.value.substring(this.displayPos), k);
-            int l = string.length() + this.displayPos;
+            int j = this.getInnerWidth();
+            String string = this.font.plainSubstrByWidth(this.value.substring(this.displayPos), j);
+            int k = string.length() + this.displayPos;
             if (this.highlightPos == this.displayPos) {
-                this.displayPos -= this.font.plainSubstrByWidth(this.value, k, true).length();
+                this.displayPos -= this.font.plainSubstrByWidth(this.value, j, true).length();
             }
 
-            if (this.highlightPos > l) {
-                this.displayPos += this.highlightPos - l;
+            if (this.highlightPos > k) {
+                this.displayPos += this.highlightPos - k;
             } else if (this.highlightPos <= this.displayPos) {
                 this.displayPos -= this.displayPos - this.highlightPos;
             }
 
-            this.displayPos = Mth.clamp((int)this.displayPos, (int)0, (int)j);
+            this.displayPos = Mth.clamp((int)this.displayPos, (int)0, (int)i);
         }
 
     }
 
-    public void setCanLoseFocus(boolean bl) {
-        this.canLoseFocus = bl;
+    /**
+     * Sets whether this text box loses focus when something other than it is clicked.
+     */
+    public void setCanLoseFocus(boolean canLoseFocus) {
+        this.canLoseFocus = canLoseFocus;
     }
 
+    /**
+     * returns true if this textbox is visible
+     */
     public boolean isVisible() {
         return this.visible;
     }
 
-    public void setVisible(boolean bl) {
-        this.visible = bl;
+    /**
+     * Sets whether or not this textbox is visible
+     */
+    public void setVisible(boolean isVisible) {
+        this.visible = isVisible;
     }
 
-    public void setSuggestion(@Nullable String string) {
-        this.suggestion = string;
+    public void setSuggestion(@Nullable String suggestion) {
+        this.suggestion = suggestion;
     }
 
-    public int getScreenX(int i) {
-        return i > this.value.length() ? this.x : this.x + this.font.width(this.value.substring(0, i));
+    public int getScreenX(int charNum) {
+        return charNum > this.value.length() ? this.x : this.x + this.font.width(this.value.substring(0, charNum));
     }
 
-    public void setX(int i) {
-        this.x = i;
+    public void setX(int x) {
+        this.x = x;
     }
 
     public void updateNarration(NarrationElementOutput narrationElementOutput) {

@@ -66,7 +66,7 @@ public class RdiTitleScreen extends Screen {
         }
         blit(matrices, 0, 0, this.width, this.height, 0.0F, 0.0F, 16, 128, 16, 128);
         if(frames>= 35){
-            this.font.drawShadow(matrices, "按  Enter", (this.width/2.0f)-30, this.height - 50, 0x00FFFFFF);
+            this.font.drawShadow(matrices, ":sweat_smile:  Enter", (this.width/2.0f)-30, this.height - 50, 0x00FFFFFF);
         }
         if(frames>=70){
             frames=0;

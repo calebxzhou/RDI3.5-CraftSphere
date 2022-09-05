@@ -1,5 +1,6 @@
 package calebzhou.rdi.craftsphere.emojiful.gui;
 
+import calebzhou.rdi.craftsphere.screen.RdiChatScreen;
 import com.google.common.base.Strings;
 import calebzhou.rdi.craftsphere.emojiful.EmojiClientProxy;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -20,17 +21,17 @@ import java.util.concurrent.CompletableFuture;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class EmojiSuggestionHelper extends Screen implements IDrawableGuiListener {
+public class EmojiSuggestionHelper extends Screen  {
 
     private static final Pattern WHITESPACE_PATTERN = Pattern.compile("(\\s+)");
 
-    private final ChatScreen chatScreen;
+    private final RdiChatScreen chatScreen;
     private CompletableFuture<Suggestions> suggestionsFuture;
     private EmojiSuggestions suggestions;
     private boolean updating;
     private String inputFieldTextLast;
 
-    public EmojiSuggestionHelper(ChatScreen screen) {
+    public EmojiSuggestionHelper(RdiChatScreen screen) {
         super(Component.literal("emoji helper"));
         this.chatScreen = screen;
         this.updating = false;
@@ -112,7 +113,6 @@ public class EmojiSuggestionHelper extends Screen implements IDrawableGuiListene
         return textAll.startsWith(text) ? textAll.substring(text.length()) : null;
     }
 
-    @Override
     public void render(PoseStack matrixStack) {
         if (this.suggestions != null) {
             this.suggestions.render(matrixStack);

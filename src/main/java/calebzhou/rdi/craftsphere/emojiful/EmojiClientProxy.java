@@ -9,6 +9,7 @@ import com.google.gson.JsonElement;
 import calebzhou.rdi.craftsphere.emojiful.api.EmojiCategory;
 import calebzhou.rdi.craftsphere.emojiful.api.EmojiFromGithub;
 import calebzhou.rdi.craftsphere.emojiful.api.EmojiFromTwitmoji;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -24,7 +25,7 @@ import java.util.stream.Collectors;
 public class EmojiClientProxy {
     public static EmojiClientProxy INSTANCE = new EmojiClientProxy();
 
-    public static Font oldFontRenderer;
+    public static Font oldFontRenderer ;
     public static List<String> ALL_EMOJIS = new ArrayList<>();
     public static HashMap<EmojiCategory, List<Emoji[]>> SORTED_EMOJIS_FOR_SELECTION = new LinkedHashMap<>();
     public static List<Emoji> EMOJI_WITH_TEXTS = new ArrayList<>();
@@ -39,6 +40,10 @@ public class EmojiClientProxy {
         initEmojis();
         indexEmojis();
         RdiCore.LOGGER.info("Loaded " + Emojiful.EMOJI_LIST.size() + " emojis");
+        ClientLifecycleEvents.CLIENT_STARTED.register(client -> {
+            EmojiClientProxy.oldFontRenderer = client.fontManager.createFont();
+        });
+
         //ScreenEvents.AFTER_INIT.register(this::guiInit);
     }
 
@@ -88,28 +93,33 @@ public class EmojiClientProxy {
 
     
     public void onKeyPressed(ScreenEvent.KeyboardKeyPressedEvent event){
-        if (emojiSuggestionHelper != null && emojiSuggestionHelper.keyPressed(event.getKeyCode(), event.getScanCode(), event.getModifiers())) event.setCanceled(true);
+        if (emojiSuggestionHelper != null && emojiSuggestionHelper.keyPressed(event.getKeyCode(), event.getScanCode(), event.getModifiers()))
+         event.setCanceled(true);
         if (emojiSelectionGui != null && emojiSelectionGui.keyPressed(event.getKeyCode(), event.getScanCode(), event.getModifiers())) event.setCanceled(true);
     }
 
     
     public void onClick(ScreenEvent.MouseClickedEvent.Pre event){
-        if (emojiSelectionGui != null) emojiSelectionGui.mouseClicked(event.getMouseX(), event.getMouseY(), event.getButton());
+        if (emojiSelectionGui != null)
+         emojiSelectionGui.mouseClicked(event.getMouseX(), event.getMouseY(), event.getButton());
     }
 
     
     public void onScroll(ScreenEvent.MouseScrollEvent.Pre event){
-        if (emojiSelectionGui != null) emojiSelectionGui.mouseScrolled(event.getMouseX(), event.getMouseY(), event.getScrollDelta());
+        if (emojiSelectionGui != null)
+         emojiSelectionGui.mouseScrolled(event.getMouseX(), event.getMouseY(), event.getScrollDelta());
     }
 
     
     public void onClose(TickEvent.ClientTickEvent event){
-        if (emojiSelectionGui != null && Minecraft.getInstance().screen != emojiSelectionGui.getChatScreen()) emojiSelectionGui = null;
+        if (emojiSelectionGui != null && Minecraft.getInstance().screen != emojiSelectionGui.getChatScreen())
+         emojiSelectionGui = null;
     }
 
     
     public void onCharTyped(ScreenEvent.KeyboardCharTypedEvent event){
-        if (emojiSelectionGui != null && emojiSelectionGui.charTyped(event.getCodePoint(), event.getModifiers())) event.setCanceled(true);
+        if (emojiSelectionGui != null && emojiSelectionGui.charTyped(event.getCodePoint(), event.getModifiers()))
+         event.setCanceled(true);
     }
 
 

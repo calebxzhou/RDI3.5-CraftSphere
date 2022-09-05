@@ -12,6 +12,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
 import io.netty.util.internal.StringUtil;
+import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -30,10 +31,7 @@ import net.minecraft.util.StringDecomposer;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -54,11 +52,8 @@ public class EmojiFontRenderer extends Font {
         return instance;
     }
 
-    //<+(\w)+:+(\w)+>
 
-    private static String MY_NAME = "DevNotWorkingRn";
-
-    public static LoadingCache<String, Pair<String, HashMap<Integer, Emoji>>> RECENT_STRINGS = CacheBuilder.newBuilder().expireAfterAccess(60, TimeUnit.SECONDS).build(new CacheLoader<String, Pair<String, HashMap<Integer, Emoji>>>() {
+    public static LoadingCache<String, Pair<String, HashMap<Integer, Emoji>>> RECENT_STRINGS = CacheBuilder.newBuilder().expireAfterAccess(60, TimeUnit.SECONDS).build(new CacheLoader<>() {
         @Override
         public Pair<String, HashMap<Integer, Emoji>> load(String key) throws Exception {
             return getEmojiFormattedString(key);
@@ -79,7 +74,7 @@ public class EmojiFontRenderer extends Font {
     public int width(String text) {
         if (text != null) {
             try {
-                text = RECENT_STRINGS.get(text.replaceAll(MY_NAME, MY_NAME + " :blobcatbolb: ")).getKey();
+                text = RECENT_STRINGS.get(text).getKey();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -140,6 +135,7 @@ public class EmojiFontRenderer extends Font {
             }
         }
         return Pair.of(text, emojis);
+
     }
 
     @Override
@@ -147,22 +143,22 @@ public class EmojiFontRenderer extends Font {
         return super.drawInBatch(p_228079_1_, p_228079_2_, p_228079_3_, p_228079_4_, p_228079_5_, p_228079_6_, p_228079_7_, p_228079_8_, p_228079_9_, p_228079_10_);
     }
 
-    public float overwrite_renderText(String text, float x, float y, int color, boolean isShadow, Matrix4f matrix, MultiBufferSource buffer, boolean isTransparent, int colorBackgroundIn, int packedLight) {
+    @Override
+    public float renderText(String text, float x, float y, int color, boolean isShadow, Matrix4f matrix, MultiBufferSource buffer, boolean isTransparent, int colorBackgroundIn, int packedLight) {
         if (text.isEmpty())
             return 0;
         HashMap<Integer, Emoji> emojis = new LinkedHashMap<>();
         try {
-            Pair<String, HashMap<Integer, Emoji>> cache = RECENT_STRINGS.get(text.replaceAll(MY_NAME, MY_NAME + " :blobcatbolb: "));
+            Pair<String, HashMap<Integer, Emoji>> cache = RECENT_STRINGS.get(text);
             text = cache.getLeft();
             emojis = cache.getRight();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
         EmojiCharacterRenderer fontrenderer$characterrenderer = new EmojiCharacterRenderer(emojis, buffer, x, y, color, isShadow, matrix, isTransparent, packedLight);
-        StringDecomposer.iterateFormatted(text, Style.EMPTY, fontrenderer$characterrenderer);
+        StringDecomposer.iterateFormatted(text, Style.EMPTY.withBold(true), fontrenderer$characterrenderer);
         return fontrenderer$characterrenderer.finish(colorBackgroundIn, x);
     }
-
     @Override
     public int drawInBatch(FormattedCharSequence reorderingProcessor, float x, float y, int color, boolean isShadow, Matrix4f matrix, MultiBufferSource buffer, boolean isTransparent, int colorBackgroundIn, int packedLight) {
         if (reorderingProcessor != null) {
@@ -173,20 +169,19 @@ public class EmojiFontRenderer extends Font {
                     return true;
                 });
             }
-            String text = builder.toString().replaceAll(MY_NAME, MY_NAME + " :blobcatbolb:");
+            String text = builder.toString()/*.replaceAll(MY_NAME, MY_NAME + " :blobcatbolb:")*/;
             if (text.length() > 0) {
                 color = (color & -67108864) == 0 ? color | -16777216 : color;
                 HashMap<Integer, Emoji> emojis = new LinkedHashMap<>();
                 try {
                     Pair<String, HashMap<Integer, Emoji>> cache = RECENT_STRINGS.get(text);
-                    text = cache.getLeft();
                     emojis = cache.getRight();
                 } catch (ExecutionException e) {
                     e.printStackTrace();
                 }
                 List<FormattedCharSequence> processors = new ArrayList<>();
                 HashMap<Integer, Emoji> finalEmojis = emojis;
-                AtomicInteger cleanPos = new AtomicInteger();
+                AtomicInteger cleanPos = new AtomicInteger(0);
                 AtomicBoolean ignore = new AtomicBoolean(false);
                 reorderingProcessor.accept((pos, style, ch) -> {
                     if (!ignore.get()) {
@@ -198,9 +193,10 @@ public class EmojiFontRenderer extends Font {
                             return true;
                         }
                     }
+
                     if (ch == ':') {
                         ignore.set(false);
-                        cleanPos.getAndIncrement();
+                        cleanPos.getAndAdd(pos);
                     }
                     return true;
                 });
@@ -217,30 +213,14 @@ public class EmojiFontRenderer extends Font {
                     //SHADOW_OFFSET
                     matrix4f.translate(new Vector3f(0.0F, 0.0F, 0.03F));
                 }
-                EmojiCharacterRenderer fontrenderer$characterrenderer = new EmojiCharacterRenderer(emojis, buffer, x, y, color, false, matrix4f, isTransparent, packedLight);
-                FormattedCharSequence.fromList(processors).accept(fontrenderer$characterrenderer);
-                return (int) fontrenderer$characterrenderer.finish(colorBackgroundIn, x);
+                    EmojiCharacterRenderer fontrenderer$characterrenderer = new EmojiCharacterRenderer(emojis, buffer, x, y, color, false, matrix4f, isTransparent, packedLight);
+                    FormattedCharSequence.fromList(processors).accept(fontrenderer$characterrenderer);
+                    return (int) fontrenderer$characterrenderer.finish(colorBackgroundIn, x);
+
+
             }
         }
         return super.drawInBatch(reorderingProcessor, x, y, color, isShadow, matrix, buffer, isTransparent, colorBackgroundIn, packedLight);
-    }
-
-    class CharacterProcessor implements FormattedCharSequence {
-
-        public final int pos;
-        public final Style style;
-        public final int character;
-
-        CharacterProcessor(int pos, Style style, int character) {
-            this.pos = pos;
-            this.style = style;
-            this.character = character;
-        }
-
-        @Override
-        public boolean accept(FormattedCharSink iCharacterConsumer) {
-            return iCharacterConsumer.accept(pos, style, character);
-        }
     }
 
 
@@ -288,7 +268,7 @@ public class EmojiFontRenderer extends Font {
 
         public boolean accept(int pos, Style style, int charInt) {
             FontSet font = EmojiFontRenderer.this.getFontSet(style.getFont());
-            if (true && this.emojis.get(pos) != null) {
+            if (this.emojis.get(pos) != null) {
                 Emoji emoji = this.emojis.get(pos);
                 if (emoji != null && !this.dropShadow) {
                     EmojiUtil.renderEmoji(emoji, this.x, this.y, matrix, buffer, packedLight);

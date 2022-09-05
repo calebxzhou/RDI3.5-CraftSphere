@@ -6,13 +6,11 @@
   "compatibilityLevel": "JAVA_17",
   "client": [
     "mBlockEntityRenderers",
-    "mFont",
     "mMinecraft"
   ],
   "injectors": {
     "defaultRequire": 1
   },
   "mixins": [
-    "mChatScreen"
   ]
 }

@@ -3,6 +3,7 @@ package calebzhou.rdi.craftsphere.emojiful;
 import calebzhou.rdi.craftsphere.emojiful.api.Emoji;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 
 import java.io.IOException;
 import java.net.URL;
@@ -11,7 +12,7 @@ import java.util.*;
 
 
 public class Emojiful {
-    public static final Map<String, List<Emoji>> EMOJI_MAP = new HashMap<>();
+    public static final Map<String, List<Emoji>> EMOJI_MAP = new Object2ObjectOpenHashMap<>();
     public static final List<Emoji> EMOJI_LIST = new ArrayList<>();
     public static boolean error = false;
 

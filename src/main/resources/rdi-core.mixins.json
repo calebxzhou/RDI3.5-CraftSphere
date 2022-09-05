@@ -27,6 +27,9 @@
     "mSkyAlwaysBlue",
     "mTabPlayerHud",
     "mTitleScreen",
+    "mUseRdiChatScreen",
+    "mUseRdiChatScreen2",
+    "mUseRdiChatScreen3",
     "mWindowTitle"
   ],
   "injectors": {

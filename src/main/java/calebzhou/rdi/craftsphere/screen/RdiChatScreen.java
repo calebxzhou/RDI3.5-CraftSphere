@@ -1,5 +1,10 @@
 package calebzhou.rdi.craftsphere.screen;
 
+import calebzhou.rdi.craftsphere.emojiful.EmojiClientProxy;
+import calebzhou.rdi.craftsphere.emojiful.gui.EmojiSelectionGui;
+import calebzhou.rdi.craftsphere.emojiful.gui.EmojiSuggestionHelper;
+import calebzhou.rdi.craftsphere.emojiful.render.EmojiFontRenderer;
+import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.brigadier.tree.CommandNode;
@@ -41,20 +46,20 @@ public class RdiChatScreen extends Screen {
     private static final Component PREVIEW_HINT;
     private String historyBuffer = "";
     private int historyPos = -1;
-    public EditBox input;
+    public RdiChatEditBox input;
     private String initial;
     CommandSuggestions commandSuggestions;
     private ClientChatPreview chatPreview;
 
     public RdiChatScreen(String string) {
-        super(Component.translatable("chat_screen.title"));
+        super(Component.literal(""));
         this.initial = string;
     }
 
     protected void init() {
         this.minecraft.keyboardHandler.setSendRepeatsToGui(true);
         this.historyPos = this.minecraft.gui.getChat().getRecentChat().size();
-        this.input = new EditBox(this.font, 4, this.height - 12, this.width - 4, 12, Component.translatable("chat.editBox")) {
+        this.input = new RdiChatEditBox(this.font, 4, this.height - 12, this.width - 4, 12, Component.translatable("chat.editBox")) {
             protected MutableComponent createNarrationMessage() {
                 return super.createNarrationMessage().append(RdiChatScreen.this.commandSuggestions.getNarrationMessage());
             }
@@ -66,6 +71,9 @@ public class RdiChatScreen extends Screen {
         this.addWidget(this.input);
         this.commandSuggestions = new CommandSuggestions(this.minecraft, this, this.input, this.font, false, false, 1, 10, true, -805306368);
         this.commandSuggestions.updateCommandInfo();
+        EmojiClientProxy.emojiSuggestionHelper = new EmojiSuggestionHelper(this);
+        EmojiClientProxy.emojiSelectionGui = new EmojiSelectionGui(this);
+        EmojiClientProxy.emojiSuggestionHelper.updateSuggestionList(false);
         this.setInitialFocus(this.input);
         this.chatPreview = new ClientChatPreview(this.minecraft);
         this.updateChatPreview(this.input.getValue());
@@ -81,11 +89,12 @@ public class RdiChatScreen extends Screen {
 
     }
 
-    public void resize(Minecraft minecraft, int i, int j) {
+    public void resize(Minecraft minecraft, int width, int height) {
         String string = this.input.getValue();
-        this.init(minecraft, i, j);
+        this.init(minecraft, width, height);
         this.setChatLine(string);
         this.commandSuggestions.updateCommandInfo();
+        EmojiClientProxy.emojiSuggestionHelper.updateSuggestionList(false);
     }
 
     public void removed() {
@@ -98,11 +107,12 @@ public class RdiChatScreen extends Screen {
         this.chatPreview.tick();
     }
 
-    private void onEdited(String string) {
-        String string2 = this.input.getValue();
-        this.commandSuggestions.setAllowSuggestions(!string2.equals(this.initial));
+    private void onEdited(String value) {
+        String string = this.input.getValue();
+        this.commandSuggestions.setAllowSuggestions(!string.equals(this.initial));
         this.commandSuggestions.updateCommandInfo();
-        this.updateChatPreview(string2);
+        EmojiClientProxy.emojiSuggestionHelper.updateSuggestionList(false);
+        this.updateChatPreview(string);
     }
 
     private void updateChatPreview(String string) {
@@ -115,11 +125,11 @@ public class RdiChatScreen extends Screen {
 
     }
 
-    private void requestPreview(String string) {
-        if (string.startsWith("/")) {
-            this.requestCommandArgumentPreview(string);
+    private void requestPreview(String message) {
+        if (message.startsWith("/")) {
+            this.requestCommandArgumentPreview(message);
         } else {
-            this.requestChatMessagePreview(string);
+            this.requestChatMessagePreview(message);
         }
 
     }
@@ -149,25 +159,29 @@ public class RdiChatScreen extends Screen {
         }
     }
 
-    public boolean keyPressed(int i, int j, int k) {
-        if (this.commandSuggestions.keyPressed(i, j, k)) {
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        if (this.commandSuggestions.keyPressed(keyCode, scanCode, modifiers)) {
             return true;
-        } else if (super.keyPressed(i, j, k)) {
+        }else if(EmojiClientProxy.emojiSelectionGui.keyPressed(keyCode, scanCode, modifiers)){
             return true;
-        } else if (i == 256) {
+        }else if(EmojiClientProxy.emojiSuggestionHelper.keyPressed(keyCode, scanCode, modifiers)){
+            return true;
+        } else if (super.keyPressed(keyCode, scanCode, modifiers)) {
+            return true;
+        } else if (keyCode == 256) {
             this.minecraft.setScreen((Screen)null);
             return true;
-        } else if (i != 257 && i != 335) {
-            if (i == 265) {
+        } else if (keyCode != 257 && keyCode != 335) {
+            if (keyCode == 265) {
                 this.moveInHistory(-1);
                 return true;
-            } else if (i == 264) {
+            } else if (keyCode == 264) {
                 this.moveInHistory(1);
                 return true;
-            } else if (i == 266) {
+            } else if (keyCode == 266) {
                 this.minecraft.gui.getChat().scrollChat(this.minecraft.gui.getChat().getLinesPerPage() - 1);
                 return true;
-            } else if (i == 267) {
+            } else if (keyCode == 267) {
                 this.minecraft.gui.getChat().scrollChat(-this.minecraft.gui.getChat().getLinesPerPage() + 1);
                 return true;
             } else {
@@ -180,103 +194,117 @@ public class RdiChatScreen extends Screen {
         }
     }
 
-    public boolean mouseScrolled(double d, double e, double f) {
-        f = Mth.clamp(f, -1.0, 1.0);
-        if (this.commandSuggestions.mouseScrolled(f)) {
+    public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
+        delta = Mth.clamp(delta, -1.0, 1.0);
+        if (this.commandSuggestions.mouseScrolled(delta)) {
             return true;
-        } else {
+        } else  if(EmojiClientProxy.emojiSelectionGui.mouseScrolled(mouseX, mouseY, delta)){
+            return true;
+        }else{
             if (!hasShiftDown()) {
-                f *= 7.0;
+                delta *= MOUSE_SCROLL_SPEED;
             }
 
-            this.minecraft.gui.getChat().scrollChat((int)f);
+            this.minecraft.gui.getChat().scrollChat((int)delta);
             return true;
         }
     }
 
-    public boolean mouseClicked(double d, double e, int i) {
-        if (this.commandSuggestions.mouseClicked((double)((int)d), (double)((int)e), i)) {
+    @Override
+    public void mouseMoved(double mouseX, double mouseY) {
+        EmojiClientProxy.emojiSelectionGui.mouseMoved(mouseX, mouseY);
+        super.mouseMoved(mouseX, mouseY);
+    }
+
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (this.commandSuggestions.mouseClicked((double)((int)mouseX), (double)((int)mouseY), button)) {
             return true;
-        } else {
-            if (i == 0) {
+        }else if(EmojiClientProxy.emojiSelectionGui.mouseClicked(mouseX, mouseY))
+            return true;
+        else {
+            if (button == 0) {
                 ChatComponent chatComponent = this.minecraft.gui.getChat();
-                if (chatComponent.handleChatQueueClicked(d, e)) {
+                if (chatComponent.handleChatQueueClicked(mouseX, mouseY)) {
                     return true;
                 }
 
-                Style style = this.getComponentStyleAt(d, e);
+                Style style = this.getComponentStyleAt(mouseX, mouseY);
                 if (style != null && this.handleComponentClicked(style)) {
                     this.initial = this.input.getValue();
                     return true;
                 }
             }
 
-            return this.input.mouseClicked(d, e, i) ? true : super.mouseClicked(d, e, i);
+            return this.input.mouseClicked(mouseX, mouseY, button) ? true : super.mouseClicked(mouseX, mouseY, button);
         }
     }
 
-    protected void insertText(String string, boolean bl) {
-        if (bl) {
-            this.input.setValue(string);
+    protected void insertText(String text, boolean overwrite) {
+        if (overwrite) {
+            this.input.setValue(text);
         } else {
-            this.input.insertText(string);
+            this.input.insertText(text);
         }
 
     }
 
-    public void moveInHistory(int i) {
-        int j = this.historyPos + i;
-        int k = this.minecraft.gui.getChat().getRecentChat().size();
-        j = Mth.clamp((int)j, (int)0, (int)k);
-        if (j != this.historyPos) {
-            if (j == k) {
-                this.historyPos = k;
+    /**
+     * input is relative and is applied directly to the sentHistoryCursor so -1 is the previous message, 1 is the next message from the current cursor position
+     */
+    public void moveInHistory(int msgPos) {
+        int i = this.historyPos + msgPos;
+        int j = this.minecraft.gui.getChat().getRecentChat().size();
+        i = Mth.clamp((int)i, (int)0, (int)j);
+        if (i != this.historyPos) {
+            if (i == j) {
+                this.historyPos = j;
                 this.input.setValue(this.historyBuffer);
             } else {
-                if (this.historyPos == k) {
+                if (this.historyPos == j) {
                     this.historyBuffer = this.input.getValue();
                 }
 
-                this.input.setValue((String)this.minecraft.gui.getChat().getRecentChat().get(j));
+                this.input.setValue((String)this.minecraft.gui.getChat().getRecentChat().get(i));
                 this.commandSuggestions.setAllowSuggestions(false);
-                this.historyPos = j;
+                this.historyPos = i;
             }
         }
     }
 
-    public void render(PoseStack poseStack, int i, int j, float f) {
+    public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
         this.setFocused(this.input);
         this.input.setFocus(true);
         fill(poseStack, 2, this.height - 14, this.width - 2, this.height - 2, this.minecraft.options.getBackgroundColor(Integer.MIN_VALUE));
-        this.input.render(poseStack, i, j, f);
+        this.input.render(poseStack, mouseX, mouseY, partialTick);
         if (this.chatPreview.isEnabled()) {
             this.renderChatPreview(poseStack);
         } else {
-            this.commandSuggestions.render(poseStack, i, j);
+            this.commandSuggestions.render(poseStack, mouseX, mouseY);
+            EmojiClientProxy.emojiSuggestionHelper.render(poseStack);
         }
 
-        Style style = this.getComponentStyleAt((double)i, (double)j);
+        Style style = this.getComponentStyleAt((double)mouseX, (double)mouseY);
         if (style != null && style.getHoverEvent() != null) {
-            this.renderComponentHoverEffect(poseStack, style, i, j);
+            this.renderComponentHoverEffect(poseStack, style, mouseX, mouseY);
         }
-
-        super.render(poseStack, i, j, f);
+        EmojiClientProxy.emojiSelectionGui.render(poseStack,mouseX,mouseY,partialTick);
+        super.render(poseStack, mouseX, mouseY, partialTick);
     }
 
     public boolean isPauseScreen() {
         return false;
     }
 
-    private void setChatLine(String string) {
-        this.input.setValue(string);
+    private void setChatLine(String chatLine) {
+        this.input.setValue(chatLine);
     }
 
-    protected void updateNarrationState(NarrationElementOutput narrationElementOutput) {
-        narrationElementOutput.add(NarratedElementType.TITLE, this.getTitle());
-        narrationElementOutput.add(NarratedElementType.USAGE, USAGE_TEXT);
+    protected void updateNarrationState(NarrationElementOutput output) {
+        output.add(NarratedElementType.TITLE, this.getTitle());
+        output.add(NarratedElementType.USAGE, USAGE_TEXT);
         String string = this.input.getValue();
         if (!string.isEmpty()) {
-            narrationElementOutput.nest().add(NarratedElementType.TITLE, (Component)Component.translatable("chat_screen.message", string));
+            output.nest().add(NarratedElementType.TITLE, (Component)Component.translatable("chat_screen.message", string));
         }
 
     }
@@ -322,8 +350,8 @@ public class RdiChatScreen extends Screen {
             List<FormattedCharSequence> list = this.peekChatPreview();
             int i = this.chatPreviewHeight(list);
             if (!(d < (double)this.chatPreviewLeft()) && !(d > (double)this.chatPreviewRight()) && !(e < (double)this.chatPreviewTop(i)) && !(e > (double)this.chatPreviewBottom())) {
-                int j = this.chatPreviewLeft() + 2;
-                int k = this.chatPreviewTop(i) + 2;
+                int j = this.chatPreviewLeft() + PREVIEW_PADDING;
+                int k = this.chatPreviewTop(i) + PREVIEW_PADDING;
                 int var10000 = Mth.floor(e) - k;
                 Objects.requireNonNull(this.font);
                 int l = var10000 / 9;
@@ -355,19 +383,19 @@ public class RdiChatScreen extends Screen {
     }
 
     private int chatPreviewBottom() {
-        return this.minecraft.screen.height - 15;
+        return this.minecraft.screen.height - PREVIEW_MARGIN_BOTTOM;
     }
 
-    private int chatPreviewTop(int i) {
-        return this.chatPreviewBottom() - i;
+    private int chatPreviewTop(int height) {
+        return this.chatPreviewBottom() - height;
     }
 
     private int chatPreviewLeft() {
-        return 2;
+        return PREVIEW_MARGIN_SIDES;
     }
 
     private int chatPreviewRight() {
-        return this.minecraft.screen.width - 2;
+        return this.minecraft.screen.width - PREVIEW_MARGIN_SIDES;
     }
 
     public void handleChatInput(String string, boolean bl) {
@@ -387,8 +415,8 @@ public class RdiChatScreen extends Screen {
         }
     }
 
-    public String normalizeChatMessage(String string) {
-        return StringUtils.normalizeSpace(string.trim());
+    public String normalizeChatMessage(String message) {
+        return StringUtils.normalizeSpace(message.trim());
     }
 
     public ClientChatPreview getChatPreview() {
@@ -397,5 +425,4 @@ public class RdiChatScreen extends Screen {
 
     static {
         PREVIEW_HINT = Component.translatable("chat.preview").withStyle(ChatFormatting.DARK_GRAY);
-    }
-}
+    }}

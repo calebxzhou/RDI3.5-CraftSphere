@@ -4,6 +4,8 @@ import calebzhou.rdi.craftsphere.emojiful.api.Emoji;
 import calebzhou.rdi.craftsphere.emojiful.EmojiClientProxy;
 import calebzhou.rdi.craftsphere.emojiful.Emojiful;
 import calebzhou.rdi.craftsphere.emojiful.api.EmojiCategory;
+import calebzhou.rdi.craftsphere.screen.RdiChatEditBox;
+import calebzhou.rdi.craftsphere.screen.RdiChatScreen;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
@@ -31,10 +33,10 @@ public class EmojiSelectionGui extends Overlay   {
 
     private int selectionPointer;
     private int categoryPointer;
-    private ChatScreen chatScreen;
+    private RdiChatScreen chatScreen;
     private int openSelectionAreaEmoji;
     private boolean showingSelectionArea;
-    private EditBox fieldWidget;
+    private RdiChatEditBox fieldWidget;
 
     private Rect2i openSelectionArea;
     private Rect2i selectionArea;
@@ -47,7 +49,7 @@ public class EmojiSelectionGui extends Overlay   {
     private Emoji lastEmoji;
     private List<Emoji[]> filteredEmojis;
 
-    public EmojiSelectionGui(ChatScreen screen) {
+    public EmojiSelectionGui(RdiChatScreen screen) {
         super();
         this.selectionPointer = 1;
         this.categoryPointer = 0;
@@ -63,7 +65,7 @@ public class EmojiSelectionGui extends Overlay   {
         this.categorySelectionArea = new Rect2i(this.selectionArea.getX(), this.selectionArea.getY() + 20, 22, this.selectionArea.getHeight() - 20);
         this.emojiInfoArea = new Rect2i(this.selectionArea.getX() + 22, this.selectionArea.getY() + this.selectionArea.getHeight() - 20,  this.selectionArea.getWidth() - 22,  20);
         this.textFieldRectangle = new Rect2i(selectionArea.getX() + 6, selectionArea.getY() + 6, selectionArea.getWidth() -12, 10);
-        this.fieldWidget = new EditBox(EmojiClientProxy.oldFontRenderer, textFieldRectangle.getX(), textFieldRectangle.getY(), textFieldRectangle.getWidth(), textFieldRectangle.getHeight(), MutableComponent.create(new LiteralContents("")));
+        this.fieldWidget = new RdiChatEditBox(EmojiClientProxy.oldFontRenderer, textFieldRectangle.getX(), textFieldRectangle.getY(), textFieldRectangle.getWidth(), textFieldRectangle.getHeight(), MutableComponent.create(new LiteralContents("")));
         this.fieldWidget.setEditable(true);
         this.fieldWidget.setVisible(true);
         this.filteredEmojis = new ArrayList<>();
@@ -310,7 +312,7 @@ public class EmojiSelectionGui extends Overlay   {
         return null;
     }
 
-    public ChatScreen getChatScreen() {
+    public RdiChatScreen getChatScreen() {
         return chatScreen;
     }
 

@@ -22,7 +22,6 @@ public abstract class mBlockEntityRenderers {
     @Inject(method = "<clinit>",at = @At("TAIL"))
     private static void rdi_registerSignEmojiRenderer(CallbackInfo ci){
         register(BlockEntityType.SIGN, context -> {
-           // context.getFont()
             SignRenderer signRenderer = new SignRenderer(context);
             return signRenderer;
         });
