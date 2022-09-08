@@ -1,0 +1,51 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "priority": 1989,
+  "package": "calebzhou.rdi.craftsphere.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+    "AccessSplashOverlay",
+    "AccessSystemReport",
+    "mConnectScreen",
+    "mDeathGoNewTitle",
+    "mFastCreateMojangService",
+    "mFastCreateMojangService2",
+    "mFinishLoad",
+    "mGameVersion",
+    "mLaglessEat",
+    "mLoginProtocol",
+    "mLuminChk",
+    "mMultiPlayerScreen",
+    "mNewPauseMenu",
+    "mNewScreens",
+    "mNoChatBrackets",
+    "mNoUnicodeFonts",
+    "mNoUnicodeFonts2",
+    "mPauseScreenSave",
+    "mProtocol",
+    "mSkyAlwaysBlue",
+    "mTabPlayerHud",
+    "mTitleScreen",
+    "mUseRdiChatScreen",
+    "mUseRdiChatScreen2",
+    "mUseRdiChatScreen3",
+    "mWindowTitle"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "mixins": [
+    "AccessNatualSpawner",
+    "mClientStartup",
+    "mPlayMusic",
+    "mPlayMusic2",
+    "mStartup10",
+    "mStartup2",
+    "mStartup23",
+    "mStartup3",
+    "mStartup4",
+    "mStartup5",
+    "mStartup6"
+  ]
+}

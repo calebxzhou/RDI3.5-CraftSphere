@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "priority": 1989,
+  "package": "calebzhou.rdi.craftsphere.mixin.emoji",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+    "ChatScreenMixin",
+    "mMinecraft"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "mixins": [
+  ]
+}
