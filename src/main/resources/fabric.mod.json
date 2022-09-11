@@ -17,7 +17,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "calebzhou.rdi.craftsphere.RdiCore"
+      "calebzhou.rdi.core.client.RdiCore"
     ]
   },
   "mixins": [

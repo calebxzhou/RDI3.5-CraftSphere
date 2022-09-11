@@ -1,0 +1,118 @@
+package calebzhou.rdi.craftsphere.mixin;
+
+import RdiCore;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.Options;
+import net.minecraft.client.gui.screens.controls.KeyBindsList;
+import net.minecraft.client.gui.screens.controls.KeyBindsScreen;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.Component;
+import org.apache.commons.lang3.StringUtils;
+import org.spongepowered.asm.mixin.*;
+import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.io.File;
+import java.util.Map;
+
+@Mixin(Options.class)
+public class MixinNoVanillaKeys {
+    @Shadow @Final @Mutable public KeyMapping[] keyMappings;
+
+    @Shadow @Final @Mutable public KeyMapping[] keyHotbarSlots;
+
+    @Shadow @Final @Mutable public KeyMapping keySaveHotbarActivator;
+
+    @Shadow @Final @Mutable  public KeyMapping keyLoadHotbarActivator;
+
+    @Inject(method = "<init>(Lnet/minecraft/client/Minecraft;Ljava/io/File;)V",
+    at = @At(value = "NEW",target = "net.minecraft.client.KeyMapping",ordinal = 31
+            ,shift = At.Shift.AFTER))
+    private void axca(Minecraft minecraft, File file, CallbackInfo ci){
+        keyHotbarSlots=new KeyMapping[]{new KeyMapping("",255,"")};
+        keySaveHotbarActivator=new KeyMapping("",255,"");
+        keyLoadHotbarActivator=new KeyMapping("",255,"");
+    }
+
+
+    @Redirect(method = "processOptions(Lnet/minecraft/client/Options$FieldAccess;)V",
+    at = @At(value = "INVOKE",target = "Lnet/minecraft/client/KeyMapping;saveString()Ljava/lang/String;"))
+    private String checkKeyNull(KeyMapping instance){
+        try{
+            return instance.saveString();
+        }catch (NullPointerException e){
+            ExampleMod.LOGGER.error("111");
+        }
+        return "";
+    }
+
+}
+@Mixin(Minecraft.class)
+class NoVanillaKey2{
+    @ModifyConstant(method = "handleKeybinds()V",constant =
+    @Constant(intValue = 9))
+    private int asdc(int constant){
+        return 0;
+    }
+}
+@Mixin(KeyMapping.class)
+class NVK3{
+    @Shadow @Final private String category;
+
+    @Shadow @Final private String name;
+
+    @Shadow @Final private static Map<String, Integer> CATEGORY_SORT_ORDER;
+
+    @Overwrite
+    public int compareTo(KeyMapping keyMapping) {
+        if(keyMapping==null)
+            return 0;
+        String keyMappingName = keyMapping.getName();
+        String i18nGet = I18n.get(name);
+        String anotherI18nGet = I18n.get(keyMappingName);
+        if(StringUtils.isEmpty(keyMappingName)||StringUtils.isEmpty(i18nGet)||StringUtils.isEmpty(anotherI18nGet))
+            return 0;
+        if (category.equals(keyMapping.getCategory())) {
+            return i18nGet.compareTo(anotherI18nGet);
+        } else
+            return CATEGORY_SORT_ORDER.get(this.category).compareTo(CATEGORY_SORT_ORDER.get(keyMapping.getCategory()));
+    }
+}
+@Mixin(AbstractContainerScreen.class)
+abstract class NVK4 /*extends ContainerObjectSelectionList*/{
+    @ModifyConstant(method = "Lnet/minecraft/client/gui/screens/inventory/AbstractContainerScreen;checkHotbarKeyPressed(II)Z",
+    constant = @Constant(intValue = 9))
+    private int sac(int a){
+        return 0;
+    }
+   /* KeyMapping[] keyMappings;
+
+    public NVK4(Minecraft minecraft, int i, int j, int k, int l, int m) {
+        super(minecraft, i, j, k, l, m);
+    }*/
+
+    /*@Inject(method = "<init>(Lnet/minecraft/client/gui/screens/controls/KeyBindsScreen;Lnet/minecraft/client/Minecraft;)V",
+    at = @At(value = "INVOKE",target = "Ljava/util/Arrays;sort([Ljava/lang/Object;)V"),locals = LocalCapture.CAPTURE_FAILSOFT)
+    private void keysCApture(KeyBindsScreen keyBindsScreen, Minecraft minecraft, CallbackInfo ci,KeyMapping[] keyMappings){
+        this.keyMappings=keyMappings;
+    }
+    @Redirect(method = "<init>(Lnet/minecraft/client/gui/screens/controls/KeyBindsScreen;Lnet/minecraft/client/Minecraft;)V",
+    at = @At(value = "INVOKE",target = "Ljava/util/Arrays;sort([Ljava/lang/Object;)V"))
+    private void kepMappings(Object[] keyMap){
+        Object[] kM = Arrays.stream(keyMappings).filter(keyMapping -> keyMapping.getDefaultKey().getValue() < 512).toArray();
+        Arrays.sort(kM);
+    }*/
+
+    /*@Redirect(method = "<init>(Lnet/minecraft/client/gui/screens/controls/KeyBindsScreen;Lnet/minecraft/client/Minecraft;)V",
+    at = @At(value = "INVOKE",target = "net/minecraft/client/gui/screens/controls/KeyBindsList$KeyEntry.<init> (Lnet/minecraft/client/gui/screens/controls/KeyBindsList;Lnet/minecraft/client/KeyMapping;Lnet/minecraft/network/chat/Component;)V"))
+    private void init(KeyBindsList.KeyEntry instance, KeyBindsList keyBindsList, KeyMapping keyMapping, Component component){
+        if(keyMapping.getDefaultKey().getValue()>512)
+            instance = null;
+    }*/
+}
+@Mixin(KeyBindsScreen.class)
+abstract class NVK5{
+
+}

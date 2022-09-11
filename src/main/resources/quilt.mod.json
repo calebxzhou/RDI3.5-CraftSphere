@@ -19,7 +19,7 @@
 		},
 		"intermediate_mappings": "net.fabricmc:intermediary",
 		"entrypoints": {
-			"init": "calebzhou.rdi.craftsphere.RdiCore"
+			"init": "calebzhou.rdi.core.client.RdiCore"
 		},
 		"depends": [
 			{

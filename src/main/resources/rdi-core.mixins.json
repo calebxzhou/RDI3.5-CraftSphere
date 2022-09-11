@@ -2,7 +2,7 @@
   "required": true,
   "minVersion": "0.8",
   "priority": 1989,
-  "package": "calebzhou.rdi.craftsphere.mixin",
+  "package": "calebzhou.rdi.core.client.mixin",
   "compatibilityLevel": "JAVA_17",
   "client": [
     "AccessSplashOverlay",
@@ -12,6 +12,7 @@
     "mFastCreateMojangService",
     "mFastCreateMojangService2",
     "mFinishLoad",
+    "mFontTexture",
     "mGameVersion",
     "mLaglessEat",
     "mLoginProtocol",

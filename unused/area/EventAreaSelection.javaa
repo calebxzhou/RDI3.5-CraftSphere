@@ -1,0 +1,52 @@
+package calebzhou.rdi.craftsphere.module.area;
+
+import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
+import net.fabricmc.fabric.api.event.player.UseBlockCallback;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+
+public class EventAreaSelection {
+    public EventAreaSelection() {
+        //左键单击方块事件
+        AttackBlockCallback.EVENT.register(((player, world, hand, pos, direction) -> {
+            BlockState blockState = world.getBlockState(pos);
+            Block block = blockState.getBlock();
+            String pid = player.getStringUUID();
+
+
+            if(player.getMainHandItem().getItem() == Items.GOLDEN_HOE &&ModelAreaSelection.isAreaSelectionMode){
+                handleAreaSelection(pos,true);
+            }
+
+            return InteractionResult.PASS;
+        }));
+        //右键单击方块事件
+        UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
+            BlockPos blockPos = hitResult.getBlockPos();
+            BlockState blockState = world.getBlockState(blockPos);
+            Block block = blockState.getBlock();
+            String pid = player.getStringUUID();
+
+
+            if(player.getMainHandItem().getItem() == Items.GOLDEN_HOE &&ModelAreaSelection.isAreaSelectionMode){
+                handleAreaSelection(blockPos,false);
+            }
+            return InteractionResult.PASS;
+        });
+    }
+    /**
+     * @param left_right 左手点1 true 右手点2 false
+     * */
+    private void handleAreaSelection(BlockPos blockPos,boolean left_right){
+        if(left_right){
+            //左手
+            ModelAreaSelection.INSTANCE.setP1(blockPos);
+        }else{
+            //右手
+            ModelAreaSelection.INSTANCE.setP2(blockPos);
+        }
+    }
+}
