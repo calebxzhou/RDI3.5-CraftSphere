@@ -18,6 +18,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeBitmapFontData;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.GlyphAndBitmap;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
 public class LazyBitmapFont extends BitmapFont {
@@ -39,10 +40,14 @@ public class LazyBitmapFont extends BitmapFont {
 	public LazyBitmapFont(FreeTypeFontGenerator generator, int fontSize) {
 		if(generator == null)
 			throw new GdxRuntimeException("lazyBitmapFont global generator must be not null to use this constructor.");
-		this.generator = generator;
+
 		FreeTypeFontParameter param = new FreeTypeFontParameter();
 		param.size = fontSize;
+		param.minFilter = Texture.TextureFilter.Linear;
+		param.magFilter = Texture.TextureFilter.Linear;
+		param.kerning=true;
 		this.parameter = param;
+		this.generator = generator;
 		this.data = new LazyBitmapFontData(generator, fontSize, this);
 		try {
 			Field f = getClass().getSuperclass().getDeclaredField("data");
@@ -146,13 +151,13 @@ public class LazyBitmapFont extends BitmapFont {
 			GlyphAndBitmap gab = generator.generateGlyphAndBitmap(ch, fontSize, false);
 			if (gab == null || gab.bitmap == null)
 				return null;
-
 			Pixmap map = gab.bitmap.getPixmap(Format.RGBA8888, Color.WHITE,9);
 			TextureRegion rg = new TextureRegion(new Texture(map));
 			map.dispose();
 
-			font.getRegions().add(rg);
-
+			Array<TextureRegion> fontRegions = font.getRegions();
+			fontRegions.add(rg);
+			fontRegions.forEach(region->region.getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear));
 			gab.glyph.page = page++;
 			super.setGlyph(ch, gab.glyph);
 			setGlyphRegion(gab.glyph, rg);

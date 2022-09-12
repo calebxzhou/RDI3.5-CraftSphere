@@ -1,22 +1,44 @@
 package calebzhou.rdi.core.client.loader;
 
+import calebzhou.rdi.core.client.FileConst;
 import calebzhou.rdi.core.client.util.LazyBitmapFont;
+import calebzhou.rdi.hifont.HiFont;
+import calebzhou.rdi.hifont.TextBeingDraw;
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.FileHandleResolver;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
+import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
+import org.joml.Math;
 import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
 
-public class LoadProgressDisplay extends ApplicationAdapter {
+import java.util.stream.IntStream;
+
+public class LoadProgressDisplay extends ApplicationAdapter implements InputProcessor {
 	public static void main(String[] args) {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setForegroundFPS(60);
-		config.setTitle("My GDX Game");
-		new Lwjgl3Application(new LoadProgressDisplay(), config);
+		config.setWindowedMode(1280,720);
+		config.setTitle("RDI客户端启动中");
+		config.setResizable(false);
+		config.setWindowIcon(Files.FileType.Classpath, FileConst.RDI_ICON_PATH);
+
+		LoadProgressDisplay progressDisplay = new LoadProgressDisplay();
+		Lwjgl3Application lwjgl3Application = new Lwjgl3Application(progressDisplay, config);
 	}
     public static  LoadProgressDisplay INSTANCE;// = new LoadProgressDisplay();
     private long loadStartTime;
@@ -35,27 +57,73 @@ public class LoadProgressDisplay extends ApplicationAdapter {
     }
 
 	@Override
-	public void create() {
-		System.out.println("Hello LWJGL " + Version.getVersion() + "!");
-		init();
+	public boolean keyDown(int keycode) {
+		return false;
 	}
-	LazyBitmapFont font;
-	SpriteBatch batch;
-	private void init() {
-		font= new LazyBitmapFont(new FreeTypeFontGenerator(new FileHandle("C:\\Users\\liberatorch\\IdeaProjects\\RDICore3\\src\\main\\resources\\pingfang.ttf")), 32);
-		batch = new SpriteBatch();
-		// Setup an error callback. The default implementation
-		// will print the error message in System.err.
-		GLFWErrorCallback.createPrint(System.err).set();
 
+	@Override
+	public boolean keyUp(int keycode) {
+		return false;
+	}
+
+	@Override public boolean keyTyped (char character) {
+		addText("t:"+character);
+		return true;
+	}
+
+	@Override
+	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+		return false;
+	}
+
+	@Override
+	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+		return false;
+	}
+
+	@Override
+	public boolean touchDragged(int screenX, int screenY, int pointer) {
+		return false;
+	}
+
+	@Override
+	public boolean mouseMoved(int screenX, int screenY) {
+		return false;
+	}
+
+	@Override
+	public boolean scrolled(float amountX, float amountY) {
+		return false;
+	}
+
+	@Override
+	public void create() {
+
+
+		HiFont.init();
+		batch = new SpriteBatch();
+		GLFWErrorCallback.createPrint(System.err).set();
+		Gdx.input.setInputProcessor(this);
+	}
+
+	SpriteBatch batch;
+	String textBeingDisplay="客户端正在准备...";
+	public void addText(String text){
+		textBeingDisplay=text;
 	}
 	public void render() {
-		// Set the clear color
-		Gdx.gl.glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
+		//清除上一帧的内容
+		Gdx.gl.glClearColor( 0, 0, 0, 1 );
+		Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT );
 		batch.begin();
-		font.draw(batch,"啊啊123传送到摧毁",100f,100f);
+		TextBeingDraw t1 = TextBeingDraw.create(textBeingDisplay, false, 100f, 200f, 16);
+		BitmapFont bitmapFont = HiFont.drawText(batch, t1);
 		batch.end();
+		bitmapFont.dispose();
 	}
+
+
+
     /*@Override
     public void run() {
         if(Util.getPlatform() != Util.OS.WINDOWS) return;
