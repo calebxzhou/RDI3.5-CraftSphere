@@ -21,6 +21,7 @@ public class NetworkPackets {
     public static final ResourceLocation SAVE_WORLD = new ResourceLocation(MODID,"save_world");
     //快速繁殖
     public static final ResourceLocation ANIMAL_SEX=new ResourceLocation(MODID,"animal_sex");
+    public static final ResourceLocation TELEPORT=new ResourceLocation(MODID,"teleport");
     //S2C 服务端->客户端
 
     //岛屿信息

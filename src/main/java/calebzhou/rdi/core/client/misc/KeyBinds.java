@@ -27,9 +27,9 @@ public class KeyBinds  {
         while (KeyBinds.HOME_KEY.consumeClick()) {
             String cmd;
             if(client.player.isCrouching())
-                cmd="home";
+                cmd="home1";
             else
-                cmd="home2";
+                cmd="home";
             client.player.commandUnsigned(cmd);
         }
         //按下J键开启缓降

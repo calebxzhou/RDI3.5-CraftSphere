@@ -3,6 +3,8 @@ package calebzhou.rdi.core.client.mixin;
 import calebzhou.rdi.core.client.RdiCore;
 import calebzhou.rdi.core.client.UserInfoStorage;
 import calebzhou.rdi.core.client.loader.LoadProgressDisplay;
+import calebzhou.rdi.core.client.util.RdiAccountUtils;
+import calebzhou.rdi.core.client.util.UuidUtils;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.datafixers.DataFixer;
 import com.mojang.datafixers.DataFixerBuilder;
@@ -59,35 +61,16 @@ public class mClientStartup {
     }
     @Inject(method = "run",remap = false,at = @At(value = "INVOKE",target = "Ljava/util/List;isEmpty()Z"),locals = LocalCapture.CAPTURE_FAILSOFT)
     private static void readUuid(String[] args, boolean bl, CallbackInfo ci, OptionParser optionParser, OptionSpec optionSpec, OptionSpec optionSpec2, OptionSpec optionSpec3, OptionSpec optionSpec4, OptionSpec optionSpec5, OptionSpec optionSpec6, OptionSpec optionSpec7, OptionSpec optionSpec8, OptionSpec optionSpec9, OptionSpec optionSpec10, OptionSpec optionSpec11, OptionSpec optionSpec12, OptionSpec optionSpec13, OptionSpec optionSpec14, OptionSpec optionSpec15, OptionSpec optionSpec16, OptionSpec optionSpec17, OptionSpec optionSpec18, OptionSpec optionSpec19, OptionSpec optionSpec20, OptionSpec optionSpec21, OptionSpec optionSpec22, OptionSpec optionSpec23, OptionSpec optionSpec24, OptionSpec optionSpec25, OptionSpec optionSpec26, OptionSet optionSet, List list){
-        String uuid = (String) optionSpec12.value(optionSet);
-
-        String name = (String) optionSpec11.value(optionSet);
-        String pwd = passwordSpec.value(optionSet);
-        UserInfoStorage.UserName=name;
-        RdiCore.LOGGER.info("成功读取用户名，{}",name);
-        LoadProgressDisplay.INSTANCE.appendLoadProgressInfo("载入游戏角色:"+name);
-        if(!StringUtils.isEmpty(pwd)){
-            UserInfoStorage.UserPwd=pwd;
-            //ExampleMod.LOGGER.info("成功读取密钥，{}",pwd.getBytes(StandardCharsets.UTF_8));
-            LoadProgressDisplay.INSTANCE.appendLoadProgressInfo("正在解密角色:"+name);
-        }
-        if(StringUtils.isEmpty(uuid)){
-            RdiCore.LOGGER.info("无法读取您的微软正版账号！1");
-            createOfflineUser(name);
-        }else{
-            if(uuid.startsWith("00000000")){
-                RdiCore.LOGGER.info("无法读取您的微软正版账号！2");
-                RdiCore.LOGGER.info("非法的UUID，{}，正在生成新的",pwd);
-                createOfflineUser(name);
-            }else{
-                //mojang登录的uuid不带横线，要通过正则表达式转换成带横线的
-                uuid=uuid.replaceFirst("(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)", "$1-$2-$3-$4-$5" );
-                RdiCore.LOGGER.info("成功读取正版uuid，{}",uuid);
-                UserInfoStorage.UserUuid=uuid;
-            }
+		String name = (String) optionSpec11.value(optionSet);
+		String uuid = (String) optionSpec12.value(optionSet);
+		String pwd = passwordSpec.value(optionSet);
+		RdiAccountUtils.login(name,uuid,pwd);
 
 
-        }
+
+		UserInfoStorage.UserName=name;
+		UserInfoStorage.UserUuid=uuid;
+		UserInfoStorage.UserPwd=pwd;
         LoadProgressDisplay.INSTANCE.appendLoadProgressInfo("游戏角色载入成功！");
     }
     @Inject(method = "run",remap=false,at = @At(value = "INVOKE",target = "Ljoptsimple/OptionSet;valuesOf(Ljoptsimple/OptionSpec;)Ljava/util/List;"))
@@ -95,10 +78,6 @@ public class mClientStartup {
         LoadProgressDisplay.INSTANCE.appendLoadProgressInfo("读取完成，正在分析...");
     }
 
-    private static void createOfflineUser(String name){
-        UserInfoStorage.UserUuid=  UUID.nameUUIDFromBytes(("OfflinePlayer:" +name).getBytes(StandardCharsets.UTF_8)).toString();
-        RdiCore.LOGGER.info("创建离线uuid "+UserInfoStorage.UserUuid);
-    }
 }
 @Mixin(RenderSystem.class)
 class mStartup23{
@@ -115,11 +94,11 @@ class mStartup23{
 class mStartup10{
     @Inject(method = "preload",at = @At("HEAD"))
     private static void preload(CallbackInfo ci){
-        LoadProgressDisplay.INSTANCE.appendLoadProgressInfo("载入崩溃报告分析模块...");
+        LoadProgressDisplay.INSTANCE.appendLoadProgressInfo("载入系统报告分析模块...");
     }
     @Inject(method = "preload",at = @At("TAIL"))
     private static void preload2(CallbackInfo ci){
-        LoadProgressDisplay.INSTANCE.appendLoadProgressInfo("载入崩溃报告分析模块完成");
+        LoadProgressDisplay.INSTANCE.appendLoadProgressInfo("载入系统报告分析模块完成");
     }
 
 }

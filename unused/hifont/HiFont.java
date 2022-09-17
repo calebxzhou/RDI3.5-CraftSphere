@@ -39,6 +39,7 @@ public class HiFont {
 		}
 		parameter.size = Math.round(textBeingDraw.sizePx * fontOversampling);
 		parameter.magFilter = Texture.TextureFilter.Linear;
+		parameter.color = textBeingDraw.color;
 		BitmapFont font = fontGenerator.generateFont(parameter);
 		font.setUseIntegerPositions(false);
 		font.getRegion().getTexture().setFilter(parameter.minFilter, Texture.TextureFilter.Linear);

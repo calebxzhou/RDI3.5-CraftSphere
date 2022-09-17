@@ -1,6 +1,5 @@
 package calebzhou.rdi.core.client;
 
-import calebzhou.rdi.core.client.emojiful.EmojiClientProxy;
 import calebzhou.rdi.core.client.loader.LoadProgressDisplay;
 import calebzhou.rdi.core.client.util.ThreadPool;
 import org.apache.logging.log4j.LogManager;
@@ -10,7 +9,7 @@ import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
 
 public class RdiCore implements ModInitializer {
 	static {
-		//ThreadPool.newThread(LoadProgressDisplay.INSTANCE::start);
+		ThreadPool.newThread(()->{LoadProgressDisplay.INSTANCE.start();});
 	}
 
 	//是否为调试模式,本地用
@@ -30,7 +29,7 @@ public class RdiCore implements ModInitializer {
 	@Override
 	public void onInitialize(ModContainer container) {
 		new EventRegister();
-		EmojiClientProxy.INSTANCE.init();
+		//EmojiClientProxy.INSTANCE.init();
 
 	}
 	/*
