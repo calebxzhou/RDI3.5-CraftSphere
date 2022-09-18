@@ -1,7 +1,5 @@
 package calebzhou.rdi.core.client.mixin.emoji;
 
-import calebzhou.rdi.core.client.emojiful.Emojiful;
-import calebzhou.rdi.core.client.emojiful.api.EmojiFromGithub;
 import net.minecraft.client.gui.components.ChatComponent;
 
 import net.minecraft.client.gui.screens.ChatScreen;
@@ -34,11 +32,11 @@ public abstract class ChatScreenMixin {
     public Component component(Component x) {
         //System.out.println("SADDFADF");
         //System.out.println(x);
-        replaceComponents(x);
+        //replaceComponents(x);
         return x;
     }
 
-
+/*
     private void replaceComponents(Component x){
         var components = new ArrayList<Component>();
         for (int i = 0; i < x.getSiblings().size(); i++) {
@@ -56,9 +54,9 @@ public abstract class ChatScreenMixin {
 
 
     private static final Pattern DISCORD_EMOJI = Pattern.compile("<:\\w+:[0-9]+>", Pattern.CASE_INSENSITIVE);
-    private static final Pattern ANIMATED_DISCORD_EMOJI = Pattern.compile("<a:\\w+:[0-9]+>", Pattern.CASE_INSENSITIVE);
+    private static final Pattern ANIMATED_DISCORD_EMOJI = Pattern.compile("<a:\\w+:[0-9]+>", Pattern.CASE_INSENSITIVE);*/
 
-    private static String tryLoadEmoji(String unformattedText){
+  /*  private static String tryLoadEmoji(String unformattedText){
         Matcher discordMatcher = DISCORD_EMOJI.matcher(unformattedText);
         while (discordMatcher.find()) {
             var discordValue = discordMatcher.group(0);
@@ -70,9 +68,9 @@ public abstract class ChatScreenMixin {
             unformattedText = unformattedText.replaceAll(discordValue, loadEmoji(discordValue, true));
         }
         return unformattedText;
-    }
+    }*/
 
-    private static String loadEmoji(String discordMatcher, boolean isAnimated){
+   /* private static String loadEmoji(String discordMatcher, boolean isAnimated){
         var discordEmoji = discordMatcher.replaceAll(isAnimated ? "<a:" : "<:", "").replaceAll(">", "");
         var slug = discordEmoji.split(":")[0];
         var url = discordEmoji.split(":")[1];
@@ -87,6 +85,6 @@ public abstract class ChatScreenMixin {
         Emojiful.EMOJI_MAP.computeIfAbsent("Discord Relay Emojis", s -> new ArrayList<>()).add(emoji);
         Emojiful.EMOJI_LIST.add(emoji);
         return ":" + slug + ":";
-    }
+    }*/
 
 }

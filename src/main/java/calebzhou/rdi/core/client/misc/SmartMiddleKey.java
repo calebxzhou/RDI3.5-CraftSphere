@@ -1,6 +1,7 @@
 package calebzhou.rdi.core.client.misc;
 
 import calebzhou.rdi.core.client.RdiCore;
+import calebzhou.rdi.core.client.RdiSharedConstants;
 import it.unimi.dsi.fastutil.objects.ReferenceArrayList;
 import it.unimi.dsi.fastutil.objects.ReferenceList;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -29,7 +30,7 @@ public class SmartMiddleKey {
             return;
         Inventory inventory = player.getInventory();
         if (inventory.isEmpty()) {
-            if(RdiCore.debug)
+            if(RdiSharedConstants.DEBUG)
                 RdiCore.LOGGER.debug("背包为空，无法找到挖掘工具");
             return;
         }
@@ -40,14 +41,14 @@ public class SmartMiddleKey {
         inventory.items.parallelStream().forEach(itemStack -> {
             Item item = itemStack.getItem();
             if(item.isCorrectToolForDrops(blockState)){
-                if(RdiCore.debug)
+                if(RdiSharedConstants.DEBUG)
                     RdiCore.LOGGER.info("找到了{}符合挖掘",item.toString());
                 correctItemList.add(itemStack);
             }
         });
         //如果什么都没找到，就什么都不做
         if(correctItemList.isEmpty()){
-            if(RdiCore.debug)
+            if(RdiSharedConstants.DEBUG)
                 RdiCore.LOGGER.info("没有找到合适的工具来挖掘{}",blockState.getBlock().toString());
             return;
         }
@@ -55,7 +56,7 @@ public class SmartMiddleKey {
         if(correctItemList.size()==1){
             ItemStack correctStack = correctItemList.get(0);
             int slotMatchingItem = inventory.findSlotMatchingItem(correctStack);
-            if(RdiCore.debug)
+            if(RdiSharedConstants.DEBUG)
                 RdiCore.LOGGER.info("找到了 只有一个 {}",correctStack.toString());
             inventory.selected= slotMatchingItem;
             return;

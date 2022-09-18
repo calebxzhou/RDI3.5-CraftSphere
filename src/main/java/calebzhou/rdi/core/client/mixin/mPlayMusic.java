@@ -1,6 +1,6 @@
 package calebzhou.rdi.core.client.mixin;
 
-import calebzhou.rdi.core.client.FileConst;
+import calebzhou.rdi.core.client.RdiSharedConstants;
 import calebzhou.rdi.core.client.misc.MusicPlayer;
 import net.minecraft.client.gui.screens.ReceivingLevelScreen;
 import net.minecraft.client.multiplayer.ClientPacketListener;
@@ -17,7 +17,7 @@ public class mPlayMusic {
     @Inject(method="handleLogin",at=@At("TAIL"))
     private void play(ClientboundLoginPacket clientboundLoginPacket, CallbackInfo ci){
         MusicPlayer.needToPlayEnterGameSound=true;
-        //MusicPlayer.playOgg(new File(FileConst.RDI_SOUND_FOLDER,"enter_game.ogg"));
+        //MusicPlayer.playOgg(new File(RdiSharedConstants.RDI_SOUND_FOLDER,"enter_game.ogg"));
     }
 }
 @Mixin(ReceivingLevelScreen.class)
@@ -25,7 +25,7 @@ class mPlayMusic2{
    @Inject(method = "tick",at = @At(value = "INVOKE",target = "Lnet/minecraft/client/gui/screens/ReceivingLevelScreen;onClose()V"))
    private void plauy(CallbackInfo ci){
        if(MusicPlayer.needToPlayEnterGameSound){
-           MusicPlayer.playOgg(new File(FileConst.RDI_SOUND_FOLDER,"enter_game.ogg"));
+           MusicPlayer.playOgg(new File(RdiSharedConstants.RDI_SOUND_FOLDER,"enter_game.ogg"));
            MusicPlayer.needToPlayEnterGameSound=false;
        }
 

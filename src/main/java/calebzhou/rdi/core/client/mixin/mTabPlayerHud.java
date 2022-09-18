@@ -35,9 +35,9 @@ public class mTabPlayerHud {
     }
 
     //延迟图标永远是绿的 满格
-    @Redirect(method = "renderPingIcon(Lcom/mojang/blaze3d/vertex/PoseStack;IIILnet/minecraft/client/multiplayer/PlayerInfo;)V",
+    /*@Redirect(method = "renderPingIcon(Lcom/mojang/blaze3d/vertex/PoseStack;IIILnet/minecraft/client/multiplayer/PlayerInfo;)V",
     at=@At(value = "INVOKE",target = "Lnet/minecraft/client/multiplayer/PlayerInfo;getLatency()I"))
     private int getLatency(PlayerInfo instance){
         return 20;
-    }
+    }*/
 }

@@ -1,6 +1,6 @@
 package calebzhou.rdi.core.client.misc;
 
-import calebzhou.rdi.core.client.FileConst;
+import calebzhou.rdi.core.client.RdiSharedConstants;
 import calebzhou.rdi.core.client.util.ExampleOggPlayer;
 import calebzhou.rdi.core.client.util.ThreadPool;
 import net.sourceforge.jaad.aac.Decoder;
@@ -25,7 +25,7 @@ public class MusicPlayer {
 public static boolean needToPlayEnterGameSound = false;
     public static void playStartupMusic(){
         ThreadPool.newThread(()->{
-            playOgg(new File(FileConst.RDI_SOUND_FOLDER,"startup.ogg"));
+            playOgg(new File(RdiSharedConstants.RDI_SOUND_FOLDER,"startup.ogg"));
         });
     }
     public static void playOggAsync(File musicFile){

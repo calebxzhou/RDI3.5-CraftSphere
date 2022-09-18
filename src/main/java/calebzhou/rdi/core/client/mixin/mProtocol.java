@@ -1,6 +1,7 @@
 package calebzhou.rdi.core.client.mixin;
 
 import calebzhou.rdi.core.client.RdiCore;
+import calebzhou.rdi.core.client.RdiSharedConstants;
 import com.google.gson.JsonObject;
 import net.minecraft.DetectedVersion;
 import org.spongepowered.asm.mixin.Final;
@@ -17,13 +18,11 @@ public class mProtocol {
     @Final
     @Mutable
     private int protocolVersion;
-    @Shadow @Final @Mutable
-    private String name;
     @Inject(
-            method = "Lnet/minecraft/DetectedVersion;<init>(Lcom/google/gson/JsonObject;)V",
+            method = "<init>(Lcom/google/gson/JsonObject;)V",
             at=@At("TAIL")
     )
     private void changeProtocolVersion(JsonObject json, CallbackInfo ci){
-        protocolVersion= RdiCore.VERSION;
+        protocolVersion= RdiSharedConstants.PROTOCOL_VERSION;
     }
 }

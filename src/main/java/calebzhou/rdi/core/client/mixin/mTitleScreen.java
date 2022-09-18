@@ -1,6 +1,7 @@
 package calebzhou.rdi.core.client.mixin;
 
 import calebzhou.rdi.core.client.RdiCore;
+import calebzhou.rdi.core.client.RdiSharedConstants;
 import calebzhou.rdi.core.client.misc.ServerConnector;
 import calebzhou.rdi.core.client.screen.RdiTitleScreen;
 import com.mojang.blaze3d.platform.InputConstants;
@@ -30,7 +31,7 @@ class mTitleScreen {
     }
     @Redirect(method = "render",at = @At(value = "INVOKE",target = "Lnet/minecraft/WorldVersion;getName()Ljava/lang/String;"))
     private String vers(WorldVersion instance){
-        return RdiCore.GAME_VERSION;
+        return RdiSharedConstants.GAME_VERSION;
     }
 
     @Inject(method = "tick",at = @At("TAIL"))

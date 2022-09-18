@@ -1,10 +1,11 @@
 package calebzhou.rdi.core.client.misc;
 
-import calebzhou.rdi.core.client.RdiCore;
 import calebzhou.rdi.core.client.util.AwtImageUtils;
 import net.minecraft.Util;
 
 import java.awt.*;
+
+import static calebzhou.rdi.core.client.RdiSharedConstants.MODID_DISPLAY;
 
 public class RdiSystemTray {
 
@@ -17,12 +18,12 @@ public class RdiSystemTray {
             return;
         }
         //final PopupMenu popup = new PopupMenu();
-        Image iconImage = AwtImageUtils.createImage("/assets/rdict3/icon/icon.gif", RdiCore.MODID_CHN);
+        Image iconImage = AwtImageUtils.createImage("/assets/rdict3/icon/icon.gif", MODID_DISPLAY);
         int trayIconWidth = new TrayIcon(iconImage).getSize().width;
         Image scaledInstance = iconImage.getScaledInstance(trayIconWidth, -1, Image.SCALE_SMOOTH);
-        trayIcon = new TrayIcon(scaledInstance, RdiCore.MODID_CHN);
+        trayIcon = new TrayIcon(scaledInstance, MODID_DISPLAY);
         final SystemTray tray = SystemTray.getSystemTray();
-        trayIcon.setToolTip(RdiCore.MODID_CHN);
+        trayIcon.setToolTip(MODID_DISPLAY);
         // Create a pop-up menu components
         /*MenuItem aboutItem = new MenuItem("About");
         CheckboxMenuItem cb1 = new CheckboxMenuItem("Set auto size");

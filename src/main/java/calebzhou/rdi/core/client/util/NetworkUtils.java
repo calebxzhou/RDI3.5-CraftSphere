@@ -1,10 +1,10 @@
 package calebzhou.rdi.core.client.util;
 
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import org.quiltmc.qsl.networking.api.PacketByteBufs;
+import org.quiltmc.qsl.networking.api.client.ClientPlayNetworking;
 
 public class NetworkUtils {
     public static void sendPacketToServer(ResourceLocation packType, Object content){

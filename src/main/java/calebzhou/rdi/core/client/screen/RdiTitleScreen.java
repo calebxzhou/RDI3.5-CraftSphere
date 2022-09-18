@@ -1,7 +1,7 @@
 package calebzhou.rdi.core.client.screen;
 
-import calebzhou.rdi.core.client.FileConst;
 import calebzhou.rdi.core.client.RdiCore;
+import calebzhou.rdi.core.client.RdiSharedConstants;
 import calebzhou.rdi.core.client.misc.MusicPlayer;
 import calebzhou.rdi.core.client.misc.ServerConnector;
 import calebzhou.rdi.core.client.util.DialogUtils;
@@ -65,12 +65,12 @@ public class RdiTitleScreen extends Screen {
             return;
         }
         blit(matrices, 0, 0, this.width, this.height, 0.0F, 0.0F, 16, 128, 16, 128);
-        if(frames>= 35){
-            this.font.drawShadow(matrices, ":sweat_smile:  Enter", (this.width/2.0f)-30, this.height - 50, 0x00FFFFFF);
-        }
+        //if(frames>= 35){
+            this.font.drawShadow(matrices, "按Enter(回车)键", (this.width/2.0f)-30, this.height - 50, 0x00FFFFFF);
+        /*}
         if(frames>=70){
             frames=0;
-        }
+        }*/
         int j = this.width / 2 - 137;
 
         int lz = Mth.ceil(g * 255.0F) << 24;
@@ -93,7 +93,7 @@ public class RdiTitleScreen extends Screen {
 
         long handle = Minecraft.getInstance().getWindow().getWindow();
         if(InputConstants.isKeyDown(handle, InputConstants.KEY_0)){
-            if(RdiCore.debug)
+            if(RdiSharedConstants.DEBUG)
             this.minecraft.setScreen(new JoinMultiplayerScreen(this));
             return;
         }
@@ -111,14 +111,14 @@ public class RdiTitleScreen extends Screen {
             return;
         }
         if(InputConstants.isKeyDown(handle, InputConstants.KEY_O)){
-            MusicPlayer.playOggAsync(new File(FileConst.RDI_SOUND_FOLDER,"settings.ogg"));
+            MusicPlayer.playOggAsync(new File(RdiSharedConstants.RDI_SOUND_FOLDER,"settings.ogg"));
             this.minecraft.setScreen(new OptionsScreen(this, this.minecraft.options));
             return;
         }
         if(InputConstants.isKeyDown(handle,InputConstants.KEY_RETURN)){
             ServerConnector.connect();
             //Minecraft.getInstance().options.setSoundCategoryVolume(SoundSource.MUSIC,1);
-            MusicPlayer.playOggAsync(new File(FileConst.RDI_SOUND_FOLDER,"connect.ogg"));
+            MusicPlayer.playOggAsync(new File(RdiSharedConstants.RDI_SOUND_FOLDER,"connect.ogg"));
         }
 
 

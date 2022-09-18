@@ -1,6 +1,7 @@
 package calebzhou.rdi.core.client.mixin;
 
 import calebzhou.rdi.core.client.RdiCore;
+import calebzhou.rdi.core.client.RdiSharedConstants;
 import com.mojang.blaze3d.platform.Window;
 import net.minecraft.client.Minecraft;
 import org.spongepowered.asm.mixin.Final;
@@ -18,7 +19,7 @@ public class mWindowTitle {
      */
     @Overwrite
     private String createTitle(){
-        return RdiCore.MODID_CHN+" "+ RdiCore.VER_DISPLAY;
+        return RdiSharedConstants.MODID_DISPLAY+" "+ RdiSharedConstants.CORE_VERSION;
     }
     @Overwrite
     public void updateTitle() {

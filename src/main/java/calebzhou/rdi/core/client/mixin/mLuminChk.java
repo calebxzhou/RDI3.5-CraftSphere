@@ -1,6 +1,7 @@
 package calebzhou.rdi.core.client.mixin;
 
 import calebzhou.rdi.core.client.RdiCore;
+import calebzhou.rdi.core.client.RdiSharedConstants;
 import net.minecraft.client.OptionInstance;
 import net.minecraft.client.Options;
 import org.spongepowered.asm.mixin.Final;
@@ -23,7 +24,7 @@ public abstract class mLuminChk {
     at = @At("HEAD"))
     private void efACdaew( CallbackInfo ci){
         //如果亮度过高，并且不是调试模式，就会崩
-        if(gamma.get()>1.0 && !RdiCore.debug){
+        if(gamma.get()>1.0 && !RdiSharedConstants.DEBUG){
             gamma().set(1.0);
         }
 

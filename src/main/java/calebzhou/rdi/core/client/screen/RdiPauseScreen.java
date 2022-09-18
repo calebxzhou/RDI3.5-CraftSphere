@@ -1,6 +1,6 @@
 package calebzhou.rdi.core.client.screen;
 
-import calebzhou.rdi.core.client.FileConst;
+import calebzhou.rdi.core.client.RdiSharedConstants;
 import calebzhou.rdi.core.client.misc.MusicPlayer;
 import calebzhou.rdi.core.client.texture.Textures;
 import calebzhou.rdi.core.client.util.DialogUtils;
@@ -41,7 +41,7 @@ public class RdiPauseScreen extends Screen {
         },  Component.translatable("menu.returnToGame")));
 
         this.addRenderableWidget(new ImageButton(w , j, 20, 20, 0,0,20, Textures.ICON_SETTINGS,32,64, (button) -> {
-            MusicPlayer.playOggAsync(new File(FileConst.RDI_SOUND_FOLDER,"settings.ogg"));
+            MusicPlayer.playOggAsync(new File(RdiSharedConstants.RDI_SOUND_FOLDER,"settings.ogg"));
             this.minecraft.setScreen(new OptionsScreen(this, this.minecraft.options));
         }, Component.translatable("menu.options")));
         this.addRenderableWidget(new ImageButton(w+25 , j, 20, 20, 0,0,20, Textures.ICON_MODMENU,32,64, (button) -> {
@@ -66,7 +66,7 @@ public class RdiPauseScreen extends Screen {
                 this.minecraft.clearLevel();
             }
 
-            MusicPlayer.playOggAsync(new File(FileConst.RDI_SOUND_FOLDER,"disconnect.ogg"));
+            MusicPlayer.playOggAsync(new File(RdiSharedConstants.RDI_SOUND_FOLDER,"disconnect.ogg"));
                 this.minecraft.setScreen(RdiTitleScreen.INSTANCE);
         }, Component.translatable("menu.disconnect")));
     }

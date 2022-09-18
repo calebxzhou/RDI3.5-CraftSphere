@@ -11,7 +11,7 @@ import java.util.function.Consumer;
 
 //封装HTTP请求
 public class RdiHttpClient {
-	//public static final String RDI_URL= RdiCore.debug?"https://localhost:26890/":"https://www.davisoft.cn:26890/";
+	//public static final String RDI_URL= RdiSharedConstants.DEBUG?"https://localhost:26890/":"https://www.davisoft.cn:26890/";
     private static final int CONNECTION_TIME_OUT = 10;
     private static final OkHttpClient client = new OkHttpClient.Builder()
             .connectTimeout(CONNECTION_TIME_OUT, TimeUnit.SECONDS)

@@ -23,7 +23,7 @@ import java.util.concurrent.CompletableFuture;
 public class mFastCreateMojangService {
     @Overwrite
     private UserApiService createUserApiService(YggdrasilAuthenticationService yggdrasilAuthenticationService, GameConfig gameConfig) {
-            return UserApiService.OFFLINE;
+		return UserApiService.OFFLINE;
     }
 }
 @Mixin(ProfileKeyPairManager.class)

@@ -1,6 +1,7 @@
 package calebzhou.rdi.core.client.misc;
 
 import calebzhou.rdi.core.client.RdiCore;
+import calebzhou.rdi.core.client.RdiSharedConstants;
 import com.google.gson.Gson;
 import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.loader.api.ModMetadata;
@@ -103,7 +104,7 @@ public class HwSpec implements Serializable {
         }
         mods.append("(∑").append(modAmount).append(")");
         spec.mods=(mods.toString());
-        spec.ver= RdiCore.VER_DISPLAY;
+        spec.ver= RdiSharedConstants.CORE_VERSION;
         return spec;
     }
 

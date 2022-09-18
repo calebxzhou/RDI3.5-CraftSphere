@@ -7,14 +7,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import org.lwjgl.glfw.GLFW;
 
-import static calebzhou.rdi.core.client.RdiCore.MODID_CHN;
+import static calebzhou.rdi.core.client.RdiSharedConstants.MODID_DISPLAY;
 
 
 public class KeyBinds  {
 
     public static KeyMapping HOME_KEY;
     public static void init(){
-        HOME_KEY = KeyBindingHelper.registerKeyBinding(new KeyMapping("回岛", InputConstants.Type.KEYSYM,GLFW.GLFW_KEY_H, MODID_CHN));
+        HOME_KEY = KeyBindingHelper.registerKeyBinding(new KeyMapping("回岛", InputConstants.Type.KEYSYM,GLFW.GLFW_KEY_H, MODID_DISPLAY));
         /*SLOWFALL_KEY = KeyBindingHelper.registerKeyBinding(new KeyMapping("缓降", InputConstants.Type.KEYSYM,GLFW.GLFW_KEY_J, MODID_CHN));
         LEAP_KEY = KeyBindingHelper.registerKeyBinding(new KeyMapping("隔空跳", InputConstants.Type.KEYSYM,GLFW.GLFW_KEY_G, MODID_CHN));*/
     }

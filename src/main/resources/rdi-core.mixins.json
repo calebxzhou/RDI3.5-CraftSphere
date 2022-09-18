@@ -12,8 +12,7 @@
     "mFastCreateMojangService",
     "mFastCreateMojangService2",
     "mFinishLoad",
-    "mGameVersion",
-    "mLaglessEat",
+    "mGameConfigData",
     "mLoginProtocol",
     "mLuminChk",
     "mMultiPlayerScreen",
@@ -37,15 +36,9 @@
   },
   "mixins": [
     "AccessNatualSpawner",
+    "mBiggerWindow",
     "mClientStartup",
     "mPlayMusic",
-    "mPlayMusic2",
-    "mStartup10",
-    "mStartup2",
-    "mStartup23",
-    "mStartup3",
-    "mStartup4",
-    "mStartup5",
-    "mStartup6"
+    "mPlayMusic2"
   ]
 }
