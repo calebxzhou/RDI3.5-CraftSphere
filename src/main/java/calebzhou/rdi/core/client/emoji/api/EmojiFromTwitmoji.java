@@ -1,6 +1,7 @@
-package calebzhou.rdi.core.client.emojiful.api;
+package calebzhou.rdi.core.client.emoji.api;
 
 import calebzhou.rdi.core.client.RdiCore;
+import calebzhou.rdi.core.client.RdiSharedConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import com.mojang.blaze3d.platform.NativeImage;
@@ -28,8 +29,8 @@ public class EmojiFromTwitmoji extends Emoji {
         if (img != null)
             return;
 
-        img = new DownloadImageData(new File("emojiful/cache/" + name + "-" + version), "https://raw.githubusercontent.com/iamcal/emoji-data/master/img-twitter-64/" + location, loading_texture);
-        resourceLocation = new ResourceLocation(RdiCore.MODID, "texures/emoji/" + location.toLowerCase() + "_" + version);
+        img = new DownloadImageData(new File(RdiSharedConstants.RDI_FOLDER,"emoji/cache/" + name + "-" + version), "https://raw.githubusercontent.com/iamcal/emoji-data/master/img-twitter-64/" + location, loading_texture);
+        resourceLocation = new ResourceLocation(RdiSharedConstants.MODID, "texures/emoji/" + location.toLowerCase() + "_" + version);
         Minecraft.getInstance().getTextureManager().register(resourceLocation, img);
     }
 

@@ -1,12 +1,12 @@
-package calebzhou.rdi.core.client.emojiful.render;
+package calebzhou.rdi.core.client.emoji.render;
 
-import calebzhou.rdi.core.client.emojiful.Emojiful;
+import calebzhou.rdi.core.client.emoji.Emojiful;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Lists;
-import calebzhou.rdi.core.client.emojiful.api.Emoji;
-import calebzhou.rdi.core.client.emojiful.util.EmojiUtil;
+import calebzhou.rdi.core.client.emoji.api.Emoji;
+import calebzhou.rdi.core.client.emoji.util.EmojiUtil;
 import com.mojang.blaze3d.font.GlyphInfo;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Matrix4f;

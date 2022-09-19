@@ -1,4 +1,4 @@
-package calebzhou.rdi.core.client.emojiful.render;
+package calebzhou.rdi.core.client.emoji.render;
 
 import net.minecraft.network.chat.Style;
 import net.minecraft.util.FormattedCharSequence;

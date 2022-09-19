@@ -1,6 +1,8 @@
 package calebzhou.rdi.core.client.mixin.emoji;
 
 
+import calebzhou.rdi.core.client.emoji.EmojiClientProxy;
+import calebzhou.rdi.core.client.emoji.render.EmojiFontRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.main.GameConfig;
@@ -25,8 +27,8 @@ public abstract class mMinecraft {
 
 	@Inject(method = "<init>",at=@At("TAIL"))
 	private void useEmojiFont(GameConfig gameConfig, CallbackInfo ci){
-		/*EmojiClientProxy.oldFontRenderer = font;
-		font = EmojiFontRenderer.createInstance(font);*/
+		EmojiClientProxy.oldFontRenderer = font;
+		font = EmojiFontRenderer.createInstance(font);
 		getEntityRenderDispatcher().font = font;
 		BlockEntityRenderers.register(BlockEntityType.SIGN, context -> {
 			SignRenderer signRenderer = new SignRenderer(context);

@@ -1,14 +1,11 @@
-package calebzhou.rdi.core.client.emojiful;
+package calebzhou.rdi.core.client.emoji;
 
 import calebzhou.rdi.core.client.RdiCore;
-import calebzhou.rdi.core.client.emojiful.api.Emoji;
-import calebzhou.rdi.core.client.emojiful.gui.EmojiSelectionGui;
-import calebzhou.rdi.core.client.emojiful.gui.EmojiSuggestionHelper;
+import calebzhou.rdi.core.client.emoji.api.Emoji;
 import calebzhou.rdi.core.client.util.ThreadPool;
 import com.google.gson.JsonElement;
-import calebzhou.rdi.core.client.emojiful.api.EmojiCategory;
-import calebzhou.rdi.core.client.emojiful.api.EmojiFromGithub;
-import calebzhou.rdi.core.client.emojiful.api.EmojiFromTwitmoji;
+import calebzhou.rdi.core.client.emoji.api.EmojiCategory;
+import calebzhou.rdi.core.client.emoji.api.EmojiFromTwitmoji;
 import net.minecraft.client.gui.Font;
 
 import java.util.*;
@@ -24,32 +21,17 @@ public class EmojiClientProxy {
     public static final List<EmojiCategory> CATEGORIES = new ArrayList<>();
     public static int lineAmount;
 
-    public static EmojiSuggestionHelper emojiSuggestionHelper;
-    public static EmojiSelectionGui emojiSelectionGui;
+    /*public static EmojiSuggestionHelper emojiSuggestionHelper;
+    public static EmojiSelectionGui emojiSelectionGui;*/
 
     public void init() {
 		ThreadPool.newThread(()->{
 			preInitEmojis();
-			initEmojis();
 			indexEmojis();
 			RdiCore.LOGGER.info("Loaded " + Emojiful.EMOJI_LIST.size() + " emojis");
 
 		});
-
-
-        //ScreenEvents.AFTER_INIT.register(this::guiInit);
     }
-
-
-  /*  private void guiInit(Minecraft minecraft, Screen screen, int i, int i1) {
-        if (screen instanceof ChatScreen && !Emojiful.error){
-            emojiSuggestionHelper = new EmojiSuggestionHelper((ChatScreen) screen);
-            emojiSelectionGui = new EmojiSelectionGui((ChatScreen) screen);
-        }
-    }*/
-
-
-
     private void indexEmojis(){
         ALL_EMOJIS = Emojiful.EMOJI_LIST.stream().map(emoji -> emoji.strings).flatMap(Collection::stream).collect(Collectors.toList());
         SORTED_EMOJIS_FOR_SELECTION = new LinkedHashMap<>();
@@ -153,86 +135,34 @@ public class EmojiClientProxy {
 */
     private void preInitEmojis() {
         CATEGORIES.addAll(Arrays.asList("Smileys & Emotion", "Animals & Nature", "Food & Drink", "Activities", "Travel & Places", "Objects", "Symbols", "Flags").stream().map(s -> new EmojiCategory(s, false)).collect(Collectors.toList()));
-        //if (EmojifulConfig.getInstance().loadCustom.get())loadCustomEmojis();
-        loadGithubEmojis();
-        loadTwemojis();
-        //if (EmojifulConfig.getInstance().profanityFilter.get()) ProfanityFilter.loadConfigs();
-    }
+		try{
+			for (JsonElement element : Emojiful.readJsonFromUrl("https://raw.githubusercontent.com/iamcal/emoji-data/master/emoji.json").getAsJsonArray()){
+				if (element.getAsJsonObject().get("has_img_twitter").getAsBoolean()){
+					EmojiFromTwitmoji emoji = new EmojiFromTwitmoji();
+					emoji.name = element.getAsJsonObject().get("short_name").getAsString();
+					emoji.location = element.getAsJsonObject().get("image").getAsString();
+					emoji.sort =  element.getAsJsonObject().get("sort_order").getAsInt();
+					element.getAsJsonObject().get("short_names").getAsJsonArray().forEach(jsonElement -> emoji.strings.add(":" + jsonElement.getAsString() + ":"));
+					if (emoji.strings.contains(":face_with_symbols_on_mouth:")){
+						emoji.strings.add(":swear:");
+					}
+					if (!element.getAsJsonObject().get("texts").isJsonNull()){
+						element.getAsJsonObject().get("texts").getAsJsonArray().forEach(jsonElement -> emoji.texts.add(jsonElement.getAsString()));
+					}
+					Emojiful.EMOJI_MAP.computeIfAbsent(element.getAsJsonObject().get("category").getAsString(), s -> new ArrayList<>()).add(emoji);
+					Emojiful.EMOJI_LIST.add(emoji);
+					if (emoji.texts.size() > 0){
+						EmojiClientProxy.EMOJI_WITH_TEXTS.add(emoji);
+					}
+				}
+			}
+			EmojiClientProxy.EMOJI_WITH_TEXTS.sort(Comparator.comparingInt(o -> o.sort));
+			Emojiful.EMOJI_MAP.values().forEach(emojis -> emojis.sort(Comparator.comparingInt(o -> o.sort)));
+		} catch (Exception e){
+			Emojiful.error = true;
+			RdiCore.LOGGER.catching(e);
+		}
+	}
 
-    /*private void loadCustomEmojis(){
-        try {
-            YamlReader reader = new YamlReader(new StringReader(Emojiful.readStringFromURL("https://raw.githubusercontent.com/InnovativeOnlineIndustries/emojiful-assets/master/Categories.yml")));
-            ArrayList<String> categories = (ArrayList<String>) reader.read();
-            for (String category : categories) {
-                CATEGORIES.add(0, new EmojiCategory(category.replace(".yml", ""), false));
-                List<Emoji> emojis = Emojiful.readCategory(category);
-                Emojiful.EMOJI_LIST.addAll(emojis);
-                Emojiful.EMOJI_MAP.put(category.replace(".yml", ""), emojis);
-            }
-        } catch (Exception e) {
-            Emojiful.error = true;
-            RdiCore.LOGGER.catching(e);
-        }
-    }*/
-
-    private void loadApiEmojis(){
-        for (JsonElement categories : Emojiful.readJsonFromUrl("https://www.emojidex.com/api/v1/categories").getAsJsonObject().getAsJsonArray("categories")) {
-            Emojiful.EMOJI_MAP.put(categories.getAsJsonObject().get("code").getAsString(), new ArrayList<>());
-        }
-    }
-
-    public void loadGithubEmojis(){
-        Emojiful.EMOJI_MAP.put("Github", new ArrayList<>());
-        for (Map.Entry<String, JsonElement> entry : Emojiful.readJsonFromUrl("https://api.github.com/emojis").getAsJsonObject().entrySet()) {
-            EmojiFromGithub emoji = new EmojiFromGithub();
-            emoji.name = entry.getKey();
-            emoji.strings = new ArrayList<>();
-            emoji.strings.add(":" + entry.getKey() + ":");
-            emoji.location = entry.getKey();
-            emoji.url = entry.getValue().getAsString();
-            Emojiful.EMOJI_MAP.get("Github").add(emoji);
-            Emojiful.EMOJI_LIST.add(emoji);
-        }
-    }
-
-    public void loadTwemojis(){
-        try{
-            for (JsonElement element : Emojiful.readJsonFromUrl("https://raw.githubusercontent.com/iamcal/emoji-data/master/emoji.json").getAsJsonArray()){
-                if (element.getAsJsonObject().get("has_img_twitter").getAsBoolean()){
-                    EmojiFromTwitmoji emoji = new EmojiFromTwitmoji();
-                    emoji.name = element.getAsJsonObject().get("short_name").getAsString();
-                    emoji.location = element.getAsJsonObject().get("image").getAsString();
-                    emoji.sort =  element.getAsJsonObject().get("sort_order").getAsInt();
-                    element.getAsJsonObject().get("short_names").getAsJsonArray().forEach(jsonElement -> emoji.strings.add(":" + jsonElement.getAsString() + ":"));
-                    if (emoji.strings.contains(":face_with_symbols_on_mouth:")){
-                        emoji.strings.add(":swear:");
-                    }
-                    if (!element.getAsJsonObject().get("texts").isJsonNull()){
-                        element.getAsJsonObject().get("texts").getAsJsonArray().forEach(jsonElement -> emoji.texts.add(jsonElement.getAsString()));
-                    }
-                    Emojiful.EMOJI_MAP.computeIfAbsent(element.getAsJsonObject().get("category").getAsString(), s -> new ArrayList<>()).add(emoji);
-                    Emojiful.EMOJI_LIST.add(emoji);
-                    if (emoji.texts.size() > 0){
-                        EmojiClientProxy.EMOJI_WITH_TEXTS.add(emoji);
-                    }
-                }
-            }
-            EmojiClientProxy.EMOJI_WITH_TEXTS.sort(Comparator.comparingInt(o -> o.sort));
-            Emojiful.EMOJI_MAP.values().forEach(emojis -> emojis.sort(Comparator.comparingInt(o -> o.sort)));
-        } catch (Exception e){
-            Emojiful.error = true;
-            RdiCore.LOGGER.catching(e);
-        }
-    }
-
-
-    private void initEmojis() {
-        if (!Emojiful.error) {
-            //oldFontRenderer = Minecraft.getInstance().font;
-            //Minecraft.getInstance().font = new EmojiFontRenderer(Minecraft.getInstance().font);
-            //Minecraft.getInstance().getEntityRenderDispatcher().font = Minecraft.getInstance().font;
-            /**/
-        }
-    }
 
 }

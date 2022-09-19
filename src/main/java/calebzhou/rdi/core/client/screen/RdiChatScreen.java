@@ -37,20 +37,11 @@ import java.util.function.Predicate;
 public class RdiChatScreen extends Screen {
     public static final double MOUSE_SCROLL_SPEED = 7.0;
     private static final Component USAGE_TEXT = Component.translatable("chat_screen.usage");
-    private static final int PREVIEW_MARGIN_SIDES = 2;
-    private static final int PREVIEW_PADDING = 2;
-    private static final int PREVIEW_MARGIN_BOTTOM = 15;
-    private static final Component PREVIEW_WARNING_TITLE = Component.translatable("chatPreview.warning.toast.title");
-    private static final Component PREVIEW_WARNING_TOAST = Component.translatable("chatPreview.warning.toast");
-    private static final Component PREVIEW_INPUT_HINT = Component.translatable("chat.previewInput", Component.translatable("key.keyboard.enter"))
-            .withStyle(ChatFormatting.DARK_GRAY);
     private String historyBuffer = "";
     private int historyPos = -1;
     public RdiChatEditBox input;
     private String initial;
     CommandSuggestions commandSuggestions;
-    private ClientChatPreview chatPreview;
-    private ChatPreviewStatus chatPreviewStatus;
     private boolean previewNotRequired;
     private final ChatPreviewAnimator chatPreviewAnimator = new ChatPreviewAnimator();
 
@@ -78,25 +69,6 @@ public class RdiChatScreen extends Screen {
         EmojiClientProxy.emojiSelectionGui = new EmojiSelectionGui(this);
         EmojiClientProxy.emojiSuggestionHelper.updateSuggestionList(false);*/
         this.setInitialFocus(this.input);
-        this.chatPreview = new ClientChatPreview(this.minecraft);
-        this.updateChatPreview(this.input.getValue());
-        ServerData serverData = this.minecraft.getCurrentServer();
-        this.chatPreviewStatus = serverData != null && !serverData.previewsChat() ? ChatPreviewStatus.OFF : this.minecraft.options.chatPreview().get();
-        if (serverData != null && this.chatPreviewStatus != ChatPreviewStatus.OFF) {
-            ServerData.ChatPreview chatPreview = serverData.getChatPreview();
-            if (chatPreview != null && serverData.previewsChat() && chatPreview.showToast()) {
-                ServerList.saveSingleServer(serverData);
-                SystemToast systemToast = SystemToast.multiline(
-                        this.minecraft, SystemToast.SystemToastIds.CHAT_PREVIEW_WARNING, PREVIEW_WARNING_TITLE, PREVIEW_WARNING_TOAST
-                );
-                this.minecraft.getToasts().addToast(systemToast);
-            }
-        }
-
-        if (this.chatPreviewStatus == ChatPreviewStatus.CONFIRM) {
-            this.previewNotRequired = this.initial.startsWith("/") && !this.minecraft.player.commandHasSignableArguments(this.initial.substring(1));
-        }
-
     }
 
     public void resize(Minecraft minecraft, int width, int height) {
@@ -114,69 +86,15 @@ public class RdiChatScreen extends Screen {
 
     public void tick() {
         this.input.tick();
-        this.chatPreview.tick();
     }
 
     private void onEdited(String value) {
         String string = this.input.getValue();
         this.commandSuggestions.setAllowSuggestions(!string.equals(this.initial));
         this.commandSuggestions.updateCommandInfo();
-        if (this.chatPreviewStatus == ChatPreviewStatus.LIVE) {
-            this.updateChatPreview(string);
-        } else if (this.chatPreviewStatus == ChatPreviewStatus.CONFIRM && !this.chatPreview.queryEquals(string)) {
-            this.previewNotRequired = string.startsWith("/") && !this.minecraft.player.commandHasSignableArguments(string.substring(1));
-            this.chatPreview.update("");
-        }
        // EmojiClientProxy.emojiSuggestionHelper.updateSuggestionList(false);
-        this.updateChatPreview(string);
     }
 
-    private void updateChatPreview(String string) {
-        String string2 = this.normalizeChatMessage(string);
-        if (this.sendsChatPreviewRequests()) {
-            this.requestPreview(string2);
-        } else {
-            this.chatPreview.disable();
-        }
-
-    }
-
-    private void requestPreview(String message) {
-        if (message.startsWith("/")) {
-            this.requestCommandArgumentPreview(message);
-        } else {
-            this.requestChatMessagePreview(message);
-        }
-
-    }
-
-    private void requestChatMessagePreview(String string) {
-        this.chatPreview.update(string);
-    }
-
-    private void requestCommandArgumentPreview(String string) {
-        ParseResults<SharedSuggestionProvider> parseResults = this.commandSuggestions.getCurrentContext();
-        CommandNode<SharedSuggestionProvider> commandNode = this.commandSuggestions.getNodeAt(this.input.getCursorPosition());
-        if (parseResults != null && commandNode != null && PreviewableCommand.of(parseResults).isPreviewed(commandNode)) {
-            this.chatPreview.update(string);
-        } else {
-            this.chatPreview.disable();
-        }
-
-    }
-
-    private boolean sendsChatPreviewRequests() {
-        if (this.minecraft.player == null) {
-            return false;
-        } else if (this.minecraft.isLocalServer()) {
-            return true;
-        } else if (this.chatPreviewStatus == ChatPreviewStatus.OFF) {
-            return false;
-        } else {
-            ServerData serverData = this.minecraft.getCurrentServer();
-            return serverData != null && serverData.previewsChat();
-        }
-    }
 
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if (this.commandSuggestions.keyPressed(keyCode, scanCode, modifiers)) {
@@ -297,20 +215,14 @@ public class RdiChatScreen extends Screen {
         this.input.render(poseStack, mouseX, mouseY, partialTick);
         super.render(poseStack, mouseX, mouseY, partialTick);
         boolean bl = this.minecraft.getProfileKeyPairManager().signer() != null;
-        ChatPreviewAnimator.State state = this.chatPreviewAnimator.get(Util.getMillis(), this.getDisplayedPreviewText());
-        if (state.preview() != null) {
-            this.renderChatPreview(poseStack, state.preview(), state.alpha(), bl);
-            this.commandSuggestions.renderSuggestions(poseStack, mouseX, mouseY);
-        } else {
+
             this.commandSuggestions.render(poseStack, mouseX, mouseY);
-           // EmojiClientProxy.emojiSuggestionHelper.render(poseStack);
+           // EmojiClientProxy.emojiSuggestionHelper.render(poseStack);  this.commandSuggestions.renderSuggestions(poseStack, mouseX, mouseY);
             if (bl) {
                 poseStack.pushPose();
                 fill(poseStack, 0, this.height - 14, 2, this.height - 2, -8932375);
                 poseStack.popPose();
             }
-        }
-
         Style style = this.getComponentStyleAt((double) mouseX, (double) mouseY);
         if (style != null && style.getHoverEvent() != null) {
             this.renderComponentHoverEffect(poseStack, style, mouseX, mouseY);
@@ -324,22 +236,6 @@ public class RdiChatScreen extends Screen {
         //EmojiClientProxy.emojiSelectionGui.render(poseStack);
         super.render(poseStack, mouseX, mouseY, partialTick);
     }
-
-    @Nullable
-    protected Component getDisplayedPreviewText() {
-        String string = this.input.getValue();
-        if (string.isBlank()) {
-            return null;
-        } else {
-            Component component = this.peekPreview();
-            return this.chatPreviewStatus == ChatPreviewStatus.CONFIRM && !this.previewNotRequired
-                    ? (Component) Objects.requireNonNullElse(
-                    component, this.chatPreview.queryEquals(string) && !string.startsWith("/") ? Component.literal(string) : PREVIEW_INPUT_HINT
-            )
-                    : component;
-        }
-    }
-
     public boolean isPauseScreen() {
         return false;
     }
@@ -358,128 +254,10 @@ public class RdiChatScreen extends Screen {
 
     }
 
-    public void renderChatPreview(PoseStack poseStack, Component message, float alpha, boolean signable) {
-        int i = (int) (255.0 * (this.minecraft.options.chatOpacity().get() * 0.9F + 0.1F) * (double) alpha);
-        int j = (int) ((double) (this.chatPreview.hasScheduledRequest() ? 127 : 255) * this.minecraft.options.textBackgroundOpacity().get() * (double) alpha);
-        int k = this.chatPreviewWidth();
-        List<FormattedCharSequence> list = this.splitChatPreview(message);
-        int l = this.chatPreviewHeight(list);
-        int m = this.chatPreviewTop(l);
-        RenderSystem.enableBlend();
-        poseStack.pushPose();
-        poseStack.translate((double) this.chatPreviewLeft(), (double) m, 0.0);
-        fill(poseStack, 0, 0, k, l, j << 24);
-        if (i > 0) {
-            poseStack.translate(2.0, 2.0, 0.0);
-
-            for (int n = 0; n < list.size(); ++n) {
-                FormattedCharSequence formattedCharSequence = (FormattedCharSequence) list.get(n);
-                int o = n * 9;
-                this.renderChatPreviewHighlights(poseStack, formattedCharSequence, o, i);
-                this.font.drawShadow(poseStack, formattedCharSequence, 0.0F, (float) o, i << 24 | 16777215);
-            }
-        }
-
-        poseStack.popPose();
-        RenderSystem.disableBlend();
-        if (signable && this.chatPreview.peek() != null) {
-            int n = this.chatPreview.hasScheduledRequest() ? 15118153 : 7844841;
-            int p = (int) (255.0F * alpha);
-            poseStack.pushPose();
-            fill(poseStack, 0, m, 2, this.chatPreviewBottom(), p << 24 | n);
-            poseStack.popPose();
-        }
-
-    }
-
-    private void renderChatPreviewHighlights(PoseStack poseStack, FormattedCharSequence text, int minY, int alpha) {
-        int i = minY + 9;
-        int j = alpha << 24 | 10533887;
-        Predicate<Style> predicate = style -> style.getHoverEvent() != null || style.getClickEvent() != null;
-
-        for (StringSplitter.Span span : this.font.getSplitter().findSpans(text, predicate)) {
-            int k = Mth.floor(span.left());
-            int l = Mth.ceil(span.right());
-            fill(poseStack, k, minY, l, i, j);
-        }
-
-    }
-
     @Nullable
     private Style getComponentStyleAt(double d, double e) {
         Style style = this.minecraft.gui.getChat().getClickedComponentStyleAt(d, e);
-        if (style == null) {
-            style = this.getChatPreviewStyleAt(d, e);
-        }
-
         return style;
-    }
-
-    @Nullable
-    private Style getChatPreviewStyleAt(double mouseX, double mouseY) {
-        if (this.minecraft.options.hideGui) {
-            return null;
-        } else {
-            Component component = this.peekPreview();
-            if (component == null) {
-                return null;
-            } else {
-                List<FormattedCharSequence> list = this.splitChatPreview(component);
-                int i = this.chatPreviewHeight(list);
-                if (!(mouseX < (double) this.chatPreviewLeft())
-                        && !(mouseX > (double) this.chatPreviewRight())
-                        && !(mouseY < (double) this.chatPreviewTop(i))
-                        && !(mouseY > (double) this.chatPreviewBottom())) {
-                    int j = this.chatPreviewLeft() + 2;
-                    int k = this.chatPreviewTop(i) + 2;
-                    int l = (Mth.floor(mouseY) - k) / 9;
-                    if (l >= 0 && l < list.size()) {
-                        FormattedCharSequence formattedCharSequence = (FormattedCharSequence) list.get(l);
-                        return this.minecraft.font.getSplitter().componentStyleAtWidth(formattedCharSequence, (int) (mouseX - (double) j));
-                    } else {
-                        return null;
-                    }
-                } else {
-                    return null;
-                }
-            }
-        }
-    }
-
-    @Nullable
-    private Component peekPreview() {
-        return Util.mapNullable(this.chatPreview.peek(), ClientChatPreview.Preview::response);
-    }
-
-    private List<FormattedCharSequence> splitChatPreview(Component message) {
-        return this.font.split(message, this.chatPreviewWidth());
-    }
-
-
-    private int chatPreviewWidth() {
-        return this.minecraft.screen.width - 4;
-    }
-
-    private int chatPreviewHeight(List<FormattedCharSequence> list) {
-        int var10000 = Math.max(list.size(), 1);
-        Objects.requireNonNull(this.font);
-        return var10000 * 9 + 4;
-    }
-
-    private int chatPreviewBottom() {
-        return this.minecraft.screen.height - PREVIEW_MARGIN_BOTTOM;
-    }
-
-    private int chatPreviewTop(int height) {
-        return this.chatPreviewBottom() - height;
-    }
-
-    private int chatPreviewLeft() {
-        return PREVIEW_MARGIN_SIDES;
-    }
-
-    private int chatPreviewRight() {
-        return this.minecraft.screen.width - PREVIEW_MARGIN_SIDES;
     }
 
     public boolean handleChatInput(String message, boolean addToChat) {
@@ -487,23 +265,17 @@ public class RdiChatScreen extends Screen {
         if (message.isEmpty()) {
             return true;
         } else {
-            if (this.chatPreviewStatus == ChatPreviewStatus.CONFIRM && !this.previewNotRequired) {
-                this.commandSuggestions.hide();
-                if (!this.chatPreview.queryEquals(message)) {
-                    this.updateChatPreview(message);
-                    return false;
-                }
+            if (addToChat) {
+                this.minecraft.gui.getChat().addRecentChat(message);
             }
 
-           /* if (addToChat) {
-                this.minecraft.gui.getChat().addRecentChat(message);
-            }*/
-
-            Component component = Util.mapNullable(this.chatPreview.pull(message), ClientChatPreview.Preview::response);
+            //Component component = Util.mapNullable(this.chatPreview.pull(message), ClientChatPreview.Preview::response);
             if (message.startsWith("/")) {
-                this.minecraft.player.commandSigned(message.substring(1), component);
+				//是指令 作为指令发送
+                this.minecraft.player.commandSigned(message.substring(1),null);
             } else {
-                this.minecraft.player.chatSigned(message, component);
+				//不是指令 作为信息发送（/speak xxx)
+                this.minecraft.player.commandSigned("speak "+message,null);
             }
 
             return true;
@@ -515,7 +287,4 @@ public class RdiChatScreen extends Screen {
         return StringUtils.normalizeSpace(message.trim());
     }
 
-    public ClientChatPreview getChatPreview() {
-        return this.chatPreview;
-    }
 }

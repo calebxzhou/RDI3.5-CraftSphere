@@ -1,7 +1,8 @@
-package calebzhou.rdi.core.client.emojiful.api;
+package calebzhou.rdi.core.client.emoji.api;
 
 import calebzhou.rdi.core.client.RdiCore;
-import calebzhou.rdi.core.client.emojiful.util.EmojiUtil;
+import calebzhou.rdi.core.client.RdiSharedConstants;
+import calebzhou.rdi.core.client.emoji.util.EmojiUtil;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import com.mojang.blaze3d.platform.NativeImage;
@@ -26,10 +27,9 @@ import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 public class Emoji implements Predicate<String> {
-    public static final ResourceLocation loading_texture = new ResourceLocation(RdiCore.MODID, "textures/26a0.png");
-    public static final ResourceLocation noSignal_texture = new ResourceLocation(RdiCore.MODID, "textures/26d4.png");
-    public static final ResourceLocation error_texture = new ResourceLocation(RdiCore.MODID, "textures/26d4.png");
-
+    public static final ResourceLocation loading_texture = new ResourceLocation(RdiSharedConstants.MODID, "textures/26a0.png");
+    public static final ResourceLocation noSignal_texture = new ResourceLocation(RdiSharedConstants.MODID, "textures/26d4.png");
+    public static final ResourceLocation error_texture = new ResourceLocation(RdiSharedConstants.MODID, "textures/26d4.png");
     public static final AtomicInteger threadDownloadCounter = new AtomicInteger(0);
     public static final AtomicInteger threadFileLoaderCounter = new AtomicInteger(0);
     public String name;
@@ -155,7 +155,7 @@ public class Emoji implements Predicate<String> {
             } else {
                 try {
                     DownloadImageData imageData = new DownloadImageData(ImageIO.read(cache), loading_texture);
-                    ResourceLocation resourceLocation = new ResourceLocation(RdiCore.MODID, "texures/emoji/" + name.toLowerCase().replaceAll("[^a-z0-9/._-]", "") + "_" + version);
+                    ResourceLocation resourceLocation = new ResourceLocation(RdiSharedConstants.MODID, "texures/emoji/" + name.toLowerCase().replaceAll("[^a-z0-9/._-]", "") + "_" + version);
                     Minecraft.getInstance().getTextureManager().register(resourceLocation, imageData);
                     img.add(imageData);
                     frames.add(resourceLocation);
@@ -174,7 +174,7 @@ public class Emoji implements Predicate<String> {
     }
 
     public File getCache() {
-        return new File("emojiful/cache/" + name + "-" + version);
+        return new File("emoji/cache/" + name + "-" + version);
     }
 
     public void loadTextureFrames(List<Pair<BufferedImage, Integer>> framesPair) {
@@ -182,7 +182,7 @@ public class Emoji implements Predicate<String> {
             int i = 0;
             for (Pair<BufferedImage, Integer> bufferedImage : framesPair) {
                 DownloadImageData imageData = new DownloadImageData(bufferedImage.getKey(), loading_texture);
-                ResourceLocation resourceLocation = new ResourceLocation(RdiCore.MODID, "texures/emoji/" + name.toLowerCase().replaceAll("[^a-z0-9/._-]", "") + "_" + version + "_frame" + i);
+                ResourceLocation resourceLocation = new ResourceLocation(RdiSharedConstants.MODID, "texures/emoji/" + name.toLowerCase().replaceAll("[^a-z0-9/._-]", "") + "_" + version + "_frame" + i);
                 Minecraft.getInstance().getTextureManager().register(resourceLocation, imageData);
                 img.add(imageData);
                 for (Integer integer = 0; integer < bufferedImage.getValue(); integer++) {

@@ -1,4 +1,4 @@
-package calebzhou.rdi.core.client.emojiful.api;
+package calebzhou.rdi.core.client.emoji.api;
 
 public class EmojiCategory {
 

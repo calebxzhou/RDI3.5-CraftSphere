@@ -46,12 +46,12 @@ public abstract class mUseRdiChatScreen {
 class mUseRdiChatScreen2{
     @Inject(method = "handleChatPreview",at=@At(value = "INVOKE",target = "Lnet/minecraft/client/gui/components/ChatComponent;getFocusedChat()Lnet/minecraft/client/gui/screens/ChatScreen;"), cancellable = true)
     private void injf(ClientboundChatPreviewPacket packet, CallbackInfo ci){
-        Screen var2 = Minecraft.getInstance().screen;
+        /*Screen var2 = Minecraft.getInstance().screen;
         if (var2 instanceof RdiChatScreen chatScreen) {
             if(var2!=null){
                 chatScreen.getChatPreview().handleResponse(packet.queryId(), packet.preview());
             }
-        }
+        }*/
         ci.cancel();
     }
 }

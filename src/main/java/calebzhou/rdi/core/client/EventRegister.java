@@ -115,7 +115,7 @@ public class EventRegister {
     //接收服务器的弹框信息
     private void onReceivePopup(Minecraft minecraft, ClientPacketListener listener, FriendlyByteBuf buf, PacketSender sender) {
         String info = buf.readUtf();
-        String[] split = info.split("@");
+        String[] split = info.split("|");
         String type= split[0];
         String title= split[1];
         String content= split[2];
@@ -133,7 +133,7 @@ public class EventRegister {
     //接收服务器的对话框信息
     private void onReceiveDialogInfo(Minecraft minecraft, ClientPacketListener listener, FriendlyByteBuf buf, PacketSender sender) {
          String info = buf.readUtf();
-         String[] split = info.split("@");
+         String[] split = info.split("|");
          String type= split[0];
          String title= split[1];
          String content= split[2];

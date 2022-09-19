@@ -1,9 +1,9 @@
-package calebzhou.rdi.core.client.emojiful.gui;
+package calebzhou.rdi.core.client.emoji.gui;
 
-import calebzhou.rdi.core.client.emojiful.EmojiClientProxy;
-import calebzhou.rdi.core.client.emojiful.Emojiful;
-import calebzhou.rdi.core.client.emojiful.api.Emoji;
-import calebzhou.rdi.core.client.emojiful.api.EmojiCategory;
+import calebzhou.rdi.core.client.emoji.EmojiClientProxy;
+import calebzhou.rdi.core.client.emoji.Emojiful;
+import calebzhou.rdi.core.client.emoji.api.Emoji;
+import calebzhou.rdi.core.client.emoji.api.EmojiCategory;
 import calebzhou.rdi.core.client.screen.RdiChatScreen;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;

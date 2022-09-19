@@ -1,6 +1,6 @@
-package calebzhou.rdi.core.client.emojiful;
+package calebzhou.rdi.core.client.emoji;
 
-import calebzhou.rdi.core.client.emojiful.api.Emoji;
+import calebzhou.rdi.core.client.emoji.api.Emoji;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;

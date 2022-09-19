@@ -1,6 +1,6 @@
-package calebzhou.rdi.core.client.emojiful.gui;
+package calebzhou.rdi.core.client.emoji.gui;
 
-import calebzhou.rdi.core.client.emojiful.EmojiClientProxy;
+import calebzhou.rdi.core.client.emoji.EmojiClientProxy;
 import calebzhou.rdi.core.client.screen.RdiChatScreen;
 import com.google.common.base.Strings;
 import com.mojang.blaze3d.vertex.PoseStack;

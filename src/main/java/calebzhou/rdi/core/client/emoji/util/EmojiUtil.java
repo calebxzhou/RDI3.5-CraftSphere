@@ -1,6 +1,6 @@
-package calebzhou.rdi.core.client.emojiful.util;
+package calebzhou.rdi.core.client.emoji.util;
 
-import calebzhou.rdi.core.client.emojiful.api.Emoji;
+import calebzhou.rdi.core.client.emoji.api.Emoji;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
@@ -12,7 +12,8 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import org.apache.commons.lang3.tuple.Pair;
-import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL30;
+import org.lwjgl.opengl.GL30;
 import org.w3c.dom.Node;
 
 import javax.imageio.ImageIO;
@@ -26,8 +27,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.lwjgl.opengl.GL11.GL_LINEAR;
-import static org.lwjgl.opengl.GL11.GL_NEAREST;
+import static org.lwjgl.opengl.GL30.GL_LINEAR;
+import static org.lwjgl.opengl.GL30.GL_NEAREST;
 
 public class EmojiUtil {
     public static RenderType createRenderType(Emoji emoji) {
@@ -37,11 +38,11 @@ public class EmojiUtil {
                 .setTransparencyState(new RenderStateShard.TransparencyStateShard("translucent_transparency", () -> {
                     RenderSystem.enableBlend();
                     RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-                    GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-                    GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+                    GL30.glTexParameteri(GL30.GL_TEXTURE_2D, GL30.GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+					GL30.glTexParameteri(GL30.GL_TEXTURE_2D, GL30.GL_TEXTURE_MAG_FILTER, GL_LINEAR);
                 }, () -> {
-                    GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-                    GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+					GL30.glTexParameteri(GL30.GL_TEXTURE_2D, GL30.GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+					GL30.glTexParameteri(GL30.GL_TEXTURE_2D, GL30.GL_TEXTURE_MIN_FILTER, GL_NEAREST);
                     RenderSystem.disableBlend();
                     RenderSystem.defaultBlendFunc();
                 }))/*.setAlphaState(new RenderStateShard.AlphaStateShard(0.003921569F))*/.setLightmapState(new RenderStateShard.LightmapStateShard(true)).createCompositeState(false);
