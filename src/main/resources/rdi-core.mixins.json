@@ -14,7 +14,6 @@
     "mFinishLoad",
     "mGameConfigData",
     "mLoginProtocol",
-    "mLuminChk",
     "mMultiPlayerScreen",
     "mNewPauseMenu",
     "mNewScreens",
@@ -39,6 +38,7 @@
     "AccessNatualSpawner",
     "mBiggerWindow",
     "mClientStartup",
+    "mDebugOverlay",
     "mPlayMusic",
     "mPlayMusic2"
   ]

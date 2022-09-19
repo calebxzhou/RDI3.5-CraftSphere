@@ -8,10 +8,6 @@ import calebzhou.rdi.core.client.util.PlayerUtils;
 import calebzhou.rdi.core.client.util.ThreadPool;
 import com.google.gson.Gson;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.multiplayer.ClientPacketListener;
@@ -23,6 +19,9 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.BoneMealItem;
 import net.minecraft.world.level.block.SaplingBlock;
+import org.quiltmc.qsl.lifecycle.api.client.event.ClientTickEvents;
+import org.quiltmc.qsl.networking.api.PacketSender;
+import org.quiltmc.qsl.networking.api.client.ClientPlayConnectionEvents;
 
 import java.awt.*;
 import java.util.List;
@@ -38,21 +37,22 @@ public class EventRegister {
         //进入服务器发送硬件数据
         ClientPlayConnectionEvents.JOIN.register(this::onJoinServer);
         //客户端世界tick事件
-        ClientTickEvents.END_WORLD_TICK.register(this::onClientWorldTick);
-        ClientPlayNetworking.registerGlobalReceiver(NetworkPackets.DIALOG_INFO,this::onReceiveDialogInfo);
-        ClientPlayNetworking.registerGlobalReceiver(NetworkPackets.POPUP,this::onReceivePopup);
+        ClientTickEvents.END.register(this::onClientWorldTick);
+
         ClientPlayConnectionEvents.DISCONNECT.register(this::onDisconnectServer);
     }
 
-    private void onClientWorldTick(ClientLevel level) {
-        LocalPlayer player = Minecraft.getInstance().player;
-        if(player ==null) return;
+	private void onClientWorldTick(Minecraft minecraft) {
+		LocalPlayer player = Minecraft.getInstance().player;
+		ClientLevel level = minecraft.level;
+		if(player ==null) return;
 
-        afkDetect(player);
-        danceTree(player,level);
-        animalSex(player);
-        KeyBinds.handleKeyActions(level);
-    }
+		afkDetect(player);
+		danceTree(player,level);
+		animalSex(player);
+		KeyBinds.handleKeyActions(level);
+	}
+
 
     private int sexTickAmount =0;boolean needStandUp = false;
     //繁殖成功所需要的tick数
@@ -112,33 +112,7 @@ public class EventRegister {
         totalAfkTicks=0;
     }
 
-    //接收服务器的弹框信息
-    private void onReceivePopup(Minecraft minecraft, ClientPacketListener listener, FriendlyByteBuf buf, PacketSender sender) {
-        String info = buf.readUtf();
-        String[] split = info.split("|");
-        String type= split[0];
-        String title= split[1];
-        String content= split[2];
-        TrayIcon.MessageType realType;
-        switch (type){
-            case "info"->realType= TrayIcon.MessageType.INFO;
-            case "warning"->realType= TrayIcon.MessageType.WARNING;
-            case "error"->realType= TrayIcon.MessageType.ERROR;
-            default -> realType= TrayIcon.MessageType.NONE;
-        }
-        DialogUtils.showPopup(realType,title,content);
 
-    }
-
-    //接收服务器的对话框信息
-    private void onReceiveDialogInfo(Minecraft minecraft, ClientPacketListener listener, FriendlyByteBuf buf, PacketSender sender) {
-         String info = buf.readUtf();
-         String[] split = info.split("|");
-         String type= split[0];
-         String title= split[1];
-         String content= split[2];
-         DialogUtils.showMessageBox(type,title,content);
-    }
 
     //跳舞树
 

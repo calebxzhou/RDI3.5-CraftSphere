@@ -1,34 +1,32 @@
-package calebzhou.rdi.craftsphere.mixin;
+package calebzhou.rdi.core.client.mixin;
 
-import calebzhou.rdi.craftsphere.ExampleMod;
+import calebzhou.rdi.core.client.RdiCore;
+import calebzhou.rdi.core.client.RdiSharedConstants;
 import net.minecraft.client.OptionInstance;
 import net.minecraft.client.Options;
-import net.minecraft.world.entity.player.PlayerModelPart;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
 //不允许亮度夜视
 @Mixin(Options.class)
-public class mLuminChk {
+public abstract class mLuminChk {
     @Final
     @Shadow
     private OptionInstance<Double> gamma;
 
-    @Redirect(method = "processOptions(Lnet/minecraft/client/Options$FieldAccess;)V",
-    at = @At(value = "INVOKE",target = "Lnet/minecraft/world/entity/player/PlayerModelPart;values()[Lnet/minecraft/world/entity/player/PlayerModelPart;"))
-    private PlayerModelPart[] efACdaew(){
-        //如果亮度过高，并且不是调试模式，就会sleep
-        if(gamma.get()>1.0 && !ExampleMod.debug){
-            try {
-                System.out.println("1");
-                Thread.sleep(Long.MAX_VALUE);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+    @Shadow public abstract OptionInstance<Double> gamma();
+
+    @Inject(method = "processOptions(Lnet/minecraft/client/Options$FieldAccess;)V",
+    at = @At("HEAD"))
+    private void efACdaew( CallbackInfo ci){
+        //如果亮度过高，并且不是调试模式，就会崩
+        if(gamma.get()>1.0 && !RdiSharedConstants.DEBUG){
+            gamma().set(1.0);
         }
 
-        return PlayerModelPart.values();
     }
 }

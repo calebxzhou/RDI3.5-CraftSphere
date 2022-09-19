@@ -29,8 +29,8 @@ public class EmojiFromTwitmoji extends Emoji {
         if (img != null)
             return;
 
-        img = new DownloadImageData(new File(RdiSharedConstants.RDI_FOLDER,"emoji/cache/" + name + "-" + version), "https://raw.githubusercontent.com/iamcal/emoji-data/master/img-twitter-64/" + location, loading_texture);
-        resourceLocation = new ResourceLocation(RdiSharedConstants.MODID, "texures/emoji/" + location.toLowerCase() + "_" + version);
+        img = new DownloadImageData(new File(RdiSharedConstants.RDI_EMOJI_IMAGE_FOLDER,name +".png"), "https://raw.githubusercontent.com/iamcal/emoji-data/master/img-twitter-64/" + location, loading_texture);
+        resourceLocation = new ResourceLocation(RdiSharedConstants.MODID, "texures/emoji/" + location.toLowerCase());
         Minecraft.getInstance().getTextureManager().register(resourceLocation, img);
     }
 
