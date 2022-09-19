@@ -43,7 +43,7 @@ public class LoadProgressDisplay extends Thread{
         loadProgressFrame.add(scroll,BorderLayout.CENTER);
         loadProgressFrame.add(loadProgressBar,BorderLayout.SOUTH);
         loadProgressFrame.setLocationRelativeTo(null);
-        loadProgressFrame.setVisible(true);
+        //loadProgressFrame.setVisible(true);
     }
 
     public void appendLoadProgressInfo(String info){
