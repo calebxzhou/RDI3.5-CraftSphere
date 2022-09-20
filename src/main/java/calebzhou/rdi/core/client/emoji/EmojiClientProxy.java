@@ -1,6 +1,8 @@
 package calebzhou.rdi.core.client.emoji;
 
 import calebzhou.rdi.core.client.RdiCore;
+import calebzhou.rdi.core.client.RdiSharedConstants;
+import calebzhou.rdi.core.client.constant.RdiFileConst;
 import calebzhou.rdi.core.client.emoji.api.Emoji;
 import calebzhou.rdi.core.client.emoji.gui.EmojiSelectionGui;
 import calebzhou.rdi.core.client.emoji.gui.EmojiSuggestionHelper;
@@ -8,8 +10,12 @@ import calebzhou.rdi.core.client.util.ThreadPool;
 import com.google.gson.JsonElement;
 import calebzhou.rdi.core.client.emoji.api.EmojiCategory;
 import calebzhou.rdi.core.client.emoji.api.EmojiFromTwitmoji;
+import com.google.gson.JsonParser;
 import net.minecraft.client.gui.Font;
+import org.apache.commons.io.FileUtils;
 
+import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -145,7 +151,8 @@ public class EmojiClientProxy {
 		CATEGORIES.add(new EmojiCategory("Symbols","符号")) ;
 		//CATEGORIES.add(new EmojiCategory("Flags","")) ;
 		try{
-			for (JsonElement element : Emojiful.readJsonFromUrl("https://raw.githubusercontent.com/iamcal/emoji-data/master/emoji.json").getAsJsonArray()){
+			String fileToString = FileUtils.readFileToString(new File(RdiSharedConstants.RDI_EMOJI_FOLDER, "emoji.json"), StandardCharsets.UTF_8);
+			for (JsonElement element : JsonParser.parseString(fileToString).getAsJsonArray()){
 				if (element.getAsJsonObject().get("has_img_twitter").getAsBoolean()){
 					EmojiFromTwitmoji emoji = new EmojiFromTwitmoji();
 					emoji.name = element.getAsJsonObject().get("short_name").getAsString();

@@ -21,6 +21,7 @@ public class RdiSharedConstants {
 	public static final File RDI_SOUND_FOLDER = new File(RDI_FOLDER,"sound");
 	public static final File RDI_USERS_FOLDER = new File(RDI_FOLDER,"users");
 	public static final File RDI_EMOJI_IMAGE_FOLDER = new File(RDI_FOLDER,"emoji/img");
+	public static final File RDI_EMOJI_FOLDER = new File(RDI_FOLDER,"emoji");
 	public static final String RDI_ICON_PATH = "assets/rdict3/icon/rdi_logo.png";
 	public static final String FONT_PATH = "assets/minecraft/font/rdifont.ttf";
 }

@@ -61,7 +61,6 @@ public class RdiLoadingOverlay extends Overlay {
 			try {
 				this.reload.checkExceptions();
 				this.onFinish.accept(Optional.empty());
-				GLFW.glfwMaximizeWindow(this.minecraft.getWindow().getWindow());
 			} catch (Throwable var23) {
 				this.onFinish.accept(Optional.of(var23));
 			}

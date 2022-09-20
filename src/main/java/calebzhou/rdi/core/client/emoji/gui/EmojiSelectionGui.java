@@ -49,8 +49,7 @@ public class EmojiSelectionGui    {
         this.selectionPointer = 1;
         this.categoryPointer = 0;
         this.chatScreen = screen;
-        this.openSelectionAreaEmoji = -1;
-        if (Emojiful.EMOJI_MAP.containsKey("Smileys & Emotion"))this.openSelectionAreaEmoji = new Random().nextInt(Emojiful.EMOJI_MAP.get("Smileys & Emotion").size());
+        this.openSelectionAreaEmoji = 5;
         this.showingSelectionArea = false;
         int offset = 0;
        // if (ModList.get().isLoaded("quark")) offset = -80;
@@ -67,7 +66,8 @@ public class EmojiSelectionGui    {
 
 
     public void render(PoseStack stack) {
-        if (this.openSelectionAreaEmoji != -1) Minecraft.getInstance().font.draw(stack, Emojiful.EMOJI_MAP.get("Smileys & Emotion").get(openSelectionAreaEmoji).strings.get(0), openSelectionArea.getX(), openSelectionArea.getY(), 0);
+        if (this.openSelectionAreaEmoji != -1)
+			Minecraft.getInstance().font.draw(stack, Emojiful.EMOJI_MAP.get("Smileys & Emotion").get(openSelectionAreaEmoji).strings.get(0), openSelectionArea.getX(), openSelectionArea.getY(), 0);
         if (this.showingSelectionArea){
             drawRectangle(stack, this.selectionArea);
             drawRectangle(stack, this.categorySelectionArea);
@@ -107,7 +107,7 @@ public class EmojiSelectionGui    {
                     EmojiCategory category = EmojiClientProxy.CATEGORIES.get(selCategory);
                     Rect2i rec = new Rect2i(categorySelectionArea.getX() + 6, categorySelectionArea.getY() + 6 + i * 12, 11, 11);
                     if (category.equals(firstCategory)){
-                        GuiComponent.fill(stack, rec.getX()-1, rec.getY()-2, rec.getX() + rec.getWidth(), rec.getY() + rec.getHeight() -1, -2130706433);
+                        GuiComponent.fill(stack, rec.getX()-1, rec.getY()-2, rec.getX() + rec.getWidth(), rec.getY() + rec.getHeight() -1, 0x80000000);
                     }
                     if (rec.contains((int)lastMouseX, (int)lastMouseY) && Minecraft.getInstance().screen != null){
                         Minecraft.getInstance().screen.renderComponentTooltip(stack, Arrays.asList(MutableComponent.create(new LiteralContents((category.getChineseName())))),(int) lastMouseX,(int) lastMouseY);
