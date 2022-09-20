@@ -13,10 +13,30 @@ public class RdiUser {
 	}
 
 	private static RdiUser currentUser;
-	private final String uuid;
-	private final String name;
-	private final String pwd;
-	private final String type;
+	private  String uuid;
+	private  String name;
+	private  String pwd;
+	private  String type;
+
+	public RdiUser setUuid(String uuid) {
+		this.uuid = uuid;
+		return this;
+	}
+
+	public RdiUser setName(String name) {
+		this.name = name;
+		return this;
+	}
+
+	public RdiUser setPwd(String pwd) {
+		this.pwd = pwd;
+		return this;
+	}
+
+	public RdiUser setType(String type) {
+		this.type = type;
+		return this;
+	}
 
 	public String getUuid() {
 		return uuid;

@@ -1,5 +1,8 @@
 package calebzhou.rdi.core.client.screen;
 
+import calebzhou.rdi.core.client.emoji.EmojiClientProxy;
+import calebzhou.rdi.core.client.emoji.gui.EmojiSelectionGui;
+import calebzhou.rdi.core.client.emoji.gui.EmojiSuggestionHelper;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.brigadier.ParseResults;
@@ -65,9 +68,9 @@ public class RdiChatScreen extends Screen {
         this.addWidget(this.input);
         this.commandSuggestions = new CommandSuggestions(this.minecraft, this, this.input, this.font, false, false, 1, 10, true, -805306368);
         this.commandSuggestions.updateCommandInfo();
-        /*EmojiClientProxy.emojiSuggestionHelper = new EmojiSuggestionHelper(this);
+        EmojiClientProxy.emojiSuggestionHelper = new EmojiSuggestionHelper(this);
         EmojiClientProxy.emojiSelectionGui = new EmojiSelectionGui(this);
-        EmojiClientProxy.emojiSuggestionHelper.updateSuggestionList(false);*/
+        EmojiClientProxy.emojiSuggestionHelper.updateSuggestionList(false);
         this.setInitialFocus(this.input);
     }
 
@@ -99,11 +102,11 @@ public class RdiChatScreen extends Screen {
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if (this.commandSuggestions.keyPressed(keyCode, scanCode, modifiers)) {
             return true;
-        }/* else if (EmojiClientProxy.emojiSelectionGui.keyPressed(keyCode, scanCode, modifiers)) {
+        } else if (EmojiClientProxy.emojiSelectionGui.keyPressed(keyCode, scanCode, modifiers)) {
             return true;
         } else if (EmojiClientProxy.emojiSuggestionHelper.keyPressed(keyCode, scanCode, modifiers)) {
             return true;
-        }*/ else if (super.keyPressed(keyCode, scanCode, modifiers)) {
+        } else if (super.keyPressed(keyCode, scanCode, modifiers)) {
             return true;
         } else if (keyCode == 256) {
             this.minecraft.setScreen((Screen) null);
@@ -135,9 +138,9 @@ public class RdiChatScreen extends Screen {
         delta = Mth.clamp(delta, -1.0, 1.0);
         if (this.commandSuggestions.mouseScrolled(delta)) {
             return true;
-        }/* else if (EmojiClientProxy.emojiSelectionGui.mouseScrolled(mouseX, mouseY, delta)) {
+        } else if (EmojiClientProxy.emojiSelectionGui.mouseScrolled(mouseX, mouseY, delta)) {
             return true;
-        }*/ else {
+        } else {
             if (!hasShiftDown()) {
                 delta *= MOUSE_SCROLL_SPEED;
             }
@@ -149,15 +152,15 @@ public class RdiChatScreen extends Screen {
 
     @Override
     public void mouseMoved(double mouseX, double mouseY) {
-        //EmojiClientProxy.emojiSelectionGui.mouseMoved(mouseX, mouseY);
+        EmojiClientProxy.emojiSelectionGui.mouseMoved(mouseX, mouseY);
         super.mouseMoved(mouseX, mouseY);
     }
 
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (this.commandSuggestions.mouseClicked((double) ((int) mouseX), (double) ((int) mouseY), button)) {
             return true;
-        }/* else if (EmojiClientProxy.emojiSelectionGui.mouseClicked(mouseX, mouseY))
-            return true;*/
+        } else if (EmojiClientProxy.emojiSelectionGui.mouseClicked(mouseX, mouseY))
+            return true;
         else {
             if (button == 0) {
                 ChatComponent chatComponent = this.minecraft.gui.getChat();
@@ -217,7 +220,7 @@ public class RdiChatScreen extends Screen {
         boolean bl = this.minecraft.getProfileKeyPairManager().signer() != null;
 
             this.commandSuggestions.render(poseStack, mouseX, mouseY);
-           // EmojiClientProxy.emojiSuggestionHelper.render(poseStack);  this.commandSuggestions.renderSuggestions(poseStack, mouseX, mouseY);
+           //EmojiClientProxy.emojiSuggestionHelper.render(poseStack);  this.commandSuggestions.renderSuggestions(poseStack, mouseX, mouseY);
             if (bl) {
                 poseStack.pushPose();
                 fill(poseStack, 0, this.height - 14, 2, this.height - 2, -8932375);
@@ -233,7 +236,7 @@ public class RdiChatScreen extends Screen {
             }
         }
 
-        //EmojiClientProxy.emojiSelectionGui.render(poseStack);
+        EmojiClientProxy.emojiSelectionGui.render(poseStack);
         super.render(poseStack, mouseX, mouseY, partialTick);
     }
     public boolean isPauseScreen() {

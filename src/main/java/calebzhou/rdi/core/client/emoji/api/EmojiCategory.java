@@ -2,19 +2,20 @@ package calebzhou.rdi.core.client.emoji.api;
 
 public class EmojiCategory {
 
+	private final String chineseName;
     private final String name;
-    private final boolean worldBased;
 
-    public EmojiCategory(String name, boolean worldBased) {
+    public EmojiCategory(String name, String chineseName) {
         this.name = name;
-        this.worldBased = worldBased;
+		this.chineseName = chineseName;
     }
 
     public String getName() {
         return name;
     }
 
-    public boolean isWorldBased() {
-        return worldBased;
-    }
+	public String getChineseName() {
+		return chineseName;
+	}
+
 }

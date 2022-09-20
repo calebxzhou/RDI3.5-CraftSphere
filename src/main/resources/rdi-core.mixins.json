@@ -9,10 +9,12 @@
     "AccessSystemReport",
     "mConnectScreen",
     "mDeathGoNewTitle",
+    "mDisplayNumberPing",
     "mFastCreateMojangService",
     "mFastCreateMojangService2",
     "mFinishLoad",
     "mGameConfigData",
+    "mHiFont",
     "mLoginProtocol",
     "mMultiPlayerScreen",
     "mNewPauseMenu",
@@ -35,7 +37,9 @@
     "defaultRequire": 1
   },
   "mixins": [
+    "AccessNativeImage",
     "AccessNatualSpawner",
+    "AccessTrueTypeGlyphProvider",
     "mBiggerWindow",
     "mClientStartup",
     "mDebugOverlay",

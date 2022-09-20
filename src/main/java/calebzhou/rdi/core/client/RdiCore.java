@@ -11,9 +11,6 @@ import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
 import org.quiltmc.qsl.lifecycle.api.client.event.ClientLifecycleEvents;
 
 public class RdiCore implements ModInitializer {
-	static {
-		ThreadPool.newThread(LoadProgressDisplay.INSTANCE::start);
-	}
 	public static final Logger LOGGER = LogManager.getLogger("RDI-Core");
 	public static RdiDebugOverlay RDI_DEBUG_OVERLAY;
 	@Override

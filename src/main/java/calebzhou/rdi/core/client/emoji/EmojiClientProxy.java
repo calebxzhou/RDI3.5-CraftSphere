@@ -2,6 +2,8 @@ package calebzhou.rdi.core.client.emoji;
 
 import calebzhou.rdi.core.client.RdiCore;
 import calebzhou.rdi.core.client.emoji.api.Emoji;
+import calebzhou.rdi.core.client.emoji.gui.EmojiSelectionGui;
+import calebzhou.rdi.core.client.emoji.gui.EmojiSuggestionHelper;
 import calebzhou.rdi.core.client.util.ThreadPool;
 import com.google.gson.JsonElement;
 import calebzhou.rdi.core.client.emoji.api.EmojiCategory;
@@ -10,6 +12,7 @@ import net.minecraft.client.gui.Font;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class EmojiClientProxy {
     public static EmojiClientProxy INSTANCE = new EmojiClientProxy();
@@ -21,8 +24,8 @@ public class EmojiClientProxy {
     public static final List<EmojiCategory> CATEGORIES = new ArrayList<>();
     public static int lineAmount;
 
-    /*public static EmojiSuggestionHelper emojiSuggestionHelper;
-    public static EmojiSelectionGui emojiSelectionGui;*/
+    public static EmojiSuggestionHelper emojiSuggestionHelper;
+    public static EmojiSelectionGui emojiSelectionGui;
 
     public void init() {
 		ThreadPool.newThread(()->{
@@ -134,7 +137,13 @@ public class EmojiClientProxy {
     }
 */
     private void preInitEmojis() {
-        CATEGORIES.addAll(Arrays.asList("Smileys & Emotion", "Animals & Nature", "Food & Drink", "Activities", "Travel & Places", "Objects", "Symbols", "Flags").stream().map(s -> new EmojiCategory(s, false)).collect(Collectors.toList()));
+		CATEGORIES.add(new EmojiCategory("Smileys & Emotion","表情")) ;
+		CATEGORIES.add(new EmojiCategory("Animals & Nature","大自然")) ;
+		CATEGORIES.add(new EmojiCategory("Food & Drink","食品")) ;
+		CATEGORIES.add(new EmojiCategory("Activities","活动")) ;
+		CATEGORIES.add(new EmojiCategory("Objects","物件")) ;
+		CATEGORIES.add(new EmojiCategory("Symbols","符号")) ;
+		//CATEGORIES.add(new EmojiCategory("Flags","")) ;
 		try{
 			for (JsonElement element : Emojiful.readJsonFromUrl("https://raw.githubusercontent.com/iamcal/emoji-data/master/emoji.json").getAsJsonArray()){
 				if (element.getAsJsonObject().get("has_img_twitter").getAsBoolean()){

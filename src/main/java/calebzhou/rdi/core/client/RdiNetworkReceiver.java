@@ -1,5 +1,6 @@
 package calebzhou.rdi.core.client;
 
+import calebzhou.rdi.core.client.constant.RdiFileConst;
 import calebzhou.rdi.core.client.model.RdiUser;
 import calebzhou.rdi.core.client.util.DialogUtils;
 import net.minecraft.client.Minecraft;
@@ -28,12 +29,13 @@ public class RdiNetworkReceiver {
 
 	private void onSetPassword(Minecraft minecraft, ClientPacketListener listener, FriendlyByteBuf buf, PacketSender sender) {
 		String pwd = buf.readUtf();
-		File pwdFile = new File(RdiSharedConstants.RDI_USERS_FOLDER, RdiUser.getCurrentUser().getUuid() + "_password.txt");
+		File pwdFile = RdiFileConst.getUserPasswordFile(RdiUser.getCurrentUser().getUuid());
 		try {
 			FileUtils.write(pwdFile,pwd, StandardCharsets.UTF_8,false);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		RdiUser.getCurrentUser().setPwd(pwd);
 	}
 	//接收服务器的弹框信息
 	private void onReceivePopup(Minecraft minecraft, ClientPacketListener listener, FriendlyByteBuf buf, PacketSender sender) {

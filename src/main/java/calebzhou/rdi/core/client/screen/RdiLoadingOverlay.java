@@ -12,15 +12,14 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.server.packs.resources.ReloadInstance;
 import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
+import org.lwjgl.glfw.GLFW;
 
 import java.util.Optional;
 import java.util.function.Consumer;
 
 public class RdiLoadingOverlay extends Overlay {
 	private long fadeOutStart = -1L;
-	private long fadeInStart = -1L;
     private float currentProgress;
-	private static int BG_COLOR = FastColor.ARGB32.color(255, 230, 240, 255);
 
     private final Minecraft minecraft;
     private final ReloadInstance reload;
@@ -62,6 +61,7 @@ public class RdiLoadingOverlay extends Overlay {
 			try {
 				this.reload.checkExceptions();
 				this.onFinish.accept(Optional.empty());
+				GLFW.glfwMaximizeWindow(this.minecraft.getWindow().getWindow());
 			} catch (Throwable var23) {
 				this.onFinish.accept(Optional.of(var23));
 			}

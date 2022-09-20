@@ -21,5 +21,6 @@ accessible class net/minecraft/client/renderer/RenderStateShard$TextureStateShar
 accessible class net/minecraft/client/renderer/RenderStateShard$TransparencyStateShard
 accessible class net/minecraft/client/renderer/RenderStateShard$LightmapStateShard
 accessible class net/minecraft/client/multiplayer/ProfileKeyPairManager$Result
+accessible class com/mojang/blaze3d/font/TrueTypeGlyphProvider$Glyph
 accessible method net/minecraft/client/renderer/RenderType create (Ljava/lang/String;Lcom/mojang/blaze3d/vertex/VertexFormat;Lcom/mojang/blaze3d/vertex/VertexFormat$Mode;IZZLnet/minecraft/client/renderer/RenderType$CompositeState;)Lnet/minecraft/client/renderer/RenderType$CompositeRenderType;
 extendable method net/minecraft/client/gui/Font renderText (Ljava/lang/String;FFIZLcom/mojang/math/Matrix4f;Lnet/minecraft/client/renderer/MultiBufferSource;ZII)F

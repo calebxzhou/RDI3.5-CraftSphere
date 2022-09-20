@@ -20,7 +20,7 @@ public class mNoReportScreen {
 	@Nullable Screen lastScreen;
 
 	@Overwrite
-	protected void init() {
+	public void init() {
 		Minecraft.getInstance().setScreen(lastScreen);
 	}
 	@Overwrite
