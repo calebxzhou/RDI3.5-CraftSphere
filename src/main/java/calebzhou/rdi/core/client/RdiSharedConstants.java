@@ -11,12 +11,12 @@ public class RdiSharedConstants {
 	//mod id中文名
 	public static final String MODID_DISPLAY ="RDI CeleTech";
 	//是否为调试模式,本地用
-	public static final boolean DEBUG=true;
+	public static final boolean DEBUG=false;
 	//版本号与协议号
 	public static final int PROTOCOL_VERSION =0x37;
 	public static final String GAME_VERSION = "1.19.2";
 	//显示版本
-	public static final String CORE_VERSION ="3.7/220917";
+	public static final String CORE_VERSION ="3.7/220924";
 	public static final File RDI_FOLDER = new File("mods/rdi");
 	public static final File RDI_SOUND_FOLDER = new File(RDI_FOLDER,"sound");
 	public static final File RDI_USERS_FOLDER = new File(RDI_FOLDER,"users");

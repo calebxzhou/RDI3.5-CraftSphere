@@ -9,9 +9,11 @@
     "AccessSystemReport",
     "mConnectScreen",
     "mDeathGoNewTitle",
+    "mDisconnectedScreen",
     "mDisplayNumberPing",
     "mFastCreateMojangService",
     "mFastCreateMojangService2",
+    "mFieldOfView",
     "mFinishLoad",
     "mGameConfigData",
     "mHiFont",
@@ -28,6 +30,7 @@
     "mSkyAlwaysBlue",
     "mTabPlayerHud",
     "mTitleScreen",
+    "mUserDataRead",
     "mUseRdiChatScreen",
     "mUseRdiChatScreen2",
     "mUseRdiChatScreen3",
@@ -43,7 +46,9 @@
     "mBiggerWindow",
     "mClientStartup",
     "mDebugOverlay",
+    "mPlayerAttributes",
     "mPlayMusic",
-    "mPlayMusic2"
+    "mPlayMusic2",
+    "mSpawnHealth"
   ]
 }

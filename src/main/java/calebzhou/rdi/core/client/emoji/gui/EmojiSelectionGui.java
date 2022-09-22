@@ -49,7 +49,7 @@ public class EmojiSelectionGui    {
         this.selectionPointer = 1;
         this.categoryPointer = 0;
         this.chatScreen = screen;
-        this.openSelectionAreaEmoji = 5;
+        this.openSelectionAreaEmoji = 29;//小笑脸
         this.showingSelectionArea = false;
         int offset = 0;
        // if (ModList.get().isLoaded("quark")) offset = -80;

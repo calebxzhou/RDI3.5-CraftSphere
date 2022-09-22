@@ -1,6 +1,7 @@
 package calebzhou.rdi.core.client.emoji.util;
 
 import calebzhou.rdi.core.client.emoji.api.Emoji;
+import calebzhou.rdi.core.client.mixin.emoji.InvokeRenderType;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
@@ -46,7 +47,8 @@ public class EmojiUtil {
                     RenderSystem.disableBlend();
                     RenderSystem.defaultBlendFunc();
                 }))/*.setAlphaState(new RenderStateShard.AlphaStateShard(0.003921569F))*/.setLightmapState(new RenderStateShard.LightmapStateShard(true)).createCompositeState(false);
-        return RenderType.create("emoji_render", DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP, VertexFormat.Mode.QUADS, 256, false, true, state);
+        //return RenderType.create("emoji_render", DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP, VertexFormat.Mode.QUADS, 256, false, true, state);
+        return InvokeRenderType.invokeCreate("emoji_render", DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP, VertexFormat.Mode.QUADS, 256, false, true, state);
     }
 
     public static float renderEmoji(Emoji emoji, float x, float y, Matrix4f matrix, MultiBufferSource buffer, int packedLight) {

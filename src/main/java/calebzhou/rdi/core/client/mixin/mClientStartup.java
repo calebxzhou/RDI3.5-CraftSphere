@@ -1,5 +1,6 @@
 package calebzhou.rdi.core.client.mixin;
 
+import calebzhou.rdi.core.client.RdiCore;
 import calebzhou.rdi.core.client.constant.RdiFileConst;
 import calebzhou.rdi.core.client.loader.LoadProgressDisplay;
 import calebzhou.rdi.core.client.misc.RdiSystemTray;
@@ -35,12 +36,15 @@ public class mClientStartup {
         System.setProperty("java.awt.headless", boolstr);
 		return boolstr;
     }
-    @Inject(method = "run",remap = false,at = @At(value = "INVOKE",target = "Ljava/util/List;isEmpty()Z"),locals = LocalCapture.CAPTURE_FAILSOFT)
-    private static void readUuid(String[] args, boolean bl, CallbackInfo ci, OptionParser optionParser, OptionSpec optionSpec, OptionSpec optionSpec2, OptionSpec optionSpec3, OptionSpec optionSpec4, OptionSpec optionSpec5, OptionSpec optionSpec6, OptionSpec optionSpec7, OptionSpec optionSpec8, OptionSpec optionSpec9, OptionSpec optionSpec10, OptionSpec optionSpec11, OptionSpec optionSpec12, OptionSpec optionSpec13, OptionSpec optionSpec14, OptionSpec optionSpec15, OptionSpec optionSpec16, OptionSpec optionSpec17, OptionSpec optionSpec18, OptionSpec optionSpec19, OptionSpec optionSpec20, OptionSpec optionSpec21, OptionSpec optionSpec22, OptionSpec optionSpec23, OptionSpec optionSpec24, OptionSpec optionSpec25, OptionSpec optionSpec26, OptionSet optionSet, List list){
+	@Inject(method = "run",at = @At("HEAD"))
+	private static void rdiStart(String[] args, boolean enableDataFixerOptimizations, CallbackInfo ci){
 		RdiSystemTray.createTray();
 		ThreadPool.newThread(LoadProgressDisplay.INSTANCE::start);
 		if(Util.getPlatform() == Util.OS.WINDOWS)
 			DialogUtils.showPopup(TrayIcon.MessageType.INFO,"RDI客户端已经开始载入了！请您耐心等待...");
+	}
+   /* @Inject(method = "run",remap = false,at = @At(ordinal = 0,value = "INVOKE",target = "Lnet/minecraft/client/main/Main;parseArgument(Ljoptsimple/OptionSet;Ljoptsimple/OptionSpec;)Ljava/lang/Object;"),locals = LocalCapture.CAPTURE_FAILEXCEPTION)
+    private static void RDI_readUuid(String[] args, boolean enableDataFixerOptimizations, CallbackInfo ci, OptionParser optionParser, OptionSpec optionSpec, OptionSpec optionSpec2, OptionSpec optionSpec3, OptionSpec optionSpec4, OptionSpec optionSpec5, OptionSpec optionSpec6, OptionSpec optionSpec7, OptionSpec optionSpec8, OptionSpec optionSpec9, OptionSpec optionSpec10, OptionSpec optionSpec11, OptionSpec optionSpec12, OptionSpec optionSpec13, OptionSpec optionSpec14, OptionSpec optionSpec15, OptionSpec optionSpec16, OptionSpec optionSpec17, OptionSpec optionSpec18, OptionSpec optionSpec19, OptionSpec optionSpec20, OptionSpec optionSpec21, OptionSpec optionSpec22, OptionSpec optionSpec23, OptionSpec optionSpec24, OptionSpec optionSpec25, OptionSpec optionSpec26, OptionSet optionSet){
 
 		String name = (String) optionSpec11.value(optionSet);
 		String uuid = (String) optionSpec12.value(optionSet);
@@ -59,9 +63,9 @@ public class mClientStartup {
 		try {
 			pwd = FileUtils.readFileToString(passwordFile, StandardCharsets.UTF_8);
 		} catch (IOException e) {
-			throw new RuntimeException(e);
+			RdiCore.LOGGER.warn("此账户没有注册过 {}",e.getMessage());
 		}
 		RdiUser.setCurrentUser(new RdiUser(uuid,name,pwd,userTypeName));
-    }
+    }*/
 
 }

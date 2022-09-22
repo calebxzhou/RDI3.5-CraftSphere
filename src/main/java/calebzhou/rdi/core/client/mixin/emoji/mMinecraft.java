@@ -29,12 +29,12 @@ public abstract class mMinecraft {
 	private void useEmojiFont(GameConfig gameConfig, CallbackInfo ci){
 		EmojiClientProxy.oldFontRenderer = font;
 		font = EmojiFontRenderer.createInstance(font);
-		getEntityRenderDispatcher().font = font;
-		BlockEntityRenderers.register(BlockEntityType.SIGN, context -> {
+		//getEntityRenderDispatcher().font = font;
+		/*BlockEntityRenderers.register(BlockEntityType.SIGN, context -> {
 			SignRenderer signRenderer = new SignRenderer(context);
 			signRenderer.font = font;
 			return signRenderer;
-		});
+		});*/
 	}
 
 }

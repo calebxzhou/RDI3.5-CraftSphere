@@ -1,6 +1,7 @@
 package calebzhou.rdi.core.client.emoji.render;
 
 import calebzhou.rdi.core.client.emoji.Emojiful;
+import calebzhou.rdi.core.client.mixin.emoji.AccessFont;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -39,7 +40,10 @@ import java.util.regex.Pattern;
 
 public class EmojiFontRenderer extends Font {
     private static EmojiFontRenderer instance;
-    public static EmojiFontRenderer createInstance(Font fontRenderer){
+	private final boolean filterFishyGlyphs
+			;
+
+	public static EmojiFontRenderer createInstance(Font fontRenderer){
         if(null == instance)
             instance = new EmojiFontRenderer(fontRenderer);
         return instance;
@@ -60,9 +64,12 @@ public class EmojiFontRenderer extends Font {
         }
     });
 
-    public EmojiFontRenderer(Font fontRenderer) {
-        super(fontRenderer.fonts, fontRenderer.filterFishyGlyphs);
+    public EmojiFontRenderer(Font font) {
+        super(((AccessFont)font).getFonts(), ((AccessFont)font).getFilterFishyGlyphs());
+		this.filterFishyGlyphs =
+				((AccessFont)font).getFilterFishyGlyphs();
     }
+
 
     private TextureAtlasSprite sprite;
 
@@ -142,8 +149,16 @@ public class EmojiFontRenderer extends Font {
         return super.drawInBatch(p_228079_1_, p_228079_2_, p_228079_3_, p_228079_4_, p_228079_5_, p_228079_6_, p_228079_7_, p_228079_8_, p_228079_9_, p_228079_10_);
     }
 
-    @Override
-    public float renderText(String text, float x, float y, int color, boolean isShadow, Matrix4f matrix, MultiBufferSource buffer, boolean isTransparent, int colorBackgroundIn, int packedLight) {
+    public float renderText(String text,
+							float x,
+							float y,
+							int color,
+							boolean isShadow,
+							Matrix4f matrix,
+							MultiBufferSource buffer,
+							boolean isTransparent,
+							int colorBackgroundIn,
+							int packedLight) {
         if (text.isEmpty())
             return 0;
         HashMap<Integer, Emoji> emojis = new LinkedHashMap<>();
@@ -284,7 +299,7 @@ public class EmojiFontRenderer extends Font {
         }
 
         public boolean accept(int pos, Style style, int charInt) {
-            FontSet font = EmojiFontRenderer.this.getFontSet(style.getFont());
+            FontSet font = ((AccessFont)EmojiFontRenderer.this).invokeGetFontSet(style.getFont());
             if ( this.emojis.get(pos) != null) {
                 Emoji emoji = this.emojis.get(pos);
                 if (emoji != null && !this.dropShadow) {
@@ -316,7 +331,7 @@ public class EmojiFontRenderer extends Font {
                     float f5 = flag ? iglyph.getBoldOffset() : 0.0F;
                     float f4 = this.dropShadow ? iglyph.getShadowOffset() : 0.0F;
                     VertexConsumer ivertexbuilder = this.buffer.getBuffer(texturedglyph.renderType(this.seeThrough ? Font.DisplayMode.SEE_THROUGH : Font.DisplayMode.NORMAL));
-                    EmojiFontRenderer.this.renderChar(texturedglyph, flag, style.isItalic(), f5, this.x + f4, this.y + f4, this.matrix, ivertexbuilder, f, f1, f2, f3, this.packedLight);
+					((AccessFont)EmojiFontRenderer.this).invokeRenderChar(texturedglyph, flag, style.isItalic(), f5, this.x + f4, this.y + f4, this.matrix, ivertexbuilder, f, f1, f2, f3, this.packedLight);
                 }
 
                 float f6 = iglyph.getAdvance(flag);
@@ -345,7 +360,7 @@ public class EmojiFontRenderer extends Font {
             }
 
             if (this.effects != null) {
-                BakedGlyph texturedglyph = EmojiFontRenderer.this.getFontSet(Style.DEFAULT_FONT).whiteGlyph();
+                BakedGlyph texturedglyph = ((AccessFont)EmojiFontRenderer.this).invokeGetFontSet(Style.DEFAULT_FONT).whiteGlyph();
                 VertexConsumer ivertexbuilder = this.buffer.getBuffer(texturedglyph.renderType(this.seeThrough ? Font.DisplayMode.SEE_THROUGH : Font.DisplayMode.NORMAL));
 
                 for (BakedGlyph.Effect texturedglyph$effect : this.effects) {

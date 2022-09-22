@@ -66,24 +66,8 @@ configurations.implementation {
 	exclude group: 'org.apache.httpcomponents', module: 'httpclient'
 	exclude group: 'org.apache.httpcomponents', module: 'httpcore'
 }
-/*configurations.api{
-	exclude group: 'org.lwjgl' , module: 'lwjgl-jemalloc'
-	exclude group: 'org.lwjgl' , module: 'lwjgl-openal'
-}*/
 dependencies {
-	/*api ("com.badlogicgames.gdx:gdx-backend-lwjgl3:1.11.0"){
-		exclude group: 'org.lwjgl' , module: 'lwjgl-jemalloc'
-		exclude group: 'org.lwjgl' , module: 'lwjgl-openal'
-		exclude group: 'org.lwjgl', module: 'lwjgl-opengl'
-		exclude group: 'org.lwjgl', module: 'lwjgl-glfw'
-		exclude group: 'org.lwjgl', module: 'lwjgl-stb'
-		exclude group: 'org.lwjgl', module: 'lwjgl'
-	}
-	compileOnly 'org.lwjgl:lwjgl-openal:3.3.1'
-	api "com.badlogicgames.gdx:gdx-platform:1.11.0:natives-desktop"
-	api "com.badlogicgames.gdx:gdx-freetype-platform:1.11.0:natives-desktop"
-	api "com.badlogicgames.gdx:gdx:1.11.0"
-	api "com.badlogicgames.gdx:gdx-freetype:1.11.0"*/
+
 	minecraft libs.minecraft
 	mappings loom.layered {
 		addLayer quiltMappings.mappings("org.quiltmc:quilt-mappings:${libs.versions.quilt.mappings.get()}:v2")
@@ -114,7 +98,12 @@ dependencies {
 	modImplementation("maven.modrinth:modmenu:4.0.6")
 	modImplementation("maven.modrinth:wthit:quilt-5.12.0")
 	modImplementation("maven.modrinth:badpackets:fabric-0.2.0")
+	//dashloader，提高载入速度
+	modImplementation("maven.modrinth:dashloader:4.1.3+1.19")
+	implementation 'dev.quantumfusion:Taski:1.1.0'
+	implementation 'dev.quantumfusion:Hyphen:0.2.2'
 
+	//-------------------
 }
 
 processResources {
