@@ -27,18 +27,21 @@ public class mUserDataRead {
 		if(uuid.startsWith("00000000")){
 			uuid = UuidUtils.createUuidByName(name);
 		}
+		String uuidWithDash = UuidUtils.uuidAddDash(uuid);
+		RdiCore.LOGGER.info("u:{}",uuidWithDash);
 		String userTypeName = type.getName();
-		File passwordFile = RdiFileConst.getUserPasswordFile(uuid);
+		File passwordFile = RdiFileConst.getUserPasswordFile(uuidWithDash);
 
 		String pwd = null;
 		try {
 			pwd = FileUtils.readFileToString(passwordFile, StandardCharsets.UTF_8);
+			RdiCore.LOGGER.info("p:{}",pwd);
 		} catch (IOException e) {
 			RdiCore.LOGGER.warn("此账户没有注册过 {}",e.getMessage());
 		}
 //mojang登录的uuid不带横线，要通过正则表达式转换成带横线的
 		RdiUser rdiUser = new RdiUser(
-				 UuidUtils.uuidAddDash(uuid),
+				 uuidWithDash,
 				name,
 				pwd,
 				userTypeName

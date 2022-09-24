@@ -2,7 +2,6 @@ package calebzhou.rdi.core.client.mixin;
 
 
 import calebzhou.rdi.core.client.screen.RdiChatScreen;
-import calebzhou.rdi.core.client.screen.RdiInBedChatScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ChatComponent;
 import net.minecraft.client.gui.screens.Screen;
@@ -33,10 +32,10 @@ public abstract class mUseRdiChatScreen {
         setScreen(new RdiChatScreen(defaultText));
     }
 
-    @Redirect(method = "tick",at = @At(value = "INVOKE",ordinal = 1,target = "Lnet/minecraft/client/Minecraft;setScreen(Lnet/minecraft/client/gui/screens/Screen;)V"))
+   /* @Redirect(method = "tick",at = @At(value = "INVOKE",ordinal = 1,target = "Lnet/minecraft/client/Minecraft;setScreen(Lnet/minecraft/client/gui/screens/Screen;)V"))
     private void r_setScreen2(Minecraft instance, Screen guiScreen){
         setScreen(new RdiInBedChatScreen());
-    }/*
+    }*//*
     @Inject(method = "tick",at=@At(value = "FIELD", opcode = Opcodes.GETFIELD,target = "net/minecraft/client/gui/screens/Screen;var2:Lnet/minecraft/client/gui/screens/Screen"))
     private void r_newChatInstanceof(){
 

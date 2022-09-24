@@ -14,6 +14,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class mFinishLoad {
     @Inject(method = "uploadTextures",at=@At("TAIL"))
     private void finishLoad(TextureManager textureManager, ProfilerFiller profilerFiller, CallbackInfoReturnable<AtlasSet> cir){
-        LoadProgressDisplay.INSTANCE.onFinish();
+        LoadProgressDisplay.onFinish();
     }
 }

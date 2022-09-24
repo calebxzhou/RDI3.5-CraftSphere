@@ -4,6 +4,7 @@ import calebzhou.rdi.core.client.RdiCore;
 import calebzhou.rdi.core.client.RdiSharedConstants;
 import calebzhou.rdi.core.client.misc.MusicPlayer;
 import calebzhou.rdi.core.client.misc.ServerConnector;
+import calebzhou.rdi.core.client.texture.RdiTexture;
 import calebzhou.rdi.core.client.util.DialogUtils;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.InputConstants;
@@ -29,13 +30,19 @@ import net.minecraft.util.Mth;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.ByteBuffer;
 import java.util.Iterator;
+
+import static org.lwjgl.opengl.GL11.*;
 
 public class RdiTitleScreen extends Screen {
     public static final RdiTitleScreen INSTANCE = new RdiTitleScreen();
+	RdiTexture enterKeyTexture;
     public RdiTitleScreen() {
         super(Component.literal("主界面"));
-    }
+		/*enterKeyTexture = RdiTexture.loadTexture(new File(RdiSharedConstants.RDI_TEXTURE_FOLDER, "enter.png").getAbsolutePath());
+		enterKeyTexture.bind();*/
+	}
     public boolean shouldCloseOnEsc() {
         return false;
     }
@@ -43,6 +50,11 @@ public class RdiTitleScreen extends Screen {
 		GlStateManager._clearColor(0.9f, 0.9f, 0.9f, 1.0F);
 		GlStateManager._clear(16384, Minecraft.ON_OSX);
         RenderSystem.enableBlend();
+
+		/*enterKeyTexture.setParameter( GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+		enterKeyTexture.setParameter( GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		enterKeyTexture.setParameter( GL_TEXTURE_WRAP_S, GL_CLAMP);
+		enterKeyTexture.setParameter( GL_TEXTURE_WRAP_T, GL_CLAMP);*/
 		this.font.draw(matrices, "按Enter(回车)键", (this.width/2.0f)-30, this.height/2f, 0xFF000000);
     }
     public void tick() {

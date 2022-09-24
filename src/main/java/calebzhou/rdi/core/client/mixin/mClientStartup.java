@@ -38,8 +38,9 @@ public class mClientStartup {
     }
 	@Inject(method = "run",at = @At("HEAD"))
 	private static void rdiStart(String[] args, boolean enableDataFixerOptimizations, CallbackInfo ci){
+		LoadProgressDisplay.loadStartTime=System.currentTimeMillis();
 		RdiSystemTray.createTray();
-		ThreadPool.newThread(LoadProgressDisplay.INSTANCE::start);
+		new LoadProgressDisplay().start();
 		if(Util.getPlatform() == Util.OS.WINDOWS)
 			DialogUtils.showPopup(TrayIcon.MessageType.INFO,"RDI客户端已经开始载入了！请您耐心等待...");
 	}
