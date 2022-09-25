@@ -21,8 +21,12 @@ public class NetworkUtils {
             buf.writeNbt(i);
         else
             buf.writeUtf(content+"");
-        ClientPlayNetworking.send(packType,buf);
-    }
+		try {
+			ClientPlayNetworking.send(packType,buf);
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		}
+	}
 
 
 }
