@@ -9,6 +9,9 @@ import org.quiltmc.qsl.lifecycle.api.client.event.ClientLifecycleEvents;
 
 public class RdiCore implements ModInitializer {
 	public static final Logger LOGGER = LogManager.getLogger("RDI-Core");
+	public static boolean isFontLoaded
+			=false;
+
 	@Override
 	public void onInitialize(ModContainer container) {
 		new EventRegister();

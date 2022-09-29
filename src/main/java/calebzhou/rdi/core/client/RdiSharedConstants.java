@@ -16,7 +16,7 @@ public class RdiSharedConstants {
 	public static final int PROTOCOL_VERSION =0x37;
 	public static final String GAME_VERSION = "1.19.2";
 	//显示版本
-	public static final String CORE_VERSION ="3.7b/220925";
+	public static final String CORE_VERSION ="3.7f/220927";
 	public static final File RDI_FOLDER = new File("mods/rdi");
 	public static final File RDI_SOUND_FOLDER = new File(RDI_FOLDER,"sound");
 	public static final File RDI_USERS_FOLDER = new File(RDI_FOLDER,"users");

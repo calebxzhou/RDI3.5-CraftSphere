@@ -47,6 +47,7 @@
     "mBiggerWindow",
     "mClientStartup",
     "mDebugOverlay",
+    "mCheckIfFontLoaded",
     "mPlayerAttributes",
     "mPlayMusic",
     "mPlayMusic2",

@@ -37,9 +37,9 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class RdiTitleScreen extends Screen {
     public static final RdiTitleScreen INSTANCE = new RdiTitleScreen();
-	RdiTexture enterKeyTexture;
     public RdiTitleScreen() {
         super(Component.literal("主界面"));
+		Minecraft.getInstance().updateTitle();
 		/*enterKeyTexture = RdiTexture.loadTexture(new File(RdiSharedConstants.RDI_TEXTURE_FOLDER, "enter.png").getAbsolutePath());
 		enterKeyTexture.bind();*/
 	}

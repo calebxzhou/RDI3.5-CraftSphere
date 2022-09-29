@@ -21,8 +21,4 @@ public class mWindowTitle {
     private String createTitle(){
         return RdiSharedConstants.MODID_DISPLAY+" "+ RdiSharedConstants.CORE_VERSION;
     }
-    @Overwrite
-    public void updateTitle() {
-        window.setTitle(this.createTitle());
-    }
 }
