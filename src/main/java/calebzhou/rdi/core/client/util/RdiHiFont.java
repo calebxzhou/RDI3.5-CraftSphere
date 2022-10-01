@@ -1,19 +1,14 @@
 package calebzhou.rdi.core.client.util;
 
 import calebzhou.rdi.core.client.mixin.AccessNativeImage;
-import calebzhou.rdi.core.client.mixin.AccessTrueTypeGlyphProvider;
-import com.mojang.blaze3d.font.TrueTypeGlyphProvider;
 import com.mojang.blaze3d.platform.NativeImage;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.stb.STBTTFontinfo;
-import org.lwjgl.stb.STBTTPackContext;
-import org.lwjgl.stb.STBTTPackedchar;
-import org.lwjgl.system.MemoryUtil;
 
 import java.util.Locale;
 
 import static org.lwjgl.opengl.GL11.GL_LINEAR;
-import static org.lwjgl.stb.STBTruetype.*;
+import static org.lwjgl.stb.STBTruetype.nstbtt_MakeGlyphBitmapSubpixel;
 
 /**
  * Created by calebzhou on 2022-09-20,7:51.

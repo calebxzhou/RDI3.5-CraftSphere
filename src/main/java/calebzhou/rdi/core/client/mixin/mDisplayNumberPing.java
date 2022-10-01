@@ -1,7 +1,7 @@
 package calebzhou.rdi.core.client.mixin;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import calebzhou.rdi.core.client.screen.RdiPingNumberDisplay;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.PlayerTabOverlay;
 import net.minecraft.client.multiplayer.PlayerInfo;
@@ -36,12 +36,12 @@ public abstract class mDisplayNumberPing {
 
 	/**
 	 * Redirects the call to {@code renderLatencyIcon} in {@link PlayerTabOverlay#render} to instead call
-	 * {@link RdiPingNumberDisplay#renderPingIcon}.
+	 * {@link RdiPingNumberDisplay#renderPingNumber}.
 	 */
 	@Redirect(method = "render",
 			at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/PlayerTabOverlay;renderPingIcon(Lcom/mojang/blaze3d/vertex/PoseStack;IIILnet/minecraft/client/multiplayer/PlayerInfo;)V"))
 	private void redirectRenderLatencyIconCall(
 			PlayerTabOverlay instance, PoseStack poseStack, int width, int x, int y, PlayerInfo playerInfo) {
-		RdiPingNumberDisplay.renderPingIcon(minecraft, poseStack, width, x, y, playerInfo);
+		RdiPingNumberDisplay.renderPingNumber(minecraft, poseStack, width, x, y, playerInfo);
 	}
 }

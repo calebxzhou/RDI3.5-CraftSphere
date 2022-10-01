@@ -2,7 +2,6 @@ package calebzhou.rdi.core.client;
 
 import calebzhou.rdi.core.client.misc.HwSpec;
 import calebzhou.rdi.core.client.misc.KeyBinds;
-import calebzhou.rdi.core.client.util.DialogUtils;
 import calebzhou.rdi.core.client.util.NetworkUtils;
 import calebzhou.rdi.core.client.util.PlayerUtils;
 import calebzhou.rdi.core.client.util.ThreadPool;
@@ -13,7 +12,6 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -23,7 +21,6 @@ import org.quiltmc.qsl.lifecycle.api.client.event.ClientTickEvents;
 import org.quiltmc.qsl.networking.api.PacketSender;
 import org.quiltmc.qsl.networking.api.client.ClientPlayConnectionEvents;
 
-import java.awt.*;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,6 +29,7 @@ public class EventRegister {
     private int danceTreeCurrentScore = 0;
 
     public EventRegister(){
+		RdiCore.LOGGER.info("正在注册事件");
         //初始化按键事件
         KeyBinds.init();
         //进入服务器发送硬件数据

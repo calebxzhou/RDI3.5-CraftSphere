@@ -1,7 +1,6 @@
 package calebzhou.rdi.core.client.mixin;
 
 import com.mojang.blaze3d.font.TrueTypeGlyphProvider;
-import it.unimi.dsi.fastutil.ints.IntArraySet;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import org.lwjgl.stb.STBTTFontinfo;
 import org.spongepowered.asm.mixin.Mixin;

@@ -10,8 +10,6 @@ public class NetworkPackets {
     /**
      *  C2S  客户端->服务端
      */
-    //隔空跳跃
-    public static final ResourceLocation LEAP=new ResourceLocation(MODID,"leap");
     //挂机检测
     public static final ResourceLocation AFK_DETECT = new ResourceLocation(MODID,"afk_detect");
     //跳舞树
@@ -26,13 +24,15 @@ public class NetworkPackets {
     /**
     *		S2C 服务端->客户端
      */
-
-    //岛屿信息
-    public static final ResourceLocation ISLAND_INFO =new ResourceLocation(MODID,"island_info");
+//玩家天气信息
+	public static final ResourceLocation WEATHER = new ResourceLocation(MODID,"weather");
+	//玩家地理定位
+	public static final ResourceLocation GEO_LOCATION = new ResourceLocation(MODID,"geo_location");
     //对话框信息
     public static final ResourceLocation DIALOG_INFO = new ResourceLocation(MODID,"dialog_info");
 	//右下角消息弹框
 	public static final ResourceLocation POPUP=new ResourceLocation(MODID,"popup");
 	//设定密码
 	public static final ResourceLocation SET_PASSWORD = new ResourceLocation(MODID,"set_password");
+
 }

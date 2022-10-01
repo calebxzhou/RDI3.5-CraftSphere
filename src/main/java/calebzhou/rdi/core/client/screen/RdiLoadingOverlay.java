@@ -1,6 +1,5 @@
 package calebzhou.rdi.core.client.screen;
 
-import calebzhou.rdi.core.client.RdiCore;
 import calebzhou.rdi.core.client.misc.ServerConnector;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -11,7 +10,6 @@ import net.minecraft.client.gui.screens.Overlay;
 import net.minecraft.server.packs.resources.ReloadInstance;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.RandomUtils;
-import org.lwjgl.stb.STBEasyFont;
 
 import java.io.File;
 import java.io.IOException;
@@ -48,13 +46,6 @@ public class RdiLoadingOverlay extends Overlay {
 		GlStateManager._clearColor(0.9f, 0.9f, 0.9f, 1.0F);
 		GlStateManager._clear(16384, Minecraft.ON_OSX);
 		RenderSystem.enableBlend();
-		/*RenderSystem.blendEquation(32774);
-		RenderSystem.blendFunc(770, 1);
-		RenderSystem.defaultBlendFunc();
-		RenderSystem.disableBlend();*/
-		//float t = this.reload.getActualProgress();
-		//RdiCore.LOGGER.info("F {} t {} ",f,t);
-		//RdiCore.LOGGER.info("currProg : {}",currentProgress);
 		if (f < 1.0F) {
 			this.drawProgressBar(poseStack, scaledHeight/2 - 5, scaledWidth , scaledHeight/2 + 5, timeNow);
 		}

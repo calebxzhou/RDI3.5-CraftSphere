@@ -1,0 +1,28 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "priority": 1989,
+  "package": "icyllis.modernui.textmc.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+    "AccessRenderBuffers",
+    "MixinBidiReorder",
+    "MixinChatScreen",
+    "MixinClientLanguage",
+    "MixinCommandSuggestions",
+    "MixinEditBox",
+    "MixinFontRenderer",
+    "MixinIngameGui",
+    "MixinLevelRenderer",
+    "MixinRenderSystem",
+    "MixinSignRenderer",
+    "MixinStringSplitter"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "mixins": [
+    "MixinChatFormatting",
+    "MixinLanguage"
+  ]
+}

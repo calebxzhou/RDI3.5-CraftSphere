@@ -1,39 +1,23 @@
 package calebzhou.rdi.core.client.screen;
 
-import calebzhou.rdi.core.client.RdiCore;
 import calebzhou.rdi.core.client.RdiSharedConstants;
 import calebzhou.rdi.core.client.misc.MusicPlayer;
 import calebzhou.rdi.core.client.misc.ServerConnector;
-import calebzhou.rdi.core.client.texture.RdiTexture;
 import calebzhou.rdi.core.client.util.DialogUtils;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.OptionsScreen;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
 import net.minecraft.client.gui.screens.worldselection.SelectWorldScreen;
-import net.minecraft.client.renderer.CubeMap;
-import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.PanoramaRenderer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.FastColor;
-import net.minecraft.util.Mth;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
-import java.nio.ByteBuffer;
-import java.util.Iterator;
-
-import static org.lwjgl.opengl.GL11.*;
 
 public class RdiTitleScreen extends Screen {
     public static final RdiTitleScreen INSTANCE = new RdiTitleScreen();

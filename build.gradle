@@ -78,6 +78,8 @@ dependencies {
 	includeImplementation( 'com.squareup.okhttp3:okhttp:4.10.0' )
 	includeImplementation( 'com.squareup.okio:okio:3.0.0' )
 	includeImplementation( 'com.squareup.okio:okio-jvm:3.0.0' )
+	// https://mvnrepository.com/artifact/com.github.ben-manes.caffeine/caffeine
+	includeImplementation 'com.github.ben-manes.caffeine:caffeine:3.1.1'
 	// https://mvnrepository.com/artifact/org.lwjgl/lwjgl-openal
 
 	// https://mvnrepository.com/artifact/org.joml/joml

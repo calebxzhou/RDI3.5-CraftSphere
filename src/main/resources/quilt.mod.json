@@ -36,6 +36,6 @@
 			}
 		]
 	},
-	"mixin": ["rdi-core.mixins.json", "rdi-emoji.mixins.json"],
+	"mixin": ["rdi-core.mixins.json", "mui.mixins.json"],
 	"accessWidener" : "rdict3.accesswidener"
 }

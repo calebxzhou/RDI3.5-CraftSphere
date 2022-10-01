@@ -32,9 +32,6 @@
     "mTabPlayerHud",
     "mTitleScreen",
     "mUserDataRead",
-    "mUseRdiChatScreen",
-    "mUseRdiChatScreen2",
-    "mUseRdiChatScreen3",
     "mWindowTitle"
   ],
   "injectors": {
@@ -47,7 +44,6 @@
     "mBiggerWindow",
     "mClientStartup",
     "mDebugOverlay",
-    "mCheckIfFontLoaded",
     "mPlayerAttributes",
     "mPlayMusic",
     "mPlayMusic2",

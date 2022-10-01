@@ -1,21 +1,17 @@
 package calebzhou.rdi.core.client.mixin;
 
-import com.mojang.authlib.exceptions.MinecraftClientException;
 import com.mojang.authlib.minecraft.UserApiService;
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
-import net.minecraft.SharedConstants;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.main.GameConfig;
 import net.minecraft.client.multiplayer.ProfileKeyPairManager;
-import net.minecraft.util.CryptException;
 import net.minecraft.world.entity.player.ProfileKeyPair;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
-import java.io.IOException;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 

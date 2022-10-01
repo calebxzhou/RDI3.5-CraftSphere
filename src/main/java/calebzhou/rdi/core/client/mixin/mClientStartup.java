@@ -1,30 +1,17 @@
 package calebzhou.rdi.core.client.mixin;
 
-import calebzhou.rdi.core.client.RdiCore;
-import calebzhou.rdi.core.client.constant.RdiFileConst;
 import calebzhou.rdi.core.client.loader.LoadProgressDisplay;
 import calebzhou.rdi.core.client.misc.RdiSystemTray;
-import calebzhou.rdi.core.client.model.RdiUser;
-import calebzhou.rdi.core.client.util.*;
-import joptsimple.OptionParser;
-import joptsimple.OptionSet;
-import joptsimple.OptionSpec;
+import calebzhou.rdi.core.client.util.DialogUtils;
 import net.minecraft.Util;
 import net.minecraft.client.main.Main;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
 
 @Mixin(Main.class)
 public class mClientStartup {

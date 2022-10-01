@@ -1,31 +1,39 @@
 package calebzhou.rdi.core.client.screen;
 
 import calebzhou.rdi.core.client.RdiSharedConstants;
+import calebzhou.rdi.core.client.misc.HwSpec;
 import calebzhou.rdi.core.client.misc.MusicPlayer;
+import calebzhou.rdi.core.client.model.RdiGeoLocation;
 import calebzhou.rdi.core.client.texture.Textures;
 import calebzhou.rdi.core.client.util.DialogUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.screens.GenericDirtMessageScreen;
 import net.minecraft.client.gui.screens.OptionsScreen;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.multiplayer.PlayerInfo;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
+import java.util.UUID;
 
 public class RdiPauseScreen extends Screen {
-    private final boolean showMenu;
+   // private final boolean showMenu;
+    private final HwSpec spec;
 
-    public RdiPauseScreen(boolean showMenu) {
+    public RdiPauseScreen(/*boolean showMenu*/) {
         super(Component.literal("菜单"));
-        this.showMenu=showMenu;
+        //this.showMenu=showMenu;
+		this.spec=HwSpec.getSystemSpec();
     }
 
     @Override
     protected void init() {
-        if(showMenu)
-            initWidgets();
+		//if(showMenu)
+		initWidgets();
     }
 
 
@@ -74,22 +82,35 @@ public class RdiPauseScreen extends Screen {
     @Override
     public void tick() {
         super.tick();
-
-
-
-
     }
 
 
     @Override
     public void render(PoseStack matrices, int mouseX, int mouseY, float delta) {
 
-        if (this.showMenu) {
-            this.renderBackground(matrices);
-            drawCenteredString(matrices, this.font, this.title, this.width / 2, 40, 16777215);
-        } else {
+        //if (this.showMenu) {
+		this.renderBackground(matrices);
+		drawCenteredString(matrices, this.font, this.title, this.width / 2, 40, 0xffffff);
+
+		int fontColor = 0xeeeeee;
+		int width = 40;
+		drawString(matrices, this.font, "CPU "+spec.cpu, width, this.height-100, fontColor);
+		drawString(matrices, this.font, "显卡 "+spec.gpu, width, this.height-90, fontColor);
+		drawString(matrices, this.font, "内存 "+spec.mem, width, this.height-80, fontColor);
+		LocalPlayer player = Minecraft.getInstance().player;
+		if(player==null)
+			return;
+		PlayerInfo playerInfo = player.connection.getPlayerInfo(UUID.fromString(player.getStringUUID()));
+		if(playerInfo==null)
+			return;
+		int latency = playerInfo.getLatency();
+		String carrier = RdiGeoLocation.currentGeoLocation.province.substring(0,2)+RdiGeoLocation.currentGeoLocation.isp;
+		String networkDetails = carrier+" "+latency+"ms";
+		drawString(matrices, this.font, "网络 "+networkDetails, width, this.height-70, fontColor);
+		RdiPingNumberDisplay.renderPingIcon(this,matrices,16,width-20,this.height-70,latency);
+       /* } else {
             drawCenteredString(matrices, this.font, this.title, this.width / 2, 10, 16777215);
-        }
+        }*/
         super.render(matrices, mouseX, mouseY, delta);
     }
 }

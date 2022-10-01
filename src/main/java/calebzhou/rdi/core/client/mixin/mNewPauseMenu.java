@@ -3,7 +3,6 @@ package calebzhou.rdi.core.client.mixin;
 import calebzhou.rdi.core.client.screen.RdiPauseScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.server.IntegratedServer;
 import net.minecraft.client.sounds.SoundManager;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
@@ -23,21 +22,18 @@ public abstract class mNewPauseMenu {
 
     @Shadow public abstract boolean hasSingleplayerServer();
 
-    @Shadow private @Nullable IntegratedServer singleplayerServer;
-
     /**
      * @author
      */
     @Overwrite
     public void pauseGame(boolean pause) {
         if (screen == null) {
-            boolean bl = hasSingleplayerServer() && !singleplayerServer.isPublished();
-            if (bl) {
-                this.setScreen(new RdiPauseScreen(!pause));
+            if (hasSingleplayerServer()) {
+                //this.setScreen(new RdiPauseScreen(!pause));
                 this.soundManager.pause();
-            } else {
-                this.setScreen(new RdiPauseScreen(true));
-            }
+            } //else {
+                this.setScreen(new RdiPauseScreen(/*true*/));
+            //}
 
         }
     }

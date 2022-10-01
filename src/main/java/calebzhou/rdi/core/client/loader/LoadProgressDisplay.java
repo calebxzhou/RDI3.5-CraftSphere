@@ -1,27 +1,21 @@
 package calebzhou.rdi.core.client.loader;
 
 import calebzhou.rdi.core.client.misc.MusicPlayer;
-import calebzhou.rdi.core.client.misc.RdiSystemTray;
 import calebzhou.rdi.core.client.util.DialogUtils;
 import net.minecraft.Util;
 import org.apache.commons.lang3.RandomUtils;
-import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
 
-import javax.swing.*;
-import javax.swing.text.DefaultCaret;
 import java.awt.*;
 import java.nio.IntBuffer;
 
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.glfw.Callbacks.*;
-import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.system.MemoryStack.*;
-import static org.lwjgl.system.MemoryUtil.*;
+import static org.lwjgl.system.MemoryStack.stackPush;
+import static org.lwjgl.system.MemoryUtil.NULL;
 public class LoadProgressDisplay extends Thread{
 	public static void main(String[] args) {
 		new LoadProgressDisplay().start();;

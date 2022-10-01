@@ -1,7 +1,6 @@
 package calebzhou.rdi.core.client.constant;
 
 import calebzhou.rdi.core.client.RdiSharedConstants;
-import calebzhou.rdi.core.client.model.RdiUser;
 
 import java.io.File;
 

@@ -1,8 +1,11 @@
 package calebzhou.rdi.core.client;
 
 import calebzhou.rdi.core.client.constant.RdiFileConst;
+import calebzhou.rdi.core.client.model.RdiGeoLocation;
 import calebzhou.rdi.core.client.model.RdiUser;
+import calebzhou.rdi.core.client.model.RdiWeather;
 import calebzhou.rdi.core.client.util.DialogUtils;
+import calebzhou.rdi.core.client.util.RdiSerializer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.FriendlyByteBuf;
@@ -19,15 +22,25 @@ import java.nio.charset.StandardCharsets;
  * Created by calebzhou on 2022-09-18,22:56.
  */
 public class RdiNetworkReceiver {
-	public static final RdiNetworkReceiver INSTANCE = new RdiNetworkReceiver();
 	private RdiNetworkReceiver(){ }
-	public void register(){
-		ClientPlayNetworking.registerGlobalReceiver(NetworkPackets.SET_PASSWORD,this::onSetPassword);
-		ClientPlayNetworking.registerGlobalReceiver(NetworkPackets.DIALOG_INFO,this::onReceiveDialogInfo);
-		ClientPlayNetworking.registerGlobalReceiver(NetworkPackets.POPUP,this::onReceivePopup);
+	public static void register(){
+		RdiCore.LOGGER.info("正在注册网络");
+		ClientPlayNetworking.registerGlobalReceiver(NetworkPackets.SET_PASSWORD,RdiNetworkReceiver::onSetPassword);
+		ClientPlayNetworking.registerGlobalReceiver(NetworkPackets.DIALOG_INFO,RdiNetworkReceiver::onReceiveDialogInfo);
+		ClientPlayNetworking.registerGlobalReceiver(NetworkPackets.POPUP,RdiNetworkReceiver::onReceivePopup);
+		ClientPlayNetworking.registerGlobalReceiver(NetworkPackets.WEATHER,RdiNetworkReceiver::onReceiveWeather);
+		ClientPlayNetworking.registerGlobalReceiver(NetworkPackets.GEO_LOCATION,RdiNetworkReceiver::onReceiveGeoLocation);
 	}
 
-	private void onSetPassword(Minecraft minecraft, ClientPacketListener listener, FriendlyByteBuf buf, PacketSender sender) {
+	private static void onReceiveGeoLocation(Minecraft minecraft, ClientPacketListener listener, FriendlyByteBuf buf, PacketSender sender) {
+		RdiGeoLocation.currentGeoLocation = RdiSerializer.GSON.fromJson(buf.readUtf(),RdiGeoLocation.class);
+	}
+
+	private static void onReceiveWeather(Minecraft minecraft, ClientPacketListener listener, FriendlyByteBuf buf, PacketSender sender) {
+		RdiWeather.currentWeather = RdiSerializer.GSON.fromJson(buf.readUtf(),RdiWeather.class);
+	}
+
+	private static void onSetPassword(Minecraft minecraft, ClientPacketListener listener, FriendlyByteBuf buf, PacketSender sender) {
 		String pwd = buf.readUtf();
 		File pwdFile = RdiFileConst.getUserPasswordFile(RdiUser.getCurrentUser().getUuid());
 		try {
@@ -38,7 +51,7 @@ public class RdiNetworkReceiver {
 		RdiUser.getCurrentUser().setPwd(pwd);
 	}
 	//接收服务器的弹框信息
-	private void onReceivePopup(Minecraft minecraft, ClientPacketListener listener, FriendlyByteBuf buf, PacketSender sender) {
+	private static void onReceivePopup(Minecraft minecraft, ClientPacketListener listener, FriendlyByteBuf buf, PacketSender sender) {
 		String info = buf.readUtf();
 		String[] split = info.split("\\|");
 		String type= split[0];
@@ -56,7 +69,7 @@ public class RdiNetworkReceiver {
 	}
 
 	//接收服务器的对话框信息
-	private void onReceiveDialogInfo(Minecraft minecraft, ClientPacketListener listener, FriendlyByteBuf buf, PacketSender sender) {
+	private static void onReceiveDialogInfo(Minecraft minecraft, ClientPacketListener listener, FriendlyByteBuf buf, PacketSender sender) {
 		String info = buf.readUtf();
 		String[] split = info.split("\\|");
 		String type= split[0];

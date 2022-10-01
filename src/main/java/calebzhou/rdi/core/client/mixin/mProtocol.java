@@ -1,6 +1,5 @@
 package calebzhou.rdi.core.client.mixin;
 
-import calebzhou.rdi.core.client.RdiCore;
 import calebzhou.rdi.core.client.RdiSharedConstants;
 import com.google.gson.JsonObject;
 import net.minecraft.DetectedVersion;

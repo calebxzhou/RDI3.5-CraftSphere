@@ -6,7 +6,6 @@ import calebzhou.rdi.core.client.model.RdiUser;
 import calebzhou.rdi.core.client.util.UuidUtils;
 import net.minecraft.client.User;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

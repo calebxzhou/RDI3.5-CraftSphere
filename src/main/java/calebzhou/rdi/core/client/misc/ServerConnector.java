@@ -9,8 +9,8 @@ import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.multiplayer.ServerStatusPinger;
 import net.minecraft.client.multiplayer.resolver.ServerAddress;
 
-import static calebzhou.rdi.core.client.RdiSharedConstants.MODID_DISPLAY;
 import static calebzhou.rdi.core.client.RdiSharedConstants.CORE_VERSION;
+import static calebzhou.rdi.core.client.RdiSharedConstants.MODID_DISPLAY;
 
 public class ServerConnector {
     public static final ServerStatusPinger PINGER = new ServerStatusPinger();
