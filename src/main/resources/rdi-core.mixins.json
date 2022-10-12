@@ -7,6 +7,7 @@
   "client": [
     "AccessSplashOverlay",
     "AccessSystemReport",
+    "mAskToStopClient",
     "mConnectScreen",
     "mDeathGoNewTitle",
     "mDisconnectedScreen",
@@ -22,6 +23,8 @@
     "mNewPauseMenu",
     "mNewScreens",
     "mNoChatBrackets",
+    "mNoChatValidation",
+    "mNoDirtBackground",
     "mNoReportScreen",
     "mNoUnicodeFonts",
     "mNoUnicodeFonts2",
@@ -32,6 +35,7 @@
     "mTabPlayerHud",
     "mTitleScreen",
     "mUserDataRead",
+    "mUseRdiChatScreen",
     "mWindowTitle"
   ],
   "injectors": {

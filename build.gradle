@@ -1,4 +1,15 @@
+buildscript {
+	repositories {
+		google()
+		mavenCentral()
+	}
+	dependencies {
+		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.20"
+	}
+}
 plugins {
+	// replace `<...>` with the plugin name
+		id 'org.jetbrains.kotlin.jvm' version '1.7.20'
 	id 'maven-publish'
 	id "java-library"
 	alias libs.plugins.quilt.loom
@@ -92,16 +103,24 @@ dependencies {
 	modImplementation("maven.modrinth:ferrite-core:5.0.0-fabric")
 	modImplementation("maven.modrinth:modmenu:4.0.6")
 	modImplementation("maven.modrinth:wthit:quilt-5.12.0")
+
 	modImplementation("maven.modrinth:badpackets:fabric-0.2.0")
+
 	//dashloader，提高载入速度
 	modImplementation("maven.modrinth:dashloader:4.1.3+1.19")
+	modImplementation("net.fabricmc:fabric-language-kotlin:1.8.4+kotlin.1.7.20")
 	implementation 'dev.quantumfusion:Taski:1.1.0'
 	implementation 'dev.quantumfusion:Hyphen:0.2.2'
+	implementation("org.jetbrains.kotlin:kotlin-reflect")
+	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+	testImplementation 'org.jetbrains.kotlin:kotlin-test'
 	//world edit
 	//modImplementation("curse.maven:project-225608:3922622")
 	//-------------------
 }
-
+test {
+	useJUnitPlatform()
+}
 processResources {
 	inputs.property "version", version
 

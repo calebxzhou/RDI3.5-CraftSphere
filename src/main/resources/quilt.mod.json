@@ -1,14 +1,14 @@
 {
 	"schema_version": 1,
 	"quilt_loader": {
-		"group": "com.example",
-		"id": "example_mod",
+		"group": "calebzhou.rdi.core",
+		"id": "rdict3",
 		"version": "${version}",
 		"metadata": {
-			"name": "Mod Name",
-			"description": "A short description of your mod.",
+			"name": "RDI核心",
+			"description": "如题。",
 			"contributors": {
-				"Your name here": "Owner"
+				"Davickk": "Davickk"
 			},
 			"contact": {
 				"homepage": "https://example.com/",
@@ -18,7 +18,7 @@
 			"icon": "assets/example_mod/icon.png"
 		},
 		"intermediate_mappings": "net.fabricmc:intermediary",
-		"entrypoints": {
+		"entrypoints": { 
 			"init": "calebzhou.rdi.core.client.RdiCore"
 		},
 		"depends": [

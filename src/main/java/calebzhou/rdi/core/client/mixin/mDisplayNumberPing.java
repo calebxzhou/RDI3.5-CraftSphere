@@ -1,6 +1,5 @@
 package calebzhou.rdi.core.client.mixin;
 
-import calebzhou.rdi.core.client.screen.RdiPingNumberDisplay;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.PlayerTabOverlay;
@@ -13,6 +12,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.Redirect;
+
+
 
 @Mixin(PlayerTabOverlay.class)
 public abstract class mDisplayNumberPing {
@@ -42,6 +43,6 @@ public abstract class mDisplayNumberPing {
 			at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/PlayerTabOverlay;renderPingIcon(Lcom/mojang/blaze3d/vertex/PoseStack;IIILnet/minecraft/client/multiplayer/PlayerInfo;)V"))
 	private void redirectRenderLatencyIconCall(
 			PlayerTabOverlay instance, PoseStack poseStack, int width, int x, int y, PlayerInfo playerInfo) {
-		RdiPingNumberDisplay.renderPingNumber(minecraft, poseStack, width, x, y, playerInfo);
+		calebzhou.rdi.core.client.screen.RdiPingNumberDisplay.renderPingNumber(minecraft, poseStack, width, x, y, playerInfo);
 	}
 }

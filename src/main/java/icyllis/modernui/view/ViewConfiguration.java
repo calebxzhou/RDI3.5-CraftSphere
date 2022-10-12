@@ -115,7 +115,8 @@ public class ViewConfiguration {
     /**
      * View scale factor, depends on user preference or display device.
      */
-    private volatile float mViewScale = 2.0f;
+    //字体尺寸
+	private volatile float mViewScale = 2.0f;
     private volatile float mFontScale = 2.0f;
     private volatile float mScaledFontScale = 1.0f;
 

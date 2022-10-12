@@ -1,23 +1,21 @@
-package calebzhou.rdi.core.client.util;
+package calebzhou.rdi.core.client.util
 
-import calebzhou.rdi.core.client.RdiCore;
+import calebzhou.rdi.core.client.RdiCore
+import java.io.File
+import java.io.InputStream
 
-import java.io.File;
-import java.io.InputStream;
-
-public class FileUtils {
-    public static final File GAME_FOLDER = new File(".");
-    public static final File MOD_FOLDER = new File(GAME_FOLDER,"mods");
-    public static File getJarResourceFile(String fileInJar){
-        return new File(getJarResourceFileUrl(fileInJar));
-    }
-    public static String getJarResourceFileUrl(String fileInJar){
-        return FileUtils.class.getClassLoader().getResource(fileInJar)
-                .getFile()/*.replace("/","\\")*/.replace("%20"," ");
-    }
-    public static InputStream getJarResourceAsStream(String fileInJar)
-    {
-        return RdiCore.class.getResourceAsStream("/assets/rdict3/"+fileInJar);
+object FileUtils {
+    val GAME_FOLDER = File(".")
+    val MOD_FOLDER = File(GAME_FOLDER, "mods")
+    fun getJarResourceFile(fileInJar: String?): File {
+        return File(getJarResourceFileUrl(fileInJar))
     }
 
+    fun getJarResourceFileUrl(fileInJar: String?): String {
+        return FileUtils::class.java.classLoader.getResource(fileInJar)!!.file.replace("%20", " ")
+    }
+
+    fun getJarResourceAsStream(fileInJar: String): InputStream {
+        return RdiCore::class.java.getResourceAsStream("/assets/rdict3/$fileInJar")!!
+    }
 }

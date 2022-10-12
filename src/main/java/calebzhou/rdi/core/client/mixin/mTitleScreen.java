@@ -1,8 +1,6 @@
 package calebzhou.rdi.core.client.mixin;
 
 import calebzhou.rdi.core.client.RdiSharedConstants;
-import calebzhou.rdi.core.client.misc.ServerConnector;
-import calebzhou.rdi.core.client.screen.RdiTitleScreen;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.WorldVersion;
 import net.minecraft.client.Minecraft;
@@ -26,7 +24,7 @@ class mTitleScreen {
 
     @Inject(method = "<init>()V",at=@At("TAIL"))
     private void alwaysGoNew(CallbackInfo ci){
-        Minecraft.getInstance().setScreen(RdiTitleScreen.INSTANCE);
+        Minecraft.getInstance().setScreen(calebzhou.rdi.core.client.screen.RdiTitleScreen.INSTANCE);
     }
     @Redirect(method = "render",at = @At(value = "INVOKE",target = "Lnet/minecraft/WorldVersion;getName()Ljava/lang/String;"))
     private String vers(WorldVersion instance){
@@ -37,7 +35,7 @@ class mTitleScreen {
     private void enterServer(CallbackInfo ci){
         long handle = Minecraft.getInstance().getWindow().getWindow();
         if(InputConstants.isKeyDown(handle,InputConstants.KEY_RETURN)){
-            ServerConnector.connect();
+			calebzhou.rdi.core.client.misc.ServerConnector.connect();
         }
     }
 }

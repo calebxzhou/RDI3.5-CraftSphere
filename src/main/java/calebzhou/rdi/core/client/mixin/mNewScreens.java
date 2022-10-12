@@ -1,7 +1,4 @@
 package calebzhou.rdi.core.client.mixin;
-
-import calebzhou.rdi.core.client.screen.RdiLoadingOverlay;
-import calebzhou.rdi.core.client.screen.RdiTitleScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.DeathScreen;
 import net.minecraft.client.gui.screens.LoadingOverlay;
@@ -29,7 +26,7 @@ public abstract class mNewScreens {
     private void notDisplayOverlay(Minecraft instance, Overlay overlay){
         LoadingOverlay splashOverlay = (( LoadingOverlay) overlay);
         AccessSplashOverlay accessSplashOverlay = ((AccessSplashOverlay) splashOverlay);
-        instance.setOverlay(new RdiLoadingOverlay(
+        instance.setOverlay(new calebzhou.rdi.core.client.screen.RdiLoadingOverlay(
                 instance,
                 accessSplashOverlay.getReload(),
                 accessSplashOverlay.getOnFinish())
@@ -38,7 +35,7 @@ public abstract class mNewScreens {
     //不进入mc本身的标题界面
     @Redirect(method = "<init>",at=@At(value = "INVOKE",target = "Lnet/minecraft/client/Minecraft;setScreen(Lnet/minecraft/client/gui/screens/Screen;)V"))
     private void goRdiTitleScreen(Minecraft instance, Screen screen){
-        setScreen(RdiTitleScreen.INSTANCE);
+        setScreen(calebzhou.rdi.core.client.screen.RdiTitleScreen.INSTANCE);
     }
 }
 
@@ -54,6 +51,6 @@ class mDeathGoNewTitle{
     //死亡时去新的标题画面
     @Redirect(method = "exitToTitleScreen",at=@At(value = "INVOKE",target = "Lnet/minecraft/client/Minecraft;setScreen(Lnet/minecraft/client/gui/screens/Screen;)V"))
     private void goRdiTitleScreen(Minecraft mc, Screen screen){
-        mc.setScreen(RdiTitleScreen.INSTANCE);
+        mc.setScreen(calebzhou.rdi.core.client.screen.RdiTitleScreen.INSTANCE);
     }
 }

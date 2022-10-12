@@ -1,8 +1,5 @@
 package calebzhou.rdi.core.client.mixin;
 
-import calebzhou.rdi.core.client.loader.LoadProgressDisplay;
-import calebzhou.rdi.core.client.misc.RdiSystemTray;
-import calebzhou.rdi.core.client.util.DialogUtils;
 import net.minecraft.Util;
 import net.minecraft.client.main.Main;
 import org.spongepowered.asm.mixin.Mixin;
@@ -10,8 +7,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.awt.*;
 
 @Mixin(Main.class)
 public class mClientStartup {
@@ -25,11 +20,7 @@ public class mClientStartup {
     }
 	@Inject(method = "run",at = @At("HEAD"))
 	private static void rdiStart(String[] args, boolean enableDataFixerOptimizations, CallbackInfo ci){
-		LoadProgressDisplay.loadStartTime=System.currentTimeMillis();
-		RdiSystemTray.createTray();
-		new LoadProgressDisplay().start();
-		if(Util.getPlatform() == Util.OS.WINDOWS)
-			DialogUtils.showPopup(TrayIcon.MessageType.INFO,"RDI客户端已经开始载入了！请您耐心等待...");
+		calebzhou.rdi.core.client.loader.LoadProgressDisplay.onStart();
 	}
    /* @Inject(method = "run",remap = false,at = @At(ordinal = 0,value = "INVOKE",target = "Lnet/minecraft/client/main/Main;parseArgument(Ljoptsimple/OptionSet;Ljoptsimple/OptionSpec;)Ljava/lang/Object;"),locals = LocalCapture.CAPTURE_FAILEXCEPTION)
     private static void RDI_readUuid(String[] args, boolean enableDataFixerOptimizations, CallbackInfo ci, OptionParser optionParser, OptionSpec optionSpec, OptionSpec optionSpec2, OptionSpec optionSpec3, OptionSpec optionSpec4, OptionSpec optionSpec5, OptionSpec optionSpec6, OptionSpec optionSpec7, OptionSpec optionSpec8, OptionSpec optionSpec9, OptionSpec optionSpec10, OptionSpec optionSpec11, OptionSpec optionSpec12, OptionSpec optionSpec13, OptionSpec optionSpec14, OptionSpec optionSpec15, OptionSpec optionSpec16, OptionSpec optionSpec17, OptionSpec optionSpec18, OptionSpec optionSpec19, OptionSpec optionSpec20, OptionSpec optionSpec21, OptionSpec optionSpec22, OptionSpec optionSpec23, OptionSpec optionSpec24, OptionSpec optionSpec25, OptionSpec optionSpec26, OptionSet optionSet){

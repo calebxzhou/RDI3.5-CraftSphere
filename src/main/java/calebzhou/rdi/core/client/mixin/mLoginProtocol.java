@@ -33,7 +33,7 @@ public class mLoginProtocol {
     @Overwrite
     public void write(FriendlyByteBuf friendlyByteBuf) {
 		//改变登录格式
-        friendlyByteBuf.writeUtf(RdiSerializer.GSON.toJson(RdiUser.getCurrentUser()), nameLen);
+        friendlyByteBuf.writeUtf(RdiSerializer.GSON.toJson(RdiUser.Companion.getCurrentRdiUser()), nameLen);
         friendlyByteBuf.writeOptional(publicKey, (friendlyByteBuf2, data) -> data.write(friendlyByteBuf));
 		friendlyByteBuf.writeOptional(profileId, FriendlyByteBuf::writeUUID);
     }

@@ -1,114 +1,95 @@
-package calebzhou.rdi.core.client.misc;
+package calebzhou.rdi.core.client.misc
 
-import calebzhou.rdi.core.client.RdiSharedConstants;
-import org.quiltmc.loader.api.ModContainer;
-import org.quiltmc.loader.api.ModMetadata;
-import org.quiltmc.loader.api.QuiltLoader;
-import oshi.SystemInfo;
-import oshi.hardware.*;
-import oshi.software.os.OperatingSystem;
+import calebzhou.rdi.core.client.RdiSharedConstants
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import org.quiltmc.loader.api.ModContainer
+import org.quiltmc.loader.api.QuiltLoader
+import oshi.SystemInfo
+import java.util.*
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-public class HwSpec implements Serializable {
-
-    public String brand;
-    public String os;
-    public String board;
-    public String mem;
-    public String disk;
-    public String cpu;
-    public String gpu;
-    public String mods;
-    public String ver;
-	private static HwSpec spec;
-	public static void loadSystemSpec(){
-		HwSpec spec = new HwSpec();
-		SystemInfo systemInfo = new SystemInfo();
-		HardwareAbstractionLayer hal = systemInfo.getHardware();
-
-		ComputerSystem csys = hal.getComputerSystem();
-		spec.brand = csys.getManufacturer()+":"+csys.getModel();
-		Baseboard baseboard = csys.getBaseboard();
-		spec.board = baseboard.getManufacturer()+":"+baseboard.getModel();
-
-		OperatingSystem operatingSystem = systemInfo.getOperatingSystem();
+data class HwSpec(val brand: String,
+                  val os: String,
+                  val board: String,
+                  val mem: String,
+                  val disk: String,
+                  val cpu: String,
+                  val gpu: String,
+                  val mods: String,
+                  val ver: String,){
 
 
-		String osArch = System.getProperty("os.arch");
-		String osVersion = System.getProperty("os.version");
-		spec.os= String.format("%s %s %s(%s,%s)",operatingSystem.getManufacturer(), operatingSystem.getFamily(),operatingSystem.getVersionInfo().toString(), osArch, osVersion);
+    companion object {
+        var currentHwSpec = loadSystemSpec()
+        fun loadSystemSpec() :HwSpec{
+            val systemInfo = SystemInfo()
+            val hal = systemInfo.hardware
+            val csys = hal.computerSystem
+            val brand = "${csys.manufacturer}:${csys.model}"
+
+            val baseboard = csys.baseboard
+            val board = "${baseboard.manufacturer}:${baseboard.model}"
+
+            val osInfo = systemInfo.operatingSystem
+            val osArch = System.getProperty("os.arch")
+            val osVersion = System.getProperty("os.version")
+            val os = "${osInfo.manufacturer} ${osInfo.family} ${osInfo.versionInfo}(${osArch},${osVersion})"
+
+            val cpuinfo = hal.processor
+            val cpuid = cpuinfo.processorIdentifier
+            val cpuName = cpuid.name.replace("  ", "")
+            val cpuCores = cpuinfo.physicalProcessorCount
+            val cpuThreads = cpuinfo.logicalProcessorCount
+            val cpuFreq = "%.2f".format((cpuid.vendorFreq / 1.0E9f).toDouble())
+            val cpuMaxFreq = "%.2f".format((Arrays.stream(cpuinfo.currentFreq).max().asLong / 1.0E9f).toDouble())
+            val cpu = "${cpuName}(${cpuCores}C/${cpuThreads}T)@${cpuFreq}/${cpuMaxFreq}GHz"
+
+            val gpu = StringBuilder()
+            for (gpuinfo in hal.graphicsCards) {
+                val gpuVram = "%.2f".format(gpuinfo.vRam.toFloat() / (1024 * 1024 * 1024f))
+                gpu.append("${gpuinfo.name} (${gpuVram}GB,${gpuinfo.vendor});")
+            }
+
+            val mem = StringBuilder()
+            var memTotalSize = 0f
+            for (meminfo in hal.memory.physicalMemory) {
+                val memSizef = meminfo.capacity.toFloat() / (1024 * 1024 * 1024f)
+                memTotalSize += memSizef
+                val memSize = "%.2f".format(memSizef)
+                val memType = meminfo.memoryType
+                val memSpd = (meminfo.clockSpeed / 1.0E6f).toInt().toString()
+                mem.append("${memSize}GB-${memType}-${memSpd};")
+            }
+            mem.append("(∑%.2fGB)".format(memTotalSize))
+
+            val disk = StringBuilder()
+            var diskTotalSize = 0f
+            for (diskStore in hal.diskStores) {
+                val diskSizef = diskStore.size.toFloat() / (1024 * 1024 * 1024f)
+                diskTotalSize += diskSizef
+                disk.append(
+                        "%s(%.2fGB);".format(
+                        diskStore.model.replace("(Standard disk drives)", "").replace("(标准磁盘驱动器)", ""),
+                        diskSizef)
+                )
+            }
+            disk.append(String.format("(∑%.2fGB)", diskTotalSize))
 
 
-		CentralProcessor cpuinfo = hal.getProcessor();
-		CentralProcessor.ProcessorIdentifier cpuid = cpuinfo.getProcessorIdentifier();
-		String cpuName = cpuid.getName().replace("  ","");
-		int cpuCores = cpuinfo.getPhysicalProcessorCount();
-		int cpuThreads = cpuinfo.getLogicalProcessorCount();
-		double cpuFreq = cpuid.getVendorFreq() / 1.0E9f;
-		double cpuMaxFreq = Arrays.stream(cpuinfo.getCurrentFreq()).max().getAsLong() / 1.0E9f;
-		spec.cpu=(String.format("%s(%sC/%sT)@%.2f/%.2fGHz", cpuName, cpuCores, cpuThreads, cpuFreq,cpuMaxFreq));
+            val mods = StringBuilder()
+            var modAmount = 0
+            val topLevelMods: MutableList<ModContainer> = ArrayList()
+            for (container in QuiltLoader.getAllMods()) {
+                val metadata = container.metadata()
+                if (metadata.id().startsWith("fabric-")) continue
+                mods.append(String.format("%s(%s);", metadata.name(), metadata.id()))
+                ++modAmount
+                topLevelMods.add(container)
+            }
+            mods.append("(∑").append(modAmount).append(")")
 
-		StringBuilder gpu = new StringBuilder();
-		for (GraphicsCard gpuinfo : hal.getGraphicsCards()) {
-			String gpuName = gpuinfo.getName();
-			String gpuVram = String.format("%.2f", (float) gpuinfo.getVRam() / (1024 * 1024 * 1024f));
-			gpu.append(String.format("%s (%sGB);", gpuName, gpuVram));
-		}
-		spec.gpu=(gpu.toString());
-
-		StringBuilder mem = new StringBuilder();
-		float memTotalSize=0;
-		for (PhysicalMemory meminfo : hal.getMemory().getPhysicalMemory()) {
-			float memSizef =(float) meminfo.getCapacity() / (1024 * 1024 * 1024f);
-			memTotalSize+=memSizef;
-			String memSize = String.format("%.2f", memSizef);
-			String memType = meminfo.getMemoryType();
-			String memSpd = String.valueOf((int) (meminfo.getClockSpeed() / 1.0E6f));
-			mem.append(String.format("%sGB-%s-%s;", memSize, memType, memSpd));
-		}
-		mem.append(String.format("(∑%.2fGB)", memTotalSize));
-		spec.mem=(mem.toString());
-
-		StringBuilder disk = new StringBuilder();
-		float diskTotalSize=0;
-		for (HWDiskStore diskStore : hal.getDiskStores()) {
-			float diskSizef =(float) diskStore.getSize() / (1024 * 1024 * 1024f);
-			diskTotalSize+=diskSizef;
-			disk.append(String.format("%s(%.2fGB);",diskStore.getModel().replace("(Standard disk drives)","").replace("(标准磁盘驱动器)",""),diskSizef));
-		}
-		disk.append(String.format("(∑%.2fGB)", diskTotalSize));
-		spec.disk=(disk.toString());
-
-		StringBuilder mods = new StringBuilder();
-		int modAmount =0;
-		List<ModContainer> topLevelMods = new ArrayList<>();
-		for (ModContainer container : QuiltLoader.getAllMods()) {
-			ModMetadata metadata = container.metadata();
-			if (metadata.id().startsWith("fabric-"))
-				continue;
-			mods.append(String.format("%s(%s);", metadata.name(), metadata.id()));
-			++modAmount;
-			topLevelMods.add(container);
-		}
-		mods.append("(∑").append(modAmount).append(")");
-		spec.mods=(mods.toString());
-		spec.ver= RdiSharedConstants.CORE_VERSION;
-		HwSpec.spec=spec;
-	}
-  /*  public static void main(String[] args) {
-        HwSpec systemSpec = HwSpec.getSystemSpec();
-        Gson gson = new Gson();
-        Gson gson1 = gson.newBuilder().setPrettyPrinting().create();
-        System.out.println(gson1.toJson(systemSpec));
-
-    }*/
-    public static HwSpec getSystemSpec() {
-        return HwSpec.spec;
+            return HwSpec(brand,os,board,mem.toString(), disk.toString(),cpu, gpu.toString(),
+                mods.toString(), RdiSharedConstants.CORE_VERSION)
+        }
     }
-
-
 }

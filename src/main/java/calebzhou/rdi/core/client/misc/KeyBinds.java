@@ -15,8 +15,6 @@ public class KeyBinds  {
     public static KeyMapping HOME_KEY;
     public static void init(){
         HOME_KEY = KeyBindingHelper.registerKeyBinding(new KeyMapping("回岛", InputConstants.Type.KEYSYM,GLFW.GLFW_KEY_H, MODID_DISPLAY));
-        /*SLOWFALL_KEY = KeyBindingHelper.registerKeyBinding(new KeyMapping("缓降", InputConstants.Type.KEYSYM,GLFW.GLFW_KEY_J, MODID_CHN));
-        LEAP_KEY = KeyBindingHelper.registerKeyBinding(new KeyMapping("隔空跳", InputConstants.Type.KEYSYM,GLFW.GLFW_KEY_G, MODID_CHN));*/
     }
 
     public static void handleKeyActions(ClientLevel world) {
@@ -32,10 +30,5 @@ public class KeyBinds  {
                 cmd="home";
             client.player.commandUnsigned(cmd);
         }
-        //按下J键开启缓降
-        /*while (KeyBinds.SLOWFALL_KEY.consumeClick()) {
-            client.player.command("slowfall 1");
-        }*/
-
     }
 }

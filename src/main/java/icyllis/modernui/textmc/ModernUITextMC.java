@@ -186,7 +186,7 @@ public final class ModernUITextMC {
         public final int mCacheLifespan=12;
         public final int mRehashThreshold=100;
         public final int mTextDirection=1;
-        public final boolean mColorEmoji=true;
+        public final boolean mColorEmoji=false;
         public final boolean mBitmapReplacement=false;
         public final boolean mEmojiShortcodes=true;
 

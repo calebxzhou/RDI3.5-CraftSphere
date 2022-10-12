@@ -1,6 +1,5 @@
 package calebzhou.rdi.core.client.mixin;
 
-import calebzhou.rdi.core.client.screen.RdiPauseScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.sounds.SoundManager;
@@ -29,25 +28,9 @@ public abstract class mNewPauseMenu {
     public void pauseGame(boolean pause) {
         if (screen == null) {
             if (hasSingleplayerServer()) {
-                //this.setScreen(new RdiPauseScreen(!pause));
                 this.soundManager.pause();
-            } //else {
-                this.setScreen(new RdiPauseScreen(/*true*/));
-            //}
-
+            }
+                this.setScreen(new calebzhou.rdi.core.client.screen.RdiPauseScreen( ));
         }
     }
-    /*@Redirect(method="Lnet/minecraft/client/MinecraftClient;openPauseMenu(Z)V",
-    at=@At(value="INVOKE",target = "Lnet/minecraft/client/MinecraftClient;setScreen(Lnet/minecraft/client/gui/screen/Screen;)V"
-    ,ordinal = 0))
-    private void openPause(MinecraftClient instance, Screen screen,boolean pause){
-        instance.setScreen(new PauseScreen(pause));
-    }
-
-    @Redirect(method="Lnet/minecraft/client/MinecraftClient;openPauseMenu(Z)V",
-            at=@At(value="INVOKE",target = "Lnet/minecraft/client/MinecraftClient;setScreen(Lnet/minecraft/client/gui/screen/Screen;)V"
-                    ,ordinal = 1))
-    private void openPause2(MinecraftClient instance, Screen screen){
-        instance.setScreen(new PauseScreen(true));
-    }*/
 }

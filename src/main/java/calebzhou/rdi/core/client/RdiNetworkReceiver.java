@@ -4,7 +4,7 @@ import calebzhou.rdi.core.client.constant.RdiFileConst;
 import calebzhou.rdi.core.client.model.RdiGeoLocation;
 import calebzhou.rdi.core.client.model.RdiUser;
 import calebzhou.rdi.core.client.model.RdiWeather;
-import calebzhou.rdi.core.client.util.DialogUtils;
+
 import calebzhou.rdi.core.client.util.RdiSerializer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
@@ -21,10 +21,10 @@ import java.nio.charset.StandardCharsets;
 /**
  * Created by calebzhou on 2022-09-18,22:56.
  */
+
 public class RdiNetworkReceiver {
 	private RdiNetworkReceiver(){ }
 	public static void register(){
-		RdiCore.LOGGER.info("正在注册网络");
 		ClientPlayNetworking.registerGlobalReceiver(NetworkPackets.SET_PASSWORD,RdiNetworkReceiver::onSetPassword);
 		ClientPlayNetworking.registerGlobalReceiver(NetworkPackets.DIALOG_INFO,RdiNetworkReceiver::onReceiveDialogInfo);
 		ClientPlayNetworking.registerGlobalReceiver(NetworkPackets.POPUP,RdiNetworkReceiver::onReceivePopup);
@@ -42,13 +42,13 @@ public class RdiNetworkReceiver {
 
 	private static void onSetPassword(Minecraft minecraft, ClientPacketListener listener, FriendlyByteBuf buf, PacketSender sender) {
 		String pwd = buf.readUtf();
-		File pwdFile = RdiFileConst.getUserPasswordFile(RdiUser.getCurrentUser().getUuid());
+		File pwdFile = RdiFileConst.getUserPasswordFile(RdiUser.Companion.getCurrentRdiUser().getUuid());
 		try {
 			FileUtils.write(pwdFile,pwd, StandardCharsets.UTF_8,false);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		RdiUser.getCurrentUser().setPwd(pwd);
+		RdiUser.Companion.getCurrentRdiUser().setPwd(pwd);
 	}
 	//接收服务器的弹框信息
 	private static void onReceivePopup(Minecraft minecraft, ClientPacketListener listener, FriendlyByteBuf buf, PacketSender sender) {
@@ -64,7 +64,7 @@ public class RdiNetworkReceiver {
 			case "error"->realType= TrayIcon.MessageType.ERROR;
 			default -> realType= TrayIcon.MessageType.NONE;
 		}
-		DialogUtils.showPopup(realType,title,content);
+		calebzhou.rdi.core.client.util.DialogUtils.showPopup(realType,title,content);
 
 	}
 
@@ -75,6 +75,6 @@ public class RdiNetworkReceiver {
 		String type= split[0];
 		String title= split[1];
 		String content= split[2];
-		DialogUtils.showMessageBox(type,title,content);
+		calebzhou.rdi.core.client.util.DialogUtils.showMessageBox(type,title,content);
 	}
 }

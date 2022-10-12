@@ -1,6 +1,5 @@
 package calebzhou.rdi.core.client.mixin;
 
-import calebzhou.rdi.core.client.misc.ServerConnector;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.Screen;
@@ -23,6 +22,6 @@ public class mMultiPlayerScreen extends Screen {
         return addRenderableWidget(new Button(this.width / 2 - 50,
                 this.height - 52, 100, 20,
                 Component.literal("进入RDI服务器").withStyle(Style.EMPTY.withColor(TextColor.parseColor("GREEN"))),
-                button -> ServerConnector.connect()));
+                button -> calebzhou.rdi.core.client.misc.ServerConnector.connect()));
     }
 }
