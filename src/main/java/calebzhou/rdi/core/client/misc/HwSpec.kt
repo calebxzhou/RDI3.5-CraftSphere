@@ -1,12 +1,12 @@
 package calebzhou.rdi.core.client.misc
 
 import calebzhou.rdi.core.client.RdiSharedConstants
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import calebzhou.rdi.core.client.logger
 import org.quiltmc.loader.api.ModContainer
 import org.quiltmc.loader.api.QuiltLoader
 import oshi.SystemInfo
 import java.util.*
+import kotlin.collections.ArrayList
 
 data class HwSpec(val brand: String,
                   val os: String,
@@ -22,6 +22,7 @@ data class HwSpec(val brand: String,
     companion object {
         var currentHwSpec = loadSystemSpec()
         fun loadSystemSpec() :HwSpec{
+            logger.info("载入硬件信息")
             val systemInfo = SystemInfo()
             val hal = systemInfo.hardware
             val csys = hal.computerSystem
@@ -69,7 +70,7 @@ data class HwSpec(val brand: String,
                 diskTotalSize += diskSizef
                 disk.append(
                         "%s(%.2fGB);".format(
-                        diskStore.model.replace("(Standard disk drives)", "").replace("(标准磁盘驱动器)", ""),
+                        diskStore.model,
                         diskSizef)
                 )
             }
@@ -79,17 +80,20 @@ data class HwSpec(val brand: String,
             val mods = StringBuilder()
             var modAmount = 0
             val topLevelMods: MutableList<ModContainer> = ArrayList()
-            for (container in QuiltLoader.getAllMods()) {
+            QuiltLoader.getAllMods().parallelStream().forEach { container->
                 val metadata = container.metadata()
-                if (metadata.id().startsWith("fabric-")) continue
-                mods.append(String.format("%s(%s);", metadata.name(), metadata.id()))
-                ++modAmount
-                topLevelMods.add(container)
+                if (!metadata.id().startsWith("quilt")){
+                    mods.append("${metadata.name()}(${metadata.id()});")
+                    ++modAmount
+                    topLevelMods.add(container)
+                }
             }
             mods.append("(∑").append(modAmount).append(")")
-
-            return HwSpec(brand,os,board,mem.toString(), disk.toString(),cpu, gpu.toString(),
-                mods.toString(), RdiSharedConstants.CORE_VERSION)
+            logger.info("载入硬件信息完成")
+            return HwSpec(
+                brand, os, board, mem.toString(), disk.toString(), cpu, gpu.toString(),
+                mods.toString(), RdiSharedConstants.CORE_VERSION
+            )
         }
     }
 }

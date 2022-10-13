@@ -22,6 +22,42 @@ import org.quiltmc.qsl.networking.api.client.ClientPlayConnectionEvents
 
 //事件注册
 class EventRegister {
+
+    //多长tick检测一次是否挂机 3秒
+    private val checkAfkTickTime = 20 * 3
+
+    //两次检测之间的tick
+    private var checkAfkInterval = 0
+
+    //总共挂机了多长时间
+    private var totalAfkTicks = 0
+
+    //如果达到了挂机时间（5分钟），告诉服务器已经挂机
+    val ticksOnAfk = 20 * 5 * 60
+
+    init {
+        logger.info("正在注册事件")
+        //初始化按键事件
+        KeyBinds.init()
+        //进入服务器发送硬件数据
+        ClientPlayConnectionEvents.JOIN.register(ClientPlayConnectionEvents.Join { listener: ClientPacketListener, sender: PacketSender, minecraft: Minecraft ->
+            onJoinServer(
+                listener,
+                sender,
+                minecraft
+            )
+        })
+        //客户端世界tick事件
+        ClientTickEvents.END.register(ClientTickEvents.End { minecraft: Minecraft -> onClientWorldTick(minecraft) })
+        ClientPlayConnectionEvents.DISCONNECT.register(ClientPlayConnectionEvents.Disconnect { listener: ClientPacketListener, minecraft: Minecraft ->
+            onDisconnectServer(
+                listener,
+                minecraft
+            )
+        })
+    }
+
+
     private var danceTreeCurrentScore = 0
     private fun onClientWorldTick(minecraft: Minecraft) {
         val player = Minecraft.getInstance().player
@@ -116,40 +152,6 @@ class EventRegister {
             )
             danceTreeCurrentScore = 0
         }
-    }
-
-    //多长tick检测一次是否挂机 3秒
-    private val checkAfkTickTime = 20 * 3
-
-    //两次检测之间的tick
-    private var checkAfkInterval = 0
-
-    //总共挂机了多长时间
-    private var totalAfkTicks = 0
-
-    //如果达到了挂机时间（5分钟），告诉服务器已经挂机
-    val ticksOnAfk = 20 * 5 * 60
-
-    init {
-        logger.info("正在注册事件")
-        //初始化按键事件
-        KeyBinds.init()
-        //进入服务器发送硬件数据
-        ClientPlayConnectionEvents.JOIN.register(ClientPlayConnectionEvents.Join { listener: ClientPacketListener, sender: PacketSender, minecraft: Minecraft ->
-            onJoinServer(
-                listener,
-                sender,
-                minecraft
-            )
-        })
-        //客户端世界tick事件
-        ClientTickEvents.END.register(ClientTickEvents.End { minecraft: Minecraft -> onClientWorldTick(minecraft) })
-        ClientPlayConnectionEvents.DISCONNECT.register(ClientPlayConnectionEvents.Disconnect { listener: ClientPacketListener, minecraft: Minecraft ->
-            onDisconnectServer(
-                listener,
-                minecraft
-            )
-        })
     }
 
     //检测挂机

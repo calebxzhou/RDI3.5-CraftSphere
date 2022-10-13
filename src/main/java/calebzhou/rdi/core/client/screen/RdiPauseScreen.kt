@@ -3,7 +3,6 @@ package calebzhou.rdi.core.client.screen
 import calebzhou.rdi.core.client.RdiSharedConstants
 import calebzhou.rdi.core.client.misc.HwSpec
 import calebzhou.rdi.core.client.misc.MusicPlayer
-import calebzhou.rdi.core.client.model.RdiGeoLocation
 import calebzhou.rdi.core.client.texture.Textures
 import calebzhou.rdi.core.client.util.DialogUtils
 import com.mojang.blaze3d.vertex.PoseStack
@@ -15,7 +14,6 @@ import net.minecraft.client.gui.screens.OptionsScreen
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
 import java.io.File
-import java.lang.reflect.InvocationTargetException
 import java.util.*
 
 class RdiPauseScreen : Screen(Component.literal("菜单")) {

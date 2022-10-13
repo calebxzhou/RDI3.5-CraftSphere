@@ -113,6 +113,7 @@ dependencies {
 	implementation 'dev.quantumfusion:Hyphen:0.2.2'
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+	implementation('org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4')
 	testImplementation 'org.jetbrains.kotlin:kotlin-test'
 	//world edit
 	//modImplementation("curse.maven:project-225608:3922622")

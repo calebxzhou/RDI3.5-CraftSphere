@@ -3,7 +3,6 @@ package calebzhou.rdi.core.client.util
 
 
 import calebzhou.rdi.core.client.misc.RdiSystemTray
-import calebzhou.rdi.core.client.model.RdiWeather
 import com.mojang.blaze3d.platform.GLX
 import com.mojang.blaze3d.platform.Window
 import net.minecraft.Util

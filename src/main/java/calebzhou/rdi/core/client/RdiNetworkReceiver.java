@@ -1,9 +1,7 @@
 package calebzhou.rdi.core.client;
 
 import calebzhou.rdi.core.client.constant.RdiFileConst;
-import calebzhou.rdi.core.client.model.RdiGeoLocation;
 import calebzhou.rdi.core.client.model.RdiUser;
-import calebzhou.rdi.core.client.model.RdiWeather;
 
 import calebzhou.rdi.core.client.util.RdiSerializer;
 import net.minecraft.client.Minecraft;
@@ -25,6 +23,7 @@ import java.nio.charset.StandardCharsets;
 public class RdiNetworkReceiver {
 	private RdiNetworkReceiver(){ }
 	public static void register(){
+
 		ClientPlayNetworking.registerGlobalReceiver(NetworkPackets.SET_PASSWORD,RdiNetworkReceiver::onSetPassword);
 		ClientPlayNetworking.registerGlobalReceiver(NetworkPackets.DIALOG_INFO,RdiNetworkReceiver::onReceiveDialogInfo);
 		ClientPlayNetworking.registerGlobalReceiver(NetworkPackets.POPUP,RdiNetworkReceiver::onReceivePopup);

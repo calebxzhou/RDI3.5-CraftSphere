@@ -1,2 +1,0 @@
-[22:56:25] [Test worker/WARN]: Disabling further attempts to query PhysicalDisk.
-[22:56:26] [Test worker/WARN]: COM exception: Invalid Query: SELECT NAME,DISKREADSPERSEC,DISKREADBYTESPERSEC,DISKWRITESPERSEC,DISKWRITEBYTESPERSEC,CURRENTDISKQUEUELENGTH,PERCENTDISKTIME FROM Win32_PerfRawData_PerfDisk_PhysicalDisk WHERE NOT Name="_Total"
