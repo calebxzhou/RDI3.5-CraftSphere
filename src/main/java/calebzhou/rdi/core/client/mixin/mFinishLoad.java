@@ -1,5 +1,6 @@
 package calebzhou.rdi.core.client.mixin;
 
+import calebzhou.rdi.core.client.loader.LoadProgressRecorder;
 import net.minecraft.client.renderer.texture.AtlasSet;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.resources.model.ModelBakery;
@@ -13,6 +14,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class mFinishLoad {
     @Inject(method = "uploadTextures",at=@At("TAIL"))
     private void finishLoad(TextureManager textureManager, ProfilerFiller profilerFiller, CallbackInfoReturnable<AtlasSet> cir){
-		calebzhou.rdi.core.client.loader.LoadProgressDisplay.onFinish();
+		LoadProgressRecorder.INSTANCE.onFinish();
     }
 }

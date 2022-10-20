@@ -25,7 +25,7 @@ import java.net.UnknownServiceException;
  * @author Jon Kristensen
  * @version 1.0
  */
-public class ExampleOggPlayer extends Thread {
+public class OggPlayer extends Thread {
     // If you wish to debug this source, please set the variable below to true.
     private final boolean debugMode = false;
 
@@ -82,10 +82,10 @@ public class ExampleOggPlayer extends Thread {
      *
      * @param pUrl the URL to be opened
      */
-    ExampleOggPlayer(String pUrl) {
+    OggPlayer(String pUrl) {
         configureInputStream(getUrl(pUrl));
     }
-    public ExampleOggPlayer(File musicFile){
+    public OggPlayer(File musicFile){
         configureInputStream(musicFile);
     }
 

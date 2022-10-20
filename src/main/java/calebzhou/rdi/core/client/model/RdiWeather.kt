@@ -6,9 +6,9 @@ package calebzhou.rdi.core.client.model
 
 //RDI天气
 data class RdiWeather(
-    var alert:String="",
-    var realTimeWeather: RdiRealTimeWeather?=null,
-    val dailyWeather: MutableList<RdiDailyWeather> = mutableListOf(),
+    var alert:String,
+    var realTimeWeather: RdiRealTimeWeather,
+    var dailyWeather: MutableList<RdiDailyWeather> = mutableListOf(),
 )
 //RDI天气 实时
 data class RdiRealTimeWeather(

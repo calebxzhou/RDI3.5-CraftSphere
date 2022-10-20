@@ -1,6 +1,7 @@
 package calebzhou.rdi.core.client.screen
 
 import calebzhou.rdi.core.client.RdiSharedConstants
+import calebzhou.rdi.core.client.loader.LoadProgressRecorder
 import calebzhou.rdi.core.client.misc.MusicPlayer
 import calebzhou.rdi.core.client.misc.ServerConnector
 import calebzhou.rdi.core.client.util.DialogUtils
@@ -79,8 +80,8 @@ class RdiTitleScreen : Screen(Component.literal("主界面")) {
                 InputConstants.KEY_NUMPADENTER
             )
         ) {
+            LoadProgressRecorder.musicPlayJob.stop()
             ServerConnector.connect()
-            //Minecraft.getInstance().options.setSoundCategoryVolume(SoundSource.MUSIC,1);
             MusicPlayer.playOggAsync(File(RdiSharedConstants.RDI_SOUND_FOLDER, "connect.ogg"))
         }
     }

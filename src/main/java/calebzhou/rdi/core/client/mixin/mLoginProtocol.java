@@ -1,6 +1,7 @@
 package calebzhou.rdi.core.client.mixin;
 
 
+import calebzhou.rdi.core.client.RdiCore;
 import calebzhou.rdi.core.client.model.RdiUser;
 import calebzhou.rdi.core.client.util.RdiSerializer;
 import net.minecraft.network.FriendlyByteBuf;
@@ -33,7 +34,7 @@ public class mLoginProtocol {
     @Overwrite
     public void write(FriendlyByteBuf friendlyByteBuf) {
 		//改变登录格式
-        friendlyByteBuf.writeUtf(RdiSerializer.GSON.toJson(RdiUser.Companion.getCurrentRdiUser()), nameLen);
+        friendlyByteBuf.writeUtf(RdiSerializer.gson.toJson(RdiCore.Companion.getCurrentRdiUser()), nameLen);
         friendlyByteBuf.writeOptional(publicKey, (friendlyByteBuf2, data) -> data.write(friendlyByteBuf));
 		friendlyByteBuf.writeOptional(profileId, FriendlyByteBuf::writeUUID);
     }

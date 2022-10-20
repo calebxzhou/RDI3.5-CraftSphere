@@ -4,9 +4,12 @@ import calebzhou.rdi.core.client.misc.ServerConnector
 import com.mojang.blaze3d.platform.GlStateManager
 import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.PoseStack
+import com.mojang.blaze3d.vertex.Tesselator
+import icyllis.modernui.textmc.ModernTextRenderer
 import net.minecraft.Util
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.screens.Overlay
+import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.server.packs.resources.ReloadInstance
 import net.minecraft.util.FastColor
 import org.apache.commons.io.FileUtils
@@ -56,8 +59,8 @@ class RdiLoadingOverlay(minecraft: Minecraft, reload: ReloadInstance, exceptionH
         }
     }
 
-    //到2秒 加载条就弹回去
-    var maximumLoadBarLength = 2000f
+    //到3秒 加载条就弹回去
+    var maximumLoadBarLength = 3000f
 
     init {
         //ping一下服务器提高载入速度

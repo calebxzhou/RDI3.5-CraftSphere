@@ -1,6 +1,7 @@
 package calebzhou.rdi.core.client.mixin;
 
 import calebzhou.rdi.core.client.RdiSharedConstants;
+import calebzhou.rdi.core.client.misc.ServerConnector;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.WorldVersion;
 import net.minecraft.client.Minecraft;
@@ -35,7 +36,7 @@ class mTitleScreen {
     private void enterServer(CallbackInfo ci){
         long handle = Minecraft.getInstance().getWindow().getWindow();
         if(InputConstants.isKeyDown(handle,InputConstants.KEY_RETURN)){
-			calebzhou.rdi.core.client.misc.ServerConnector.connect();
+			ServerConnector.connect();
         }
     }
 }

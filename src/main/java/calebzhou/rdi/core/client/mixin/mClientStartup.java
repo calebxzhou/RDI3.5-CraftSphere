@@ -1,5 +1,7 @@
 package calebzhou.rdi.core.client.mixin;
 
+import calebzhou.rdi.core.client.RdiLoader;
+import calebzhou.rdi.core.client.loader.LoadProgressRecorder;
 import net.minecraft.Util;
 import net.minecraft.client.main.Main;
 import org.spongepowered.asm.mixin.Mixin;
@@ -20,31 +22,8 @@ public class mClientStartup {
     }
 	@Inject(method = "run",at = @At("HEAD"))
 	private static void rdiStart(String[] args, boolean enableDataFixerOptimizations, CallbackInfo ci){
-		calebzhou.rdi.core.client.loader.LoadProgressDisplay.onStart();
+		RdiLoader.INSTANCE.onMinecraftStart();
 	}
-   /* @Inject(method = "run",remap = false,at = @At(ordinal = 0,value = "INVOKE",target = "Lnet/minecraft/client/main/Main;parseArgument(Ljoptsimple/OptionSet;Ljoptsimple/OptionSpec;)Ljava/lang/Object;"),locals = LocalCapture.CAPTURE_FAILEXCEPTION)
-    private static void RDI_readUuid(String[] args, boolean enableDataFixerOptimizations, CallbackInfo ci, OptionParser optionParser, OptionSpec optionSpec, OptionSpec optionSpec2, OptionSpec optionSpec3, OptionSpec optionSpec4, OptionSpec optionSpec5, OptionSpec optionSpec6, OptionSpec optionSpec7, OptionSpec optionSpec8, OptionSpec optionSpec9, OptionSpec optionSpec10, OptionSpec optionSpec11, OptionSpec optionSpec12, OptionSpec optionSpec13, OptionSpec optionSpec14, OptionSpec optionSpec15, OptionSpec optionSpec16, OptionSpec optionSpec17, OptionSpec optionSpec18, OptionSpec optionSpec19, OptionSpec optionSpec20, OptionSpec optionSpec21, OptionSpec optionSpec22, OptionSpec optionSpec23, OptionSpec optionSpec24, OptionSpec optionSpec25, OptionSpec optionSpec26, OptionSet optionSet){
 
-		String name = (String) optionSpec11.value(optionSet);
-		String uuid = (String) optionSpec12.value(optionSet);
-		String userTypeName = (String) optionSpec24.value(optionSet);
-
-
-		if(StringUtils.isEmpty(uuid) || uuid.startsWith("00000000")){
-			uuid = UuidUtils.createUuidByName(name);
-		}else{
-			//mojang登录的uuid不带横线，要通过正则表达式转换成带横线的
-			uuid = UuidUtils.uuidAddDash(uuid);
-		}
-		File passwordFile = RdiFileConst.getUserPasswordFile(uuid);
-
-		String pwd = null;
-		try {
-			pwd = FileUtils.readFileToString(passwordFile, StandardCharsets.UTF_8);
-		} catch (IOException e) {
-			RdiCore.LOGGER.warn("此账户没有注册过 {}",e.getMessage());
-		}
-		RdiUser.setCurrentUser(new RdiUser(uuid,name,pwd,userTypeName));
-    }*/
 
 }

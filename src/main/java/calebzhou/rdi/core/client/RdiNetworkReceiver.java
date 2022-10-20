@@ -1,8 +1,10 @@
 package calebzhou.rdi.core.client;
 
 import calebzhou.rdi.core.client.constant.RdiFileConst;
+import calebzhou.rdi.core.client.model.RdiGeoLocation;
 import calebzhou.rdi.core.client.model.RdiUser;
 
+import calebzhou.rdi.core.client.model.RdiWeather;
 import calebzhou.rdi.core.client.util.RdiSerializer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
@@ -27,27 +29,17 @@ public class RdiNetworkReceiver {
 		ClientPlayNetworking.registerGlobalReceiver(NetworkPackets.SET_PASSWORD,RdiNetworkReceiver::onSetPassword);
 		ClientPlayNetworking.registerGlobalReceiver(NetworkPackets.DIALOG_INFO,RdiNetworkReceiver::onReceiveDialogInfo);
 		ClientPlayNetworking.registerGlobalReceiver(NetworkPackets.POPUP,RdiNetworkReceiver::onReceivePopup);
-		ClientPlayNetworking.registerGlobalReceiver(NetworkPackets.WEATHER,RdiNetworkReceiver::onReceiveWeather);
-		ClientPlayNetworking.registerGlobalReceiver(NetworkPackets.GEO_LOCATION,RdiNetworkReceiver::onReceiveGeoLocation);
-	}
-
-	private static void onReceiveGeoLocation(Minecraft minecraft, ClientPacketListener listener, FriendlyByteBuf buf, PacketSender sender) {
-		RdiGeoLocation.currentGeoLocation = RdiSerializer.GSON.fromJson(buf.readUtf(),RdiGeoLocation.class);
-	}
-
-	private static void onReceiveWeather(Minecraft minecraft, ClientPacketListener listener, FriendlyByteBuf buf, PacketSender sender) {
-		RdiWeather.currentWeather = RdiSerializer.GSON.fromJson(buf.readUtf(),RdiWeather.class);
 	}
 
 	private static void onSetPassword(Minecraft minecraft, ClientPacketListener listener, FriendlyByteBuf buf, PacketSender sender) {
 		String pwd = buf.readUtf();
-		File pwdFile = RdiFileConst.getUserPasswordFile(RdiUser.Companion.getCurrentRdiUser().getUuid());
+		File pwdFile = RdiFileConst.getUserPasswordFile(RdiCore.Companion.getCurrentRdiUser().getUuid());
 		try {
 			FileUtils.write(pwdFile,pwd, StandardCharsets.UTF_8,false);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		RdiUser.Companion.getCurrentRdiUser().setPwd(pwd);
+		RdiCore.Companion.getCurrentRdiUser().setPwd(pwd);
 	}
 	//接收服务器的弹框信息
 	private static void onReceivePopup(Minecraft minecraft, ClientPacketListener listener, FriendlyByteBuf buf, PacketSender sender) {

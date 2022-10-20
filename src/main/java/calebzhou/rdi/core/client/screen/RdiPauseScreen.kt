@@ -1,5 +1,6 @@
 package calebzhou.rdi.core.client.screen
 
+import calebzhou.rdi.core.client.RdiCore
 import calebzhou.rdi.core.client.RdiSharedConstants
 import calebzhou.rdi.core.client.misc.HwSpec
 import calebzhou.rdi.core.client.misc.MusicPlayer
@@ -88,7 +89,7 @@ class RdiPauseScreen : Screen(Component.literal("菜单")) {
         val player = Minecraft.getInstance().player ?: return
         val playerInfo = player.connection.getPlayerInfo(UUID.fromString(player.stringUUID)) ?: return
         val latency = playerInfo.latency
-        val geoLocation = RdiGeoLocation.currentGeoLocation
+        val geoLocation = RdiCore.currentGeoLocation
         var isp = ""
         var province = ""
         if (geoLocation != null) {

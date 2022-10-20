@@ -14,9 +14,7 @@ object RdiSharedConstants {
 
     //是否为调试模式,本地用
     const val DEBUG = true
-    //微服务地址
-    @JvmField
-    val SERVICE_ADDR = if (DEBUG) "https://127.0.0.1:19198" else "https://www.davisoft.cn:19198"
+
     //版本号与协议号
     const val PROTOCOL_VERSION = 0x37
     const val GAME_VERSION = "1.19.2"
