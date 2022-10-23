@@ -83,9 +83,9 @@ class RdiPauseScreen : Screen(Component.literal("菜单")) {
         val fontColor = 0xeeeeee
         val width = 40
         val height = height - 40
-        drawString(matrices, font, "CPU " + HwSpec.currentHwSpec.cpu, width, height, fontColor)
-        drawString(matrices, font, "显卡 " + HwSpec.currentHwSpec.gpu, width, height - 10, fontColor)
-        drawString(matrices, font, "内存 " + HwSpec.currentHwSpec.mem, width, height - 10 * 2, fontColor)
+        drawString(matrices, font, "CPU " + HwSpec.currentHwSpec!!.cpu, width, height, fontColor)
+        drawString(matrices, font, "显卡 " + HwSpec.currentHwSpec!!.gpu, width, height - 10, fontColor)
+        drawString(matrices, font, "内存 " + HwSpec.currentHwSpec!!.mem, width, height - 10 * 2, fontColor)
         val player = Minecraft.getInstance().player ?: return
         val playerInfo = player.connection.getPlayerInfo(UUID.fromString(player.stringUUID)) ?: return
         val latency = playerInfo.latency

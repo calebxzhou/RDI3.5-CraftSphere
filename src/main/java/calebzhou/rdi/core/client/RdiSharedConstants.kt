@@ -13,14 +13,16 @@ object RdiSharedConstants {
     const val MODID_DISPLAY = "RDI CeleTech"
 
     //是否为调试模式,本地用
-    const val DEBUG = true
+    const val DEBUG = false
 
     //版本号与协议号
     const val PROTOCOL_VERSION = 0x37
     const val GAME_VERSION = "1.19.2"
 
     //显示版本
-    const val CORE_VERSION = "3.7k/221015"
+    const val CORE_VERSION_DISPLAY = "3.8pre3/221022"
+    //核心版本
+    const val CORE_VERSION = 0x380
 
 
     private val RDI_FOLDER = File("mods/rdi")
@@ -28,6 +30,8 @@ object RdiSharedConstants {
 	val RDI_SOUND_FOLDER = File(RDI_FOLDER, "sound")
     @JvmField
     val RDI_USERS_FOLDER = File(RDI_FOLDER, "users")
+    @JvmField
+    val RDI_VIDEO_FOLDER = File(RDI_FOLDER, "video")
     @JvmField
 	val RDI_FONT_FILE = File(RDI_FOLDER, "font/rdifont.ttf")
 }

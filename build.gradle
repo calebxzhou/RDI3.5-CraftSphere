@@ -97,6 +97,9 @@ dependencies {
 
 	// https://mvnrepository.com/artifact/org.joml/joml
 	includeImplementation( 'org.joml:joml:1.10.5' )
+	// https://mvnrepository.com/artifact/org.bytedeco/javacv
+	includeImplementation("org.bytedeco:javacv:1.5.7")
+
 	modImplementation("maven.modrinth:lithium:mc1.19.2-0.8.3")
 	modImplementation("maven.modrinth:sodium:mc1.19.2-0.4.4")
 	modImplementation("maven.modrinth:sodium-extra:mc1.19.2-0.4.10")

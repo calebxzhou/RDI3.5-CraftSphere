@@ -1,5 +1,6 @@
 package calebzhou.rdi.core.client.screen
 
+import calebzhou.rdi.core.client.RdiCore
 import calebzhou.rdi.core.client.misc.ServerConnector
 import com.mojang.blaze3d.platform.GlStateManager
 import com.mojang.blaze3d.systems.RenderSystem
@@ -32,6 +33,7 @@ class RdiLoadingOverlay(minecraft: Minecraft, reload: ReloadInstance, exceptionH
     }
 
     override fun render(poseStack: PoseStack, mouseX: Int, mouseY: Int, partialTick: Float) {
+
         val scaledWidth = minecraft.window.guiScaledWidth
         val scaledHeight = minecraft.window.guiScaledHeight
         val timeNow = System.currentTimeMillis()
@@ -79,7 +81,10 @@ class RdiLoadingOverlay(minecraft: Minecraft, reload: ReloadInstance, exceptionH
         }
         try {
             val logLines = FileUtils.readLines(File("./logs/latest.log"), StandardCharsets.UTF_8)
-            Minecraft.getInstance().window.setTitle(logLines[logLines.size - 1])
+            val logLastLine = logLines[logLines.size - 1]
+            if(RdiCore.gameReady)
+                Minecraft.getInstance().font.draw(matrices,logLastLine,0f,0f,0x000000)
+            Minecraft.getInstance().window.setTitle(logLastLine)
         } catch (e: IOException) {
             throw RuntimeException(e)
         }

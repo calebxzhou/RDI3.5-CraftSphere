@@ -16,14 +16,14 @@ import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen
 import net.minecraft.client.gui.screens.worldselection.SelectWorldScreen
 import net.minecraft.network.chat.Component
 import net.minecraft.sounds.SoundSource
+import org.bytedeco.javacv.FFmpegFrameGrabber
 import java.io.File
 import java.lang.reflect.InvocationTargetException
+import java.nio.ByteBuffer
 
 class RdiTitleScreen : Screen(Component.literal("主界面")) {
     init {
         Minecraft.getInstance().updateTitle()
-        /*enterKeyTexture = RdiTexture.loadTexture(new File(RdiSharedConstants.RDI_TEXTURE_FOLDER, "enter.png").getAbsolutePath());
-		enterKeyTexture.bind();*/
     }
 
     override fun shouldCloseOnEsc(): Boolean {
@@ -34,11 +34,7 @@ class RdiTitleScreen : Screen(Component.literal("主界面")) {
         GlStateManager._clearColor(0.9f, 0.9f, 0.9f, 1.0f)
         GlStateManager._clear(16384, Minecraft.ON_OSX)
         RenderSystem.enableBlend()
-
-        /*enterKeyTexture.setParameter( GL_TEXTURE_MIN_FILTER,GL_LINEAR);
-		enterKeyTexture.setParameter( GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		enterKeyTexture.setParameter( GL_TEXTURE_WRAP_S, GL_CLAMP);
-		enterKeyTexture.setParameter( GL_TEXTURE_WRAP_T, GL_CLAMP);*/font.draw(
+        font.draw(
             matrices,
             "按Enter(回车)键",
             width / 2.0f - 30,
@@ -75,12 +71,22 @@ class RdiTitleScreen : Screen(Component.literal("主界面")) {
             minecraft!!.setScreen(OptionsScreen(this, minecraft!!.options))
             return
         }
+        if (InputConstants.isKeyDown(handle, InputConstants.KEY_P)) {
+            minecraft!!.setScreen(PasswordScreen())
+            return
+        }
         if (InputConstants.isKeyDown(handle, InputConstants.KEY_RETURN) || InputConstants.isKeyDown(
                 handle,
                 InputConstants.KEY_NUMPADENTER
             )
         ) {
-            LoadProgressRecorder.musicPlayJob.stop()
+            try {
+                if(LoadProgressRecorder.musicPlayJob!=null)
+                    LoadProgressRecorder.musicPlayJob!!.stop()
+            }catch (_:ThreadDeath){}
+            catch (e:Exception) {
+                e.printStackTrace()
+            }
             ServerConnector.connect()
             MusicPlayer.playOggAsync(File(RdiSharedConstants.RDI_SOUND_FOLDER, "connect.ogg"))
         }

@@ -20,7 +20,7 @@ data class HwSpec(val brand: String,
 
 
     companion object {
-        var currentHwSpec = loadSystemSpec()
+        var currentHwSpec:HwSpec? = null
         fun loadSystemSpec() :HwSpec{
             logger.info("载入硬件信息")
             val systemInfo = SystemInfo()
@@ -92,7 +92,7 @@ data class HwSpec(val brand: String,
             logger.info("载入硬件信息完成")
             return HwSpec(
                 brand, os, board, mem.toString(), disk.toString(), cpu, gpu.toString(),
-                mods.toString(), RdiSharedConstants.CORE_VERSION
+                mods.toString(), RdiSharedConstants.CORE_VERSION_DISPLAY
             )
         }
     }

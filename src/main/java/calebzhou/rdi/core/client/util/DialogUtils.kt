@@ -4,7 +4,6 @@ package calebzhou.rdi.core.client.util
 
 import calebzhou.rdi.core.client.NetworkPackets
 import calebzhou.rdi.core.client.RdiCore
-import calebzhou.rdi.core.client.misc.RdiSystemTray
 import com.mojang.blaze3d.platform.GLX
 import com.mojang.blaze3d.platform.Window
 import net.minecraft.Util
@@ -41,7 +40,7 @@ object DialogUtils {
         showMessageBox(type, "", msg)
     }
     @JvmStatic
-    fun showPopup(type: TrayIcon.MessageType, msg: String) {
+    fun showPopup(type: String, msg: String) {
         showPopup(type, "", msg)
     }
     @JvmStatic
@@ -49,7 +48,8 @@ object DialogUtils {
         if (GLX._shouldClose(window)) {
             val rain: String = RdiCore.currentWeather?.realTimeWeather?.rainDesc?:""
             return if (showYesNoBox("真的要退出RDI客户端吗？\n$rain")) {
-                NetworkUtils.sendPacketToServer(NetworkPackets.SAVE_WORLD,1);
+                if(Minecraft.getInstance().level!=null)
+                    NetworkUtils.sendPacketToServer(NetworkPackets.SAVE_WORLD,1);
                 GLFW.glfwSetWindowShouldClose(Minecraft.getInstance().window.window, true)
                 true
             } else {
@@ -59,11 +59,9 @@ object DialogUtils {
         }
         return false
     }
+    //info warning error
     @JvmStatic
-	fun showPopup(type: TrayIcon.MessageType, title: String, msg: String) {
-        if (Util.getPlatform() === Util.OS.WINDOWS) RdiSystemTray.trayIcon!!.displayMessage(title, msg, type)
-        //TinyFileDialogs.tinyfd_notifyPopup(title,msg,type);
-    } /* public static boolean showYesNo(String msg){
-        return TinyFileDialogs.tinyfd_messageBox("提示",msg,"yesno","question",true);
-    }*/
+	fun showPopup(type: String, title: String, msg: String) {
+        TinyFileDialogs.tinyfd_notifyPopup(title,msg,type);
+    }
 }

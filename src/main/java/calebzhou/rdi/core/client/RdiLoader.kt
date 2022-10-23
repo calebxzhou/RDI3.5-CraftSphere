@@ -31,17 +31,10 @@ object RdiLoader {
     fun onMinecraftStart(){
         GlobalScope.launch{
             TinyFileDialogs.tinyfd_notifyPopup("RDI客户端将会启动！","","info");
-            loadBasicInfos()
-            LoadProgressRecorder.onStart()
-        }
-    }
-    suspend fun loadBasicInfos(){
-        coroutineScope {
             launch {
                 HwSpec.currentHwSpec = HwSpec.loadSystemSpec()
             }
-
-
+            LoadProgressRecorder.onStart()
         }
     }
     fun loadCurrentRdiUser(uuid:String,name:String,type: User.Type) {
@@ -52,7 +45,7 @@ object RdiLoader {
         val uuidWithDash = UuidUtils.uuidAddDash(processedUuid)
         logger.info("u:{}", uuidWithDash)
         val userTypeName = type.getName()
-        val passwordFile = RdiFileConst.getUserPasswordFile(uuidWithDash)
+        val passwordFile = RdiUser.getUserPasswordFile(uuidWithDash)
         var pwd = ""
         try {
             pwd = FileUtils.readFileToString(passwordFile, StandardCharsets.UTF_8)

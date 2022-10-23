@@ -37,7 +37,7 @@ public class mGameConfigData {
 
 	@Inject(method = "<init>",at=@At("TAIL"))
 	private void changeVersionType(boolean bl, String string, String string2, boolean bl2, boolean bl3, CallbackInfo ci){
-		versionType = RdiSharedConstants.MODID_DISPLAY+RdiSharedConstants.CORE_VERSION;
+		versionType = RdiSharedConstants.MODID_DISPLAY+RdiSharedConstants.CORE_VERSION_DISPLAY;
 		disableMultiplayer = false;
 		disableChat = false;
 		demo =false;

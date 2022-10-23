@@ -18,6 +18,6 @@ public class mWindowTitle {
      */
     @Overwrite
     private String createTitle(){
-        return RdiSharedConstants.MODID_DISPLAY+" "+ RdiSharedConstants.CORE_VERSION;
+        return RdiSharedConstants.MODID_DISPLAY+" "+ RdiSharedConstants.CORE_VERSION_DISPLAY;
     }
 }

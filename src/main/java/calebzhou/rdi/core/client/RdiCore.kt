@@ -21,10 +21,16 @@ class RdiCore : ModInitializer {
         var currentWeather: RdiWeather? = null
         var currentGeoLocation: RdiGeoLocation? = null
         var currentRdiUser: RdiUser? = null
+        var gameReady = false
+        private set
     }
 
     override fun onInitialize(container: ModContainer) {
-        ClientLifecycleEvents.READY.register(ClientLifecycleEvents.Ready { ModernUITextMC.setupClient() })
+        ClientLifecycleEvents.READY.register(ClientLifecycleEvents.Ready {
+            ModernUITextMC.setupClient()
+            gameReady=true
+            logger.info("客户端准备好")
+        })
         GlobalScope.launch {
             RdiNetworkReceiver.register()
         }
