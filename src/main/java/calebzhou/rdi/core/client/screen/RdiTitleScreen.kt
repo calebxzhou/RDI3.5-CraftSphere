@@ -34,13 +34,8 @@ class RdiTitleScreen : Screen(Component.literal("主界面")) {
         GlStateManager._clearColor(0.9f, 0.9f, 0.9f, 1.0f)
         GlStateManager._clear(16384, Minecraft.ON_OSX)
         RenderSystem.enableBlend()
-        font.draw(
-            matrices,
-            "按Enter(回车)键",
-            width / 2.0f - 30,
-            height / 2f,
-            -0x1000000
-        )
+        font.draw(matrices, "按Enter(回车)键", width / 2.0f - 30, height / 2f, -0x1000000)
+        font.draw(matrices,  "载入用时${"%.2f".format(LoadProgressRecorder.getLoadTimeSeconds())}秒,超越了${"%.2f".format(LoadProgressRecorder.getLoadTimePercentBeyondPlayers())}%的玩家！", 0f, 0f, -0x1000000)
     }
 
     override fun tick() {

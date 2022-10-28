@@ -49,6 +49,7 @@
     "mPlayerAttributes",
     "mPlayMusic",
     "mPlayMusic2",
-    "mSpawnHealth"
+    "mSpawnHealth",
+    "mUseRdiRandomSource"
   ]
 }

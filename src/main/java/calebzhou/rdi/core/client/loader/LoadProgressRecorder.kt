@@ -10,38 +10,32 @@ import java.awt.TrayIcon
 import java.io.File
 
 object LoadProgressRecorder {
-
-
-    //载入进度条 -1开始 1结束
-    var loadProgress = -1f
     @JvmField
-	var loadStartTime: Long = 0
-    private var loadEndTime: Long = 0
+    var loadStartTime: Long = 0
+    var loadEndTime: Long = 0
     var musicPlayJob : OggPlayer?=null
+    val standardLoadTime = 40
+    @JvmStatic
 	fun onFinish() {
-        if (Util.getPlatform() != Util.OS.WINDOWS)
-            return
         loadEndTime = System.currentTimeMillis()
-        val usedTime = (loadEndTime - loadStartTime) / 1000.0f
-        val displayTime = String.format("%.2f", usedTime)
-        //最快载入20秒
-        val standardLoadTime = 40
-        var beyondPlayerRatio = 1.0 / (usedTime / standardLoadTime)
-        if (beyondPlayerRatio >= 1.0) beyondPlayerRatio = 0.999
-        val beyondPerc = String.format("%.2f", beyondPlayerRatio * 100)
+
         //showPopup(TrayIcon.MessageType.INFO, "您本次载入游戏用时" + displayTime + "秒", "超越了$beyondPerc%的玩家！")
-               GlobalScope.launch {
-                MusicPlayer.playOgg(File(RdiSharedConstants.RDI_SOUND_FOLDER, "startup.ogg"))
-                delay(1500)
-            musicPlayJob = MusicPlayer.playOgg(File(RdiSharedConstants.RDI_SOUND_FOLDER, "title.ogg"))
-            }
+        GlobalScope.launch {
+            MusicPlayer.playOgg(File(RdiSharedConstants.RDI_SOUND_FOLDER, "startup.ogg"))
+        }
 
     }
-    fun onStart(){
-        if (Util.getPlatform() != Util.OS.WINDOWS)
-            return
-        loadStartTime = System.currentTimeMillis()
-       // createTray()
-
+    //载入游戏用了多少秒
+    fun getLoadTimeSeconds():Float{
+        return (loadEndTime - loadStartTime) / 1000.0f
     }
+    //载入时间超过了百分之多少的玩家
+    fun getLoadTimePercentBeyondPlayers():Float{
+        val usedTime = getLoadTimeSeconds()
+        var beyondPlayerRatio = 1.0 / (usedTime / standardLoadTime)
+        if (beyondPlayerRatio >= 1.0)
+            beyondPlayerRatio = 0.999
+        return (beyondPlayerRatio * 100).toFloat()
+    }
+
 }

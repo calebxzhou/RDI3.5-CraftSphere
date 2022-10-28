@@ -28,13 +28,14 @@ import java.nio.charset.StandardCharsets
  * Created by calebzhou on 2022-10-14,20:53.
  */
 object RdiLoader {
+    @JvmStatic
     fun onMinecraftStart(){
         GlobalScope.launch{
             TinyFileDialogs.tinyfd_notifyPopup("RDI客户端将会启动！","","info");
+            LoadProgressRecorder.loadStartTime=System.currentTimeMillis()
             launch {
                 HwSpec.currentHwSpec = HwSpec.loadSystemSpec()
             }
-            LoadProgressRecorder.onStart()
         }
     }
     fun loadCurrentRdiUser(uuid:String,name:String,type: User.Type) {

@@ -1,5 +1,6 @@
 package calebzhou.rdi.core.client
 
+import calebzhou.rdi.core.client.misc.ClientMobSpawner
 import calebzhou.rdi.core.client.misc.HwSpec
 import calebzhou.rdi.core.client.misc.KeyBinds
 import calebzhou.rdi.core.client.util.NetworkUtils
@@ -40,32 +41,21 @@ class EventRegister {
         //初始化按键事件
         KeyBinds.init()
         //进入服务器发送硬件数据
-        ClientPlayConnectionEvents.JOIN.register(ClientPlayConnectionEvents.Join { listener: ClientPacketListener, sender: PacketSender, minecraft: Minecraft ->
-            onJoinServer(
-                listener,
-                sender,
-                minecraft
-            )
-        })
+        ClientPlayConnectionEvents.JOIN.register(::onJoinServer)
         //客户端世界tick事件
-        ClientTickEvents.END.register(ClientTickEvents.End { minecraft: Minecraft -> onClientWorldTick(minecraft) })
-        ClientPlayConnectionEvents.DISCONNECT.register(ClientPlayConnectionEvents.Disconnect { listener: ClientPacketListener, minecraft: Minecraft ->
-            onDisconnectServer(
-                listener,
-                minecraft
-            )
-        })
+        ClientTickEvents.END.register(::onClientWorldTick)
+        ClientPlayConnectionEvents.DISCONNECT.register(::onDisconnectServer)
     }
 
 
     private var danceTreeCurrentScore = 0
     private fun onClientWorldTick(minecraft: Minecraft) {
-        val player = Minecraft.getInstance().player
-        val level = minecraft.level
-        if (player == null) return
-        afkDetect(player)
-        danceTree(player, level)
+        val player = Minecraft.getInstance().player?:return
+        val level = minecraft.level?:return
+        //afkDetect(player)
+        //danceTree(player, level)
         animalSex(player)
+        ClientMobSpawner.tick(level)
         KeyBinds.handleKeyActions(level)
     }
 
