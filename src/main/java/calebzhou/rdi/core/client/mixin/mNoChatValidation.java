@@ -11,8 +11,5 @@ import org.spongepowered.asm.mixin.Overwrite;
 public
 class mNoChatValidation{
 	@Overwrite
-	private void onChatChainBroken() {
-
-
-	}
+	private void onChatChainBroken() {}
 }

@@ -1,67 +1,67 @@
 package calebzhou.rdi.core.client
 
-import calebzhou.rdi.core.client.constant.RdiFileConst
 import calebzhou.rdi.core.client.loader.LoadProgressRecorder
 import calebzhou.rdi.core.client.misc.HwSpec
-import calebzhou.rdi.core.client.model.RdiGeoLocation
 import calebzhou.rdi.core.client.model.RdiUser
-import calebzhou.rdi.core.client.model.RdiWeather
-import calebzhou.rdi.core.client.model.ResponseData
-import calebzhou.rdi.core.client.util.DialogUtils
-import calebzhou.rdi.core.client.util.HttpClient
 import calebzhou.rdi.core.client.util.UuidUtils
+import joptsimple.OptionParser
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import net.minecraft.client.User
-import okhttp3.Call
-import okhttp3.Callback
-import okhttp3.Request
-import okhttp3.Response
 import org.apache.commons.io.FileUtils
 import org.lwjgl.util.tinyfd.TinyFileDialogs
-import java.awt.TrayIcon
 import java.io.IOException
 import java.nio.charset.StandardCharsets
+import java.util.Arrays
 
 /**
  * Created by calebzhou on 2022-10-14,20:53.
  */
 object RdiLoader {
     @JvmStatic
-    fun onMinecraftStart(){
-        GlobalScope.launch{
-            TinyFileDialogs.tinyfd_notifyPopup("RDI客户端将会启动！","","info");
-            LoadProgressRecorder.loadStartTime=System.currentTimeMillis()
-            launch {
-                HwSpec.currentHwSpec = HwSpec.loadSystemSpec()
+    fun onMinecraftStart(args: Array<String>) = GlobalScope.launch {
+        LoadProgressRecorder.loadStartTime = System.currentTimeMillis()
+        logger.info("开始载入客户端 RDI部分 客户端启动参数：${args.contentToString()}")
+        launch {
+            logger.info("开始读取启动参数")
+            val parser = OptionParser()
+            parser.allowsUnrecognizedOptions()
+            val nameSpec = parser.accepts("username").withRequiredArg()
+            val uuidSpec = parser.accepts("uuid").withRequiredArg().defaultsTo("00000000")
+            val userTypeSpec = parser.accepts("userType").withRequiredArg().defaultsTo(User.Type.LEGACY.name)
+            val specSet = parser.parse(*args)
+
+            val name = nameSpec.value(specSet)
+            logger.info("昵称 {}",name)
+            //PCL启动器会用00000000开头的uuid，不要让他用这样的，要生成新的
+            //mc的uuid刚读出来是不带横线的，给他加上
+            val uuid = UuidUtils.uuidAddDash(
+                if(uuidSpec.value(specSet).startsWith("00000000"))
+                    UuidUtils.createUuidByName(name)
+                else
+                    uuidSpec.value(specSet)
+            )
+            logger.info("UUID {}",uuid)
+            val userType = userTypeSpec.value(specSet)
+            logger.info("账户类型 {}",userType)
+            val passwd = try {
+                 FileUtils.readFileToString(RdiUser.getUserPasswordFile(uuid),StandardCharsets.UTF_8)
+            } catch (e: IOException) {
+                logger.warn("没有读取到密码： {}", e.message)
+                ""
             }
+            logger.info("密码 {}",passwd.length)
+            RdiCore.currentRdiUser = RdiUser(uuid, name, passwd, userType)
+        }
+        launch {
+            TinyFileDialogs.tinyfd_notifyPopup("RDI客户端将会启动！", "", "info");
+        }
+        launch {
+            HwSpec.currentHwSpec = HwSpec.loadSystemSpec()
         }
     }
-    fun loadCurrentRdiUser(uuid:String,name:String,type: User.Type) {
-        var processedUuid:String = uuid;
-        if (uuid.startsWith("00000000")) {
-            processedUuid = UuidUtils.createUuidByName(name)
-        }
-        val uuidWithDash = UuidUtils.uuidAddDash(processedUuid)
-        logger.info("u:{}", uuidWithDash)
-        val userTypeName = type.getName()
-        val passwordFile = RdiUser.getUserPasswordFile(uuidWithDash)
-        var pwd = ""
-        try {
-            pwd = FileUtils.readFileToString(passwordFile, StandardCharsets.UTF_8)
-            logger.info("p:{}", pwd)
-        } catch (e: IOException) {
-            logger.warn("此账户没有注册过 {}", e.message)
-        }
-        //mojang登录的uuid不带横线，要通过正则表达式转换成带横线的
-        RdiCore.currentRdiUser= RdiUser(
-            uuidWithDash,
-            name,
-            pwd,
-            userTypeName
-        )
-    }
+
+
 
 
 }

@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(ChatScreen.class)
 public abstract class mUseRdiChatScreen {
-	@Shadow
+/*	@Shadow
 	public abstract String normalizeChatMessage(String message);
 
 	@Overwrite
@@ -31,5 +31,5 @@ public abstract class mUseRdiChatScreen {
 
 			return true;
 		}
-	}
+	}*/
 }

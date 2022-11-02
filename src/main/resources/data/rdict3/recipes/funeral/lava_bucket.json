@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "cookingtime": 1200,
+  "experience": 1.0,
+  "ingredient": {
+    "item": "minecraft:cracked_stone_bricks"
+  },
+  "result": "minecraft:lava_bucket"
+}

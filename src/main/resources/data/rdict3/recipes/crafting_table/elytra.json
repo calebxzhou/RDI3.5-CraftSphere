@@ -1,0 +1,26 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "###",
+        "PNP",
+        "PGP"
+    ],
+    "key": {
+        "#": {
+            "item": "minecraft:string"
+        },
+        "P": {
+            "item": "minecraft:phantom_membrane"
+        },
+        "N": {
+            "item": "minecraft:nether_star"
+        },
+        "G": {
+            "item": "minecraft:ghast_tear"
+        }
+    },
+    "result": {
+        "item": "minecraft:elytra",
+        "count": 1
+    }
+}

@@ -3,7 +3,6 @@ package calebzhou.rdi.core.client.screen
 import calebzhou.rdi.core.client.RdiSharedConstants
 import calebzhou.rdi.core.client.loader.LoadProgressRecorder
 import calebzhou.rdi.core.client.misc.MusicPlayer
-import calebzhou.rdi.core.client.misc.ServerConnector
 import calebzhou.rdi.core.client.util.DialogUtils
 import com.mojang.blaze3d.platform.GlStateManager
 import com.mojang.blaze3d.platform.InputConstants
@@ -16,10 +15,7 @@ import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen
 import net.minecraft.client.gui.screens.worldselection.SelectWorldScreen
 import net.minecraft.network.chat.Component
 import net.minecraft.sounds.SoundSource
-import org.bytedeco.javacv.FFmpegFrameGrabber
 import java.io.File
-import java.lang.reflect.InvocationTargetException
-import java.nio.ByteBuffer
 
 class RdiTitleScreen : Screen(Component.literal("主界面")) {
     init {
@@ -82,8 +78,7 @@ class RdiTitleScreen : Screen(Component.literal("主界面")) {
             catch (e:Exception) {
                 e.printStackTrace()
             }
-            ServerConnector.connect()
-            MusicPlayer.playOggAsync(File(RdiSharedConstants.RDI_SOUND_FOLDER, "connect.ogg"))
+            IslandLoadScreen()
         }
     }
 
@@ -91,8 +86,5 @@ class RdiTitleScreen : Screen(Component.literal("主界面")) {
         Minecraft.getInstance().options.setSoundCategoryVolume(SoundSource.MUSIC, 0f)
     }
 
-    companion object {
-        @JvmField
-        val INSTANCE = RdiTitleScreen()
-    }
+
 }

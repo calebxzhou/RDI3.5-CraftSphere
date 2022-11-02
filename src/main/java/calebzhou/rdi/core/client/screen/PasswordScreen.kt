@@ -31,7 +31,7 @@ class PasswordScreen: Screen(Component.literal("输入密码屏幕")) {
             DialogUtils.showPopup("info", "您成功设定密码为${editbox.value},即将回到主界面！")
             RdiCore.currentRdiUser!!.pwd=editbox.value
             RdiCore.currentRdiUser!!.writePasswordToFile()
-            minecraft!!.setScreen(RdiTitleScreen.INSTANCE)
+            minecraft!!.setScreen(RdiTitleScreen())
         }
     }
 
@@ -45,7 +45,7 @@ class PasswordScreen: Screen(Component.literal("输入密码屏幕")) {
     }
 
     override fun onClose() {
-        minecraft!!.setScreen(RdiTitleScreen.INSTANCE)
+        minecraft!!.setScreen(RdiTitleScreen())
     }
     override fun render(poseStack: PoseStack, mouseX: Int, mouseY: Int, partialTick: Float) {
         GlStateManager._clearColor(0.9f, 0.9f, 1f, 1.0f)

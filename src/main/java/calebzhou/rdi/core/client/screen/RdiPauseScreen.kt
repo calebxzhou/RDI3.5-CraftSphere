@@ -71,7 +71,7 @@ class RdiPauseScreen : Screen(Component.literal("菜单")) {
                 minecraft!!.clearLevel()
             }
             MusicPlayer.playOggAsync(File(RdiSharedConstants.RDI_SOUND_FOLDER, "disconnect.ogg"))
-            minecraft!!.setScreen(RdiTitleScreen.Companion.INSTANCE)
+            minecraft!!.setScreen(RdiTitleScreen())
         }, Component.translatable("menu.disconnect")))
     }
 

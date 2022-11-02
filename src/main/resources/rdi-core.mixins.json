@@ -9,7 +9,6 @@
     "AccessSystemReport",
     "mAskToStopClient",
     "mConnectScreen",
-    "mDeathGoNewTitle",
     "mDisplayNumberPing",
     "mFastCreateMojangService",
     "mFastCreateMojangService2",
@@ -17,7 +16,6 @@
     "mFinishLoad",
     "mGameConfigData",
     "mLoginProtocol",
-    "mMultiPlayerScreen",
     "mNewPauseMenu",
     "mNewScreens",
     "mNoChatBrackets",
@@ -32,7 +30,6 @@
     "mSkyAlwaysBlue",
     "mTabPlayerHud",
     "mTitleScreen",
-    "mUserDataRead",
     "mUseRdiChatScreen",
     "mWindowTitle"
   ],
@@ -43,13 +40,17 @@
     "AccessNativeImage",
     "AccessNatualSpawner",
     "AccessTrueTypeGlyphProvider",
+    "mAutoRespawn",
     "mBiggerWindow",
     "mClientStartup",
     "mDebugOverlay",
-    "mPlayerAttributes",
+    "mLessExplode",
+    "gameplay.mPlayerAttributes",
     "mPlayMusic",
     "mPlayMusic2",
     "mSpawnHealth",
-    "mUseRdiRandomSource"
+    "mUseRdiRandomSource",
+    "math.mVector4f",
+    "worldgen.mOceanWorld"
   ]
 }
