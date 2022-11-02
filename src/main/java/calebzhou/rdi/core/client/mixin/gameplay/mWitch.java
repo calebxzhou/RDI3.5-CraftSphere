@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 
 //女巫增强
 @Mixin(Witch.class)
-public class MixinWitch {
+public class mWitch {
     /**
      * @author
      */

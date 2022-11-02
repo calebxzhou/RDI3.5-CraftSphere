@@ -22,7 +22,6 @@ public abstract class mNoWarnSkippingEntity {
 	@Overwrite
 	public static Optional<Entity> create(CompoundTag compound, Level level) {
 		return Util.ifElse(by(compound).map((entityType) -> entityType.create(level)), (entity) -> entity.load(compound), () -> {
-
 		});
 	}
 }

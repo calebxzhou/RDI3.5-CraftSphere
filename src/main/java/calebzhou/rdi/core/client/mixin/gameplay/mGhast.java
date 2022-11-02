@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 //恶魂 增强
 @Mixin(Ghast.class)
-public class MixinGhast {
+public class mGhast {
 
     //50血
     @Overwrite

@@ -6,6 +6,7 @@ import net.minecraft.world.level.block.CauldronBlock;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 
+//大锅快速收集水
 @Mixin(CauldronBlock.class)
 public class mCauldronFastWaterCollection {
     @Overwrite

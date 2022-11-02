@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 //羊驼增加效果
 @Mixin(LlamaSpit.class)
-public class MixinLlamaDamage {
+public class mLlamaDamage {
 
     @Inject(
             method = "Lnet/minecraft/world/entity/projectile/LlamaSpit;onHitEntity(Lnet/minecraft/world/phys/EntityHitResult;)V",

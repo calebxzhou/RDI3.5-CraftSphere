@@ -43,11 +43,13 @@ public abstract class mCreeper extends Monster{
 		this.goalSelector.addGoal(2, new SwellGoal((Creeper) (Object)this));
 		this.goalSelector.addGoal(3, new AvoidEntityGoal(this, Ocelot.class, 6.0F, 1.0, 1.2));
 		this.goalSelector.addGoal(3, new AvoidEntityGoal(this, Cat.class, 6.0F, 1.0, 1.2));
+		this.goalSelector.addGoal(2, new WaterAvoidingRandomStrollGoal(this, 1.0));
+
 		this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 1.0, false));
-		this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 32.0F));
+		this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 64.0F));
 		this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
-		this.targetSelector.addGoal(1, new NearestAttackableTargetGoal(this, Player.class, true));
-		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal(this, IronGolem.class, true));
+		this.targetSelector.addGoal(1, new NearestAttackableTargetGoal(this, Player.class, false));
+		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal(this, IronGolem.class, false));
 		this.targetSelector.addGoal(2, new HurtByTargetGoal(this));
 	}
 	//只炸实体不炸方块
