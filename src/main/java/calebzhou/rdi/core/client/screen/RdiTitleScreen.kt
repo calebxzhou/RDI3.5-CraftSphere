@@ -66,6 +66,10 @@ class RdiTitleScreen : Screen(Component.literal("主界面")) {
             minecraft!!.setScreen(PasswordScreen())
             return
         }
+        if (InputConstants.isKeyDown(handle, InputConstants.KEY_0)) {
+            minecraft!!.setScreen(JoinMultiplayerScreen(this))
+            return
+        }
         if (InputConstants.isKeyDown(handle, InputConstants.KEY_RETURN) || InputConstants.isKeyDown(
                 handle,
                 InputConstants.KEY_NUMPADENTER

@@ -22,7 +22,7 @@ data class HwSpec(val brand: String,
     companion object {
         var currentHwSpec:HwSpec? = null
         fun loadSystemSpec() :HwSpec{
-            logger.info("载入硬件信息")
+
             val systemInfo = SystemInfo()
             val hal = systemInfo.hardware
             val csys = hal.computerSystem

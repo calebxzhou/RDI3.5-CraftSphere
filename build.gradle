@@ -10,6 +10,7 @@ buildscript {
 plugins {
 	// replace `<...>` with the plugin name
 		id 'org.jetbrains.kotlin.jvm' version '1.7.20'
+		id 'org.jetbrains.kotlin.plugin.serialization' version '1.7.20'
 	id 'maven-publish'
 	id "java-library"
 	alias libs.plugins.quilt.loom
@@ -56,14 +57,11 @@ repositories {
 	google()
 }
 configurations {
-	//includeModImplementation
 	includeImplementation
 
 	include.extendsFrom includeImplementation
-	//include.extendsFrom includeModImplementation
 
 	implementation.extendsFrom includeImplementation
-	//modImplementation.extendsFrom includeModImplementation
 }
 //不用mc自带的apache http，一会引入一个新版的
 configurations.implementation {
@@ -82,7 +80,8 @@ dependencies {
 // https://mvnrepository.com/artifact/javax.annotation/javax.annotation-api
 	// https://mvnrepository.com/artifact/com.google.code.findbugs/jsr305
 	implementation 'com.google.code.findbugs:jsr305:3.0.2'
-
+// https://mvnrepository.com/artifact/org.joml/joml
+	includeImplementation( 'org.joml:joml:1.10.5' )
 	// Quilted Fabric API will automatically pull in the correct QSL version.
 	modImplementation libs.quilted.fabric.api
 	// modImplementation libs.bundles.quilted.fabric.api // If you wish to use Fabric API's deprecated modules, you can replace the above line with this one
@@ -93,7 +92,7 @@ dependencies {
 	includeImplementation( 'com.squareup.okio:okio-jvm:3.0.0' )
 	// https://mvnrepository.com/artifact/com.github.ben-manes.caffeine/caffeine
 	includeImplementation 'com.github.ben-manes.caffeine:caffeine:3.1.1'
-	// https://mvnrepository.com/artifact/org.lwjgl/lwjgl-openal
+	implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
 
 
 	modImplementation("maven.modrinth:lithium:mc1.19.2-0.8.3")

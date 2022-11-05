@@ -1,7 +1,6 @@
 package calebzhou.rdi.core.client.constant
 
 import calebzhou.rdi.core.client.util.ColorUtil
-import org.joml.Math
 
 object PingColors {
     private const val PING_START = 0
@@ -30,6 +29,6 @@ object PingColors {
 
     private fun computeOffset(start: Int, end: Int, value: Int): Float {
         val offset = (value - start) / (end - start).toFloat()
-        return Math.clamp(offset, 0.0f, 1.0f)
+        return offset.coerceIn(0.0f,1.0f)
     }
 }

@@ -1,6 +1,8 @@
 package calebzhou.rdi.core.client
 
 import java.io.File
+import java.net.InetAddress
+import java.net.InetSocketAddress
 import java.util.*
 
 /**
@@ -21,6 +23,9 @@ object RdiSharedConstants {
 
     //是否为调试模式,本地用
     const val DEBUG = true
+    //中心服务器的ip
+    val CENTRAL_SERVER = InetSocketAddress(
+        if(DEBUG)"127.0.0.1" else "rdi-central.davisoft.cn",8899)
 
     //版本号与协议号
     const val PROTOCOL_VERSION = 0x37
