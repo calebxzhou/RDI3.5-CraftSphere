@@ -18,8 +18,8 @@
 			"icon": "assets/example_mod/icon.png"
 		},
 		"intermediate_mappings": "net.fabricmc:intermediary",
-		"entrypoints": { 
-			"init": "calebzhou.rdi.core.client.RdiCore"
+		"entrypoints": {
+			"init": "calebxzhou.rdi.RdiCore"
 		},
 		"depends": [
 			{
@@ -36,6 +36,6 @@
 			}
 		]
 	},
-	"mixin": ["rdi-core.mixins.json", "mui.mixins.json"],
+	"mixin": ["rdi-core.mixins.json", "mui.mixins.json","libertorch.mixins.json"],
 	"accessWidener" : "rdict3.accesswidener"
 }

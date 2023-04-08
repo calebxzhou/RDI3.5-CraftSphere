@@ -26,7 +26,7 @@ public class UsernameChecker {
                 try {
                     HttpResponse<String> send = client.send(request, HttpResponse.BodyHandlers.ofString());
                     if(!StringUtils.isEmpty(send.body())){
-                        DialogUtils.showError("无法启动客户端。\n您的昵称 "+username+" 被其他玩家正在使用中。\n请更换昵称。");
+                        OsDialogUt.showError("无法启动客户端。\n您的昵称 "+username+" 被其他玩家正在使用中。\n请更换昵称。");
                         System.exit(0);
                     }
                 } catch (IOException | InterruptedException e) {

@@ -85,7 +85,7 @@ class chk2{
         try {
             return Registry.RECIPE_SERIALIZER.getOptional(resourceLocation).get()/*.orElseThrow(() -> new IllegalArgumentException("Unknown recipe serializer " + resourceLocation))*/.fromNetwork(resourceLocation2, friendlyByteBuf);
         } catch (IllegalArgumentException | NoSuchElementException e) {
-            DialogUtils.showPopup(TrayIcon.MessageType.ERROR,"客户端与服务器Mod列表不匹配","除聊天外的功能已被禁用，请更新客户端");
+            OsDialogUt.showPopup(TrayIcon.MessageType.ERROR,"客户端与服务器Mod列表不匹配","除聊天外的功能已被禁用，请更新客户端");
             e.printStackTrace();
         }
         return null;

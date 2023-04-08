@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "priority": 1989,
+  "package": "calebxzhou.libertorch.mc.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+    "AccessAbstractWidget"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "mixins": [
+  ]
+}

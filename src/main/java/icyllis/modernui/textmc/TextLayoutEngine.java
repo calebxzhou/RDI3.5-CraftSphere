@@ -18,7 +18,7 @@
 
 package icyllis.modernui.textmc;
 
-import calebzhou.rdi.core.client.mixin.AccessNativeImage;
+import calebxzhou.rdi.mixin.AccessNativeImage;
 import com.google.gson.*;
 import com.ibm.icu.text.Bidi;
 import com.mojang.blaze3d.platform.NativeImage;
@@ -41,7 +41,6 @@ import org.quiltmc.qsl.lifecycle.api.client.event.ClientTickEvents;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.font.GlyphVector;
 import java.io.*;

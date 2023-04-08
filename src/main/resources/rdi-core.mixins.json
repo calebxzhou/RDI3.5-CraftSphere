@@ -2,7 +2,7 @@
   "required": true,
   "minVersion": "0.8",
   "priority": 1989,
-  "package": "calebzhou.rdi.core.client.mixin",
+  "package": "calebxzhou.rdi.mixin",
   "compatibilityLevel": "JAVA_17",
   "client": [
     "AccessSplashOverlay",
@@ -44,8 +44,7 @@
     "mClientStartup",
     "mDebugOverlay",
     "mLessExplode",
-    "mPlayMusic",
-    "mPlayMusic2",
+    "mLoginProtocol",
     "mUseRdiRandomSource",
     "gameplay.mBowAttackGoal",
     "gameplay.mCauldronFastWaterCollection",
@@ -60,7 +59,6 @@
     "gameplay.mSpawnHealth",
     "gameplay.mSpider",
     "gameplay.mZombie",
-    "math.mVector4f",
-    "worldgen.mOceanWorld"
+    "math.mVector4f"
   ]
 }

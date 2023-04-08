@@ -2,18 +2,15 @@ package calebzhou.test
 
 import calebzhou.craftcone.model.dto.ConeLevelOpenRequestDto
 import calebzhou.craftcone.model.dto.ConePlayerDto
-import calebzhou.rdi.core.client.RdiLoader
+import calebxzhou.rdi.RdiLoader
 import calebzhou.rdi.core.client.RdiSharedConstants
 import calebzhou.rdi.core.client.logger
-import calebzhou.rdi.core.client.misc.HwSpec
-import calebzhou.rdi.core.client.model.ConeLevel
-import calebzhou.rdi.core.client.model.ConePlayer
+import calebxzhou.rdi.misc.HwSpec
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.Test
 import java.io.BufferedReader
 import java.io.InputStreamReader
-import java.io.PrintWriter
 import java.net.*
 import java.util.*
 
@@ -49,9 +46,23 @@ class RdiTest {
     fun testIp2(){
       RdiLoader.initNetwork()
     }
+
+    @Test
+    fun getAnnouncement(){
+        val socket = Socket(RdiSharedConstants.CENTRAL_SERVER.address,RdiSharedConstants.CENTRAL_SERVER.port)
+        socket.getOutputStream().write(3)
+        socket.shutdownOutput()
+
+        val reader = BufferedReader(InputStreamReader(socket.getInputStream()))
+        var info = ""
+        while (reader.readLine()!=null){
+            info+=reader.readLine()
+        }
+        logger.info(info)
+    }
     @Test
     fun testCone(){
-        val level =  ConeLevelOpenRequestDto(ConePlayerDto("0","test"),"testMap")
+        val level =  ConeLevelOpenRequestDto(ConePlayerDto("0","test"),"234")
         val levelJson = Json.encodeToString(level)
         logger.info(levelJson)
         val levelJsonByte = levelJson.toByteArray()
@@ -64,6 +75,13 @@ class RdiTest {
         request.write(newData)
         socket.shutdownOutput()
         val responseData = response.readAllBytes()
-        logger.info(responseData[0])
+        logger.info(littleEndianConversion(responseData))
     }
+}
+fun littleEndianConversion(bytes: ByteArray): Int {
+    var result = 0
+    for (i in bytes.indices) {
+        result = result or (bytes[i].toInt() shl 8 * i)
+    }
+    return result
 }

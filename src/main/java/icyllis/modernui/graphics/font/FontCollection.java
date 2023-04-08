@@ -18,7 +18,7 @@
 
 package icyllis.modernui.graphics.font;
 
-import calebzhou.rdi.core.client.RdiSharedConstants;
+import calebxzhou.rdi.util.FileUtils;
 import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UCharacterCategory;
@@ -53,7 +53,7 @@ public class FontCollection {
 
         List<Font> fonts = new ArrayList<>();
 
-        try (InputStream stream = new FileInputStream(RdiSharedConstants.RDI_FONT_FILE)) {
+        try (InputStream stream = FileUtils.getJarAsset("font/rdifont.ttf")) {
             Font font = Font.createFont(Font.TRUETYPE_FONT, stream);
             fonts.add(font);
         } catch (FontFormatException | IOException e) {

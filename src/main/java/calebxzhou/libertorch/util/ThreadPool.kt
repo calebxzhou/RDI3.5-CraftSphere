@@ -1,12 +1,10 @@
-package calebzhou.rdi.core.client.util;
+package calebxzhou.libertorch.util
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.Executors
 
-public class ThreadPool {
-    private final static ExecutorService exe = Executors.newCachedThreadPool();
-    public static void newThread(Runnable runnable){
-        exe.execute(runnable);
+object ThreadPool {
+    private val exe = Executors.newCachedThreadPool()
+    fun run(runnable: Runnable) {
+        exe.execute(runnable)
     }
-
 }
