@@ -4,7 +4,9 @@ import calebxzhou.libertorch.util.ThreadPool
 import calebxzhou.rdi.consts.RdiConsts.CoreVersion
 import calebxzhou.rdi.consts.RdiConsts.DEBUG
 import calebxzhou.rdi.consts.RdiConsts.MODID_DISPLAY
+import calebxzhou.rdi.screen.RdiConnectScreen
 import calebxzhou.rdi.screen.RdiTitleScreen
+import icyllis.modernui.R
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.screens.ConnectScreen
 import net.minecraft.client.multiplayer.ServerData
@@ -24,7 +26,7 @@ object ServerConnector {
     @JvmStatic
 	fun connect() {
         Minecraft.getInstance().window.setTitle("$MODID_DISPLAY $CoreVersion")
-        ConnectScreen.startConnecting(RdiTitleScreen(), Minecraft.getInstance(), SERVER_ADDRESS, SERVER_INFO)
+        RdiConnectScreen.startConnecting(Minecraft.getInstance())
 
     }
 

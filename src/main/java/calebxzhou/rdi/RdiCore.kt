@@ -10,17 +10,21 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import net.minecraft.world.level.storage.LevelStorageSource
 import org.apache.logging.log4j.LogManager
-import org.apache.logging.log4j.Logger
 import org.quiltmc.loader.api.ModContainer
 import org.quiltmc.qsl.base.api.entrypoint.ModInitializer
 import org.quiltmc.qsl.lifecycle.api.client.event.ClientLifecycleEvents
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 /**
  * Created  on 2023-04-07,23:04.
  */
-val logger: Logger = LogManager.getLogger("RDI-Core")
+val logger: Logger = RdiCore.logger
 class RdiCore : ModInitializer {
     companion object {
+        @JvmStatic
+        val logger: Logger = LoggerFactory.getLogger("RDI-Core")
+
         var currentWeather: RdiWeather? = null
         var currentGeoLocation: RdiGeoLocation? = null
         var gameReady = false
