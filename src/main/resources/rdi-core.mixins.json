@@ -14,21 +14,27 @@
     "mFieldOfView",
     "mFinishLoad",
     "mGameConfigData",
+    "mKeyBindScreenRenderer",
+    "mKeyBindScreenRenderer2",
     "mNewPauseMenu",
     "mNewScreens",
     "mNoChatBrackets",
     "mNoChatValidation",
     "mNoDirtBackground",
+    "mNoDirtBackground2",
     "mNoReportScreen",
+    "mNoScreenFpsLimit",
     "mNoUnicodeFonts",
     "mNoUnicodeFonts2",
     "mPauseScreenSave",
     "mProtocol",
     "mReceivingLevelScreen",
+    "mScreenRenderer",
     "mSkyAlwaysBlue",
     "mTabPlayerHud",
     "mTitleScreen",
     "mUseRdiChatScreen",
+    "mWidgetRenderer2",
     "mWindowTitle"
   ],
   "injectors": {
@@ -58,7 +64,6 @@
     "gameplay.mSlime",
     "gameplay.mSpawnHealth",
     "gameplay.mSpider",
-    "gameplay.mZombie",
-    "math.mVector4f"
+    "gameplay.mZombie"
   ]
 }

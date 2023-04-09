@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static calebxzhou.rdi.consts.RdiConsts.CORE_VERSION_DISPLAY;
+import static calebxzhou.rdi.consts.RdiConsts.CoreVersion;
 import static calebxzhou.rdi.consts.RdiConsts.MODID_DISPLAY;
 
 /**
@@ -39,7 +39,7 @@ public class mGameConfigData {
 
 	@Inject(method = "<init>",at=@At("TAIL"))
 	private void changeVersionType(boolean bl, String string, String string2, boolean bl2, boolean bl3, CallbackInfo ci){
-		versionType = MODID_DISPLAY+CORE_VERSION_DISPLAY;
+		versionType = MODID_DISPLAY+ CoreVersion;
 		disableMultiplayer = false;
 		disableChat = false;
 		demo =false;

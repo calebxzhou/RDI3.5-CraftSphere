@@ -3,6 +3,7 @@ package calebxzhou.rdi.mixin;
 
 import calebxzhou.libertorch.SerDesJson;
 import calebxzhou.rdi.RdiCore;
+import calebxzhou.rdi.model.RdiUser;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.login.ServerboundHelloPacket;
 import net.minecraft.world.entity.player.ProfilePublicKey;
@@ -33,7 +34,7 @@ public class mLoginProtocol {
     @Overwrite
     public void write(FriendlyByteBuf friendlyByteBuf) {
 		//改变登录格式
-        friendlyByteBuf.writeUtf(SerDesJson.gson.toJson(RdiCore.Companion.getCurrentRdiUser()), nameLen);
+        friendlyByteBuf.writeUtf(SerDesJson.gson.toJson(RdiUser.now), nameLen);
         friendlyByteBuf.writeOptional(publicKey, (friendlyByteBuf2, data) -> data.write(friendlyByteBuf));
 		friendlyByteBuf.writeOptional(profileId, FriendlyByteBuf::writeUUID);
     }

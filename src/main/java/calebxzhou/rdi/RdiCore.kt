@@ -21,10 +21,8 @@ import org.quiltmc.qsl.lifecycle.api.client.event.ClientLifecycleEvents
 val logger: Logger = LogManager.getLogger("RDI-Core")
 class RdiCore : ModInitializer {
     companion object {
-        lateinit var rdiLevelSource: LevelStorageSource
         var currentWeather: RdiWeather? = null
         var currentGeoLocation: RdiGeoLocation? = null
-        var currentRdiUser: RdiUser? = null
         var gameReady = false
             private set
     }
@@ -33,9 +31,6 @@ class RdiCore : ModInitializer {
         ClientLifecycleEvents.READY.register(ClientLifecycleEvents.Ready { mc->
             ModernUITextMC.setupClient()
             gameReady=true
-            rdiLevelSource=  LevelStorageSource(
-                RdiConsts.RDI_LEVEL_FOLDER.toPath(),
-                RdiConsts.RDI_LEVEL_BKUP_FOLDER.toPath(),mc.fixerUpper)
             logger.info("客户端准备好")
 
         })

@@ -91,7 +91,7 @@ data class HwSpec(val brand: String,
             logger.info("载入硬件信息完成")
             return HwSpec(
                 brand, os, board, mem.toString(), disk.toString(), cpu, gpu.toString(),
-                mods.toString(), RdiConsts.CORE_VERSION_DISPLAY
+                mods.toString(), RdiConsts.CoreVersion
             )
         }
     }

@@ -1,7 +1,7 @@
 package calebxzhou.rdi.misc
 
 import calebxzhou.libertorch.util.ThreadPool
-import calebxzhou.rdi.consts.RdiConsts.CORE_VERSION_DISPLAY
+import calebxzhou.rdi.consts.RdiConsts.CoreVersion
 import calebxzhou.rdi.consts.RdiConsts.DEBUG
 import calebxzhou.rdi.consts.RdiConsts.MODID_DISPLAY
 import calebxzhou.rdi.screen.RdiTitleScreen
@@ -16,14 +16,14 @@ object ServerConnector {
     val SERVER_ADDRESS =
         if (DEBUG) ServerAddress("localhost", 26085) else ServerAddress("test3.davisoft.cn", 26085)
     val SERVER_INFO = ServerData(
-        MODID_DISPLAY + CORE_VERSION_DISPLAY,
+        MODID_DISPLAY + CoreVersion,
         SERVER_ADDRESS.host + ":" + SERVER_ADDRESS.port,
         false
     )
 
     @JvmStatic
 	fun connect() {
-        Minecraft.getInstance().window.setTitle("$MODID_DISPLAY $CORE_VERSION_DISPLAY")
+        Minecraft.getInstance().window.setTitle("$MODID_DISPLAY $CoreVersion")
         ConnectScreen.startConnecting(RdiTitleScreen(), Minecraft.getInstance(), SERVER_ADDRESS, SERVER_INFO)
 
     }

@@ -8,7 +8,6 @@ object LoadProgressRecorder {
     @JvmField
     var loadStartTime: Long = 0
     var loadEndTime: Long = 0
-    var musicPlayJob : OggPlayer?=null
     val standardLoadTime = 40
     @JvmStatic
 	fun onFinish() {

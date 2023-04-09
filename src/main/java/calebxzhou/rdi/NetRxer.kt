@@ -3,9 +3,9 @@ package calebxzhou.rdi
 import calebxzhou.libertorch.SerDesJson
 import calebxzhou.libertorch.util.OsDialogUt.showMessageBox
 import calebxzhou.libertorch.util.OsDialogUt.showPopup
-import calebxzhou.rdi.RdiCore.Companion.currentRdiUser
 import calebxzhou.rdi.consts.NetPacks
 import calebxzhou.rdi.model.RdiGeoLocation
+import calebxzhou.rdi.model.RdiUser
 import calebxzhou.rdi.model.RdiWeather
 import net.minecraft.client.Minecraft
 import net.minecraft.client.multiplayer.ClientPacketListener
@@ -52,8 +52,10 @@ object NetRxer {
         sender: PacketSender
     ) {
         val pwd = buf.readUtf()
-        currentRdiUser!!.pwd = pwd
-        RdiCore.currentRdiUser!!.writePasswordToFile()
+        logger.info("正在更改密码：{}",pwd)
+        RdiUser.now.pwd=pwd
+        RdiUser.now.save()
+        logger.info("更改完成：{}",RdiUser.now)
     }
 
     //接收服务器的弹框信息

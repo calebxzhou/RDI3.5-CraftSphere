@@ -13,10 +13,7 @@ import java.util.List;
 @Mixin(DebugScreenOverlay.class)
 public class mDebugOverlay {
 
-	/*@Redirect(method = "render",at = @At(value = "INVOKE",target = "Lnet/minecraft/client/gui/components/DebugScreenOverlay;render(Lcom/mojang/blaze3d/vertex/PoseStack;)V"))
-	private void renderRdiDebug(DebugScreenOverlay instance, PoseStack poseStack){
-		RdiCore.RDI_DEBUG_OVERLAY.render(poseStack);
-	}*/
+
 	@Redirect(method = "drawGameInformation",at = @At(value = "INVOKE",target = "Ljava/util/List;add(Ljava/lang/Object;)Z"))
 	private boolean lessInfo1(List instance, Object e){
 		return false;

@@ -2,6 +2,7 @@ package calebxzhou.rdi.screen
 
 import calebxzhou.libertorch.util.OsDialogUt
 import calebxzhou.rdi.RdiCore
+import calebxzhou.rdi.model.RdiUser
 import com.mojang.blaze3d.platform.GlStateManager
 import com.mojang.blaze3d.platform.InputConstants
 import com.mojang.blaze3d.systems.RenderSystem
@@ -27,8 +28,8 @@ class PasswordScreen: Screen(Component.literal("输入密码屏幕")) {
             )
         ){
             OsDialogUt.showPopup("info", "您成功设定密码为${editbox.value},即将回到主界面！")
-            RdiCore.currentRdiUser!!.pwd=editbox.value
-            RdiCore.currentRdiUser!!.writePasswordToFile()
+            RdiUser.now.pwd=editbox.value
+            RdiUser.now.save()
             minecraft!!.setScreen(RdiTitleScreen())
         }
     }
