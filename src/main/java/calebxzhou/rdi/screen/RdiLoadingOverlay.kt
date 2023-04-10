@@ -11,6 +11,7 @@ import net.minecraft.client.gui.screens.Overlay
 import net.minecraft.server.packs.resources.ReloadInstance
 import net.minecraft.util.FastColor
 import org.apache.commons.io.FileUtils
+import org.apache.commons.io.input.ReversedLinesFileReader
 import org.apache.commons.lang3.RandomUtils
 import java.io.File
 import java.io.IOException
@@ -77,15 +78,13 @@ class RdiLoadingOverlay(minecraft: Minecraft, reload: ReloadInstance, exceptionH
             maximumLoadBarLength = RandomUtils.nextFloat(2700f, 4500f)
         }
         try {
-            val logLines = try {
-                FileUtils.readLines(File("./logs/debug.log"), StandardCharsets.UTF_8)
+            val logLastLine = try {
+                ReversedLinesFileReader(File("./logs/debug.log"), StandardCharsets.UTF_8).readLine()
             } catch (e: Exception) {
-                listOf("")
+                ""
             }
-            val logLastLine = logLines[logLines.size - 1]
             if(RdiCore.gameReady)
                 Minecraft.getInstance().font.draw(matrices,logLastLine,0f,0f,0x000000)
-            Minecraft.getInstance().window.setTitle(logLastLine)
         } catch (e: IOException) {
             throw RuntimeException(e)
         }

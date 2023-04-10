@@ -22,7 +22,7 @@ object RdiConsts {
     const val GAME_VERSION = "1.19.2"
 
     //显示版本
-    const val CoreVersion = "3.9"
+    const val CoreVersion = "3.9b"
     //发布日期
     const val ReleaseDate = "230409"
 
