@@ -1,4 +1,4 @@
-package calebxzhou.rdi
+package calebxzhou.rdi.net
 
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.resources.ResourceLocation

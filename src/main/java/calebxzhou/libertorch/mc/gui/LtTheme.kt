@@ -16,6 +16,10 @@ data class LtTheme(
     val widgetOutlineColor: LtColor,
     //滑块颜色
     val sliderHandleColor: LtColor,
+    //提示框背景色
+    val tooltipBgColor: LtColor,
+    //提示框外框色
+    val tooltipOutlineColor: LtColor
 ){
     companion object{
         var now: LtTheme = LtTheme(
@@ -24,7 +28,8 @@ data class LtTheme(
             DefaultColors.Gray.color,
             DefaultColors.KleinBlue.color,
             DefaultColors.LightBlue.color,
-
+            DefaultColors.OliveGreen.color,
+            DefaultColors.LightBlue.color
 
             )
     }

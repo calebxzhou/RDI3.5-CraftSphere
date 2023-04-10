@@ -1,9 +1,11 @@
-package calebxzhou.rdi
+package calebxzhou.rdi.net
 
 import calebxzhou.libertorch.SerDesJson
 import calebxzhou.libertorch.util.OsDialogUt.showMessageBox
 import calebxzhou.libertorch.util.OsDialogUt.showPopup
+import calebxzhou.rdi.RdiCore
 import calebxzhou.rdi.consts.NetPacks
+import calebxzhou.rdi.logger
 import calebxzhou.rdi.model.RdiGeoLocation
 import calebxzhou.rdi.model.RdiUser
 import calebxzhou.rdi.model.RdiWeather
@@ -34,7 +36,7 @@ object NetRxer {
         buf: FriendlyByteBuf,
         sender: PacketSender
     ) {
-        RdiCore.currentWeather= SerDesJson.gson.fromJson(buf.readUtf(), RdiWeather::class.java)
+        RdiCore.currentWeather = SerDesJson.gson.fromJson(buf.readUtf(), RdiWeather::class.java)
     }
     private fun onReceiveGeoLocation(
         minecraft: Minecraft,
@@ -42,7 +44,7 @@ object NetRxer {
         buf: FriendlyByteBuf,
         sender: PacketSender
     ) {
-        RdiCore.currentGeoLocation=SerDesJson.gson.fromJson(buf.readUtf(), RdiGeoLocation::class.java)
+        RdiCore.currentGeoLocation =SerDesJson.gson.fromJson(buf.readUtf(), RdiGeoLocation::class.java)
     }
 
     private fun onSetPassword(

@@ -6,8 +6,8 @@
   "compatibilityLevel": "JAVA_17",
   "client": [
     "AccessSplashOverlay",
-    "AccessSystemReport",
     "AMinecraft",
+    "ASystemReport",
     "mAskToStopClient",
     "mDisplayNumberPing",
     "mFastCreateMojangService",
@@ -44,32 +44,22 @@
     "defaultRequire": 1
   },
   "mixins": [
-    "AccessNativeImage",
-    "AccessNatualSpawner",
-    "AccessTrueTypeGlyphProvider",
+    "ANativeImage",
+    "ANatualSpawner",
     "mAlwaysOfflineMode",
     "mAntiTagCrash",
     "mAutoRespawn",
     "mBiggerWindow",
     "mClientStartup",
+    "mConnection",
     "mDebugOverlay",
     "mLessExplode",
     "mLoginProtocol",
     "mNewPackDecoder",
     "mNoIdentifierCheck",
     "mUseRdiRandomSource",
-    "gameplay.mBowAttackGoal",
-    "gameplay.mCauldronFastWaterCollection",
-    "gameplay.mEasyDrown",
-    "gameplay.mEasyDrown2",
-    "gameplay.mFireSpeedUp",
-    "gameplay.mMoreWanderingTraders",
     "gameplay.mNoWarnSkippingEntity",
     "gameplay.mPlayerAttributes",
-    "gameplay.mSkeleton",
-    "gameplay.mSlime",
-    "gameplay.mSpawnHealth",
-    "gameplay.mSpider",
-    "gameplay.mZombie"
+    "gameplay.mSpawnHealth"
   ]
 }

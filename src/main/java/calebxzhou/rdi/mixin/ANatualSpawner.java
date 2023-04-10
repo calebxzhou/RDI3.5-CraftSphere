@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(NaturalSpawner.class)
-public interface AccessNatualSpawner {
+public interface ANatualSpawner {
     @Accessor
     MobCategory[] getSPAWNING_CATEGORIES();
 }

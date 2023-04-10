@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 import java.util.Map;
 
 @Mixin(SystemReport.class)
-public interface AccessSystemReport {
+public interface ASystemReport {
     @Accessor
     Map<String, String> getEntries();
 }

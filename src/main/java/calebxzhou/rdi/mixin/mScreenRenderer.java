@@ -1,6 +1,8 @@
 package calebxzhou.rdi.mixin;
 
-import calebxzhou.libertorch.mc.gui.LtMcUiRenderer;
+import calebxzhou.libertorch.mc.gui.LtScreen;
+import calebxzhou.libertorch.mc.gui.components.LtBaseWidget;
+import calebxzhou.libertorch.mc.gui.components.LtSlider;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
@@ -10,13 +12,17 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Overlay;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.controls.KeyBindsList;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.util.List;
 
 import static calebxzhou.rdi.consts.RdiConsts.MODID;
 
@@ -33,7 +39,7 @@ public abstract class mScreenRenderer {
 
 	@Overwrite
 	public void renderButton(PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
-		LtMcUiRenderer.renderButton(poseStack,(AbstractWidget) (Object)this,alpha,()-> renderBg(poseStack, Minecraft.getInstance(), mouseX, mouseY));
+		LtBaseWidget.renderButton(poseStack,(AbstractWidget) (Object)this,alpha,()-> renderBg(poseStack, Minecraft.getInstance(), mouseX, mouseY));
 	}
 }
 @Mixin(AbstractSliderButton.class)
@@ -44,7 +50,7 @@ class mWidgetRenderer2{
 	@Overwrite
 	public void renderBg(PoseStack poseStack, Minecraft minecraft, int mouseX, int mouseY) {
 		AbstractSliderButton btn = (AbstractSliderButton)(Object)this;
-		LtMcUiRenderer.renderSlider(poseStack,btn.x,btn.y,btn.getWidth(),btn.getHeight(),value,btn.isHoveredOrFocused());
+		LtSlider.render(poseStack,btn.x,btn.y,btn.getWidth(),btn.getHeight(),value,btn.isHoveredOrFocused());
 	}
 }
 @Mixin(KeyBindsList.KeyEntry.class)
@@ -74,17 +80,24 @@ class mNoDirtBackground {
 	@Shadow
 	public int height;
 
+	@Shadow
+	protected ItemRenderer itemRenderer;
+
 	@Inject(method = "renderBackground(Lcom/mojang/blaze3d/vertex/PoseStack;I)V",at=@At("HEAD"), cancellable = true)
 	public void renderBackground(PoseStack poseStack, int vOffset, CallbackInfo ci) {
 		boolean isInGame = this.minecraft.level != null;
-		LtMcUiRenderer.renderBg(poseStack,width,height,isInGame);
+		LtScreen.renderBg(poseStack,width,height,isInGame);
 		ci.cancel();
 
 	}
 	@Inject(method = "renderDirtBackground",at=@At("HEAD"), cancellable = true)
 	public void renderDirtBackground(int vOffset, CallbackInfo ci) {
-		LtMcUiRenderer.renderBg();
+		LtScreen.renderBg();
 		ci.cancel();
+	}
+	@Overwrite
+	private void renderTooltipInternal(PoseStack poseStack, List<ClientTooltipComponent> clientTooltipComponents, int mouseX, int mouseY) {
+		LtScreen.renderTooltip(poseStack,clientTooltipComponents,mouseX,mouseY,width,height,itemRenderer);
 	}
 }
 @Mixin(GuiComponent.class)

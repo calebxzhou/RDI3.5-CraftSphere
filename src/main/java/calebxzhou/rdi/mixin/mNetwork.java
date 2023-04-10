@@ -16,8 +16,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static calebxzhou.rdi.consts.RdiConsts.PROTOCOL_VERSION;
 
+public class mNetwork{}
 @Mixin(DetectedVersion.class)
-public class mProtocol {
+class mProtocol {
     @Shadow
     @Final
     @Mutable
@@ -37,4 +38,8 @@ class mQuiltNetwork{
 		if(RdiConnectScreen.connection != null)
 			cir.setReturnValue(RdiConnectScreen.connection);
 	}
+}
+@Mixin(Connection.class)
+class mConnection{
+
 }

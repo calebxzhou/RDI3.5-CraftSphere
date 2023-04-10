@@ -1,7 +1,7 @@
 package calebxzhou.rdi.util
 
 import calebxzhou.libertorch.util.OsDialogUt.showYesNoBox
-import calebxzhou.rdi.NetTx
+import calebxzhou.rdi.net.NetTx
 import calebxzhou.rdi.RdiCore
 import calebxzhou.rdi.consts.NetPacks
 import com.mojang.blaze3d.platform.GLX

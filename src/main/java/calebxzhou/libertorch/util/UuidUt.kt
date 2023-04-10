@@ -15,6 +15,9 @@ object UuidUt {
         )
     }
 
+    fun createFromName(name: String):UUID{
+        return  UUID.nameUUIDFromBytes(name.toByteArray(StandardCharsets.UTF_8))
+    }
     fun createUuidByName(playerName: String): String {
         return UUID.nameUUIDFromBytes(playerName.toByteArray(StandardCharsets.UTF_8)).toString()
     }

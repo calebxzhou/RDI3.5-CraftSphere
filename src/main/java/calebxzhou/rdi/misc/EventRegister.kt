@@ -1,6 +1,6 @@
 package calebxzhou.rdi.misc
 
-import calebxzhou.rdi.NetTx
+import calebxzhou.rdi.net.NetTx
 import calebxzhou.rdi.logger
 import calebxzhou.rdi.util.PlayerUtils
 import calebxzhou.libertorch.util.ThreadPool

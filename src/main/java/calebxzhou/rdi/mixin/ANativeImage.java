@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
  * Created by calebzhou on 2022-09-20,7:52.
  */
 @Mixin(NativeImage.class)
-public interface AccessNativeImage {
+public interface ANativeImage {
 	@Accessor
 	NativeImage.Format getFormat();
 	@Accessor

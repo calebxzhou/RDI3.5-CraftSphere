@@ -15,6 +15,7 @@ import org.apache.commons.io.FileUtils
 import org.lwjgl.util.tinyfd.TinyFileDialogs
 import java.io.IOException
 import java.nio.charset.StandardCharsets
+import java.util.*
 
 
 /**
@@ -70,7 +71,7 @@ object RdiLoader {
             RdiUser.load(uuid)
         } catch (e: Exception) {
             logger.warn("没有读取到用户文件： {} {}", e.javaClass.name,e.message)
-            RdiUser(uuid,name,"","LEGACY")
+            RdiUser(UUID.fromString(uuid),name,"","LEGACY")
         }
         logger.info("读取完成：{}",RdiUser.now)
     }

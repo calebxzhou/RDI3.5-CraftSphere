@@ -1,15 +1,12 @@
 package calebxzhou.rdi
 
-import calebxzhou.rdi.consts.RdiConsts
 import calebxzhou.rdi.misc.EventRegister
 import calebxzhou.rdi.model.RdiGeoLocation
-import calebxzhou.rdi.model.RdiUser
 import calebxzhou.rdi.model.RdiWeather
+import calebxzhou.rdi.net.NetRxer
 import icyllis.modernui.textmc.ModernUITextMC
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import net.minecraft.world.level.storage.LevelStorageSource
-import org.apache.logging.log4j.LogManager
 import org.quiltmc.loader.api.ModContainer
 import org.quiltmc.qsl.base.api.entrypoint.ModInitializer
 import org.quiltmc.qsl.lifecycle.api.client.event.ClientLifecycleEvents

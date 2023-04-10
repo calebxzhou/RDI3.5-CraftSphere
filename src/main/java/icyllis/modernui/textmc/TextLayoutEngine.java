@@ -18,7 +18,7 @@
 
 package icyllis.modernui.textmc;
 
-import calebxzhou.rdi.mixin.AccessNativeImage;
+import calebxzhou.rdi.mixin.ANativeImage;
 import com.google.gson.*;
 import com.ibm.icu.text.Bidi;
 import com.mojang.blaze3d.platform.NativeImage;
@@ -802,9 +802,9 @@ public class TextLayoutEngine {
                     }
                     long src;
 					if(downSample!=null){
-						src = ((AccessNativeImage)(Object)downSample).getPixels();
+						src = ((ANativeImage)(Object)downSample).getPixels();
 					}else{
-						src = ((AccessNativeImage)(Object)image).getPixels();
+						src = ((ANativeImage)(Object)image).getPixels();
 					}
 
 					// = UIManager.IMAGE_PIXELS.getLong(downSample != null ? downSample : image);

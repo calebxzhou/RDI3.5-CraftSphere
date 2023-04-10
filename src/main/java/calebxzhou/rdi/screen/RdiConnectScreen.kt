@@ -44,7 +44,9 @@ class RdiConnectScreen : LtScreen("连接画面"){
 
 
     private fun connect(minecraft: Minecraft) {
+        //quilt功能
         ClientRegistrySync.createSnapshot()
+
         val completableFuture = minecraft.profileKeyPairManager.preparePublicKey()
         logger.info("开始连接")
         thread {
