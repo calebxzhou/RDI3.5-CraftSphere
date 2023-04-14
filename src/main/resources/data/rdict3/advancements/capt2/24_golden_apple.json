@@ -1,0 +1,34 @@
+{
+  "parent": "rdict3:capt2/23_gold_nugget",
+  "display": {
+    "icon": {
+      "item": "minecraft:golden_apple"
+    },
+    "title": "2.4 金苹果",
+    "description": "合成金苹果。",
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "golden_apple2": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:golden_apple"
+            ],
+            "count": 1
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "golden_apple2"
+    ]
+  ]
+}

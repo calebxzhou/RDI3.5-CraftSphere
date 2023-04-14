@@ -1,0 +1,34 @@
+{
+  "parent": "rdict3:capt2/25_cure_zombie_villager",
+  "display": {
+    "icon": {
+      "item": "minecraft:iron_ingot"
+    },
+    "title": "2.8 建造刷铁机",
+    "description": "详见B站：BV1Mf4y1d71J。得到10个铁锭。",
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "iron_ingot2": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:iron_ingot"
+            ],
+            "count": 10
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "iron_ingot2"
+    ]
+  ]
+}

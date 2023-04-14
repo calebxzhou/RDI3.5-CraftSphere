@@ -1,0 +1,25 @@
+{
+  "parent": "rdict3:capt2/24_golden_apple",
+  "display": {
+    "icon": {
+      "item": "minecraft:enchanted_golden_apple"
+    },
+    "title": "2.5 治疗村民",
+    "description": "如题。",
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "cured_zombie2": {
+      "trigger": "minecraft:cured_zombie_villager",
+      "conditions": {}
+    }
+  },
+  "requirements": [
+    [
+      "cured_zombie2"
+    ]
+  ]
+}

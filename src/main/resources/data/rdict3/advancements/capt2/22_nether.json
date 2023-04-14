@@ -1,0 +1,27 @@
+{
+  "parent": "rdict3:capt2/21_root",
+  "display": {
+    "icon": {
+      "item": "minecraft:obsidian"
+    },
+    "title": "2.2 下地狱",
+    "description": "使用岩浆与木板，引燃10个黑曜石组成的地狱门，并进入。",
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "entered_nether2": {
+      "trigger": "minecraft:changed_dimension",
+      "conditions": {
+        "to": "minecraft:the_nether"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "entered_nether2"
+    ]
+  ]
+}

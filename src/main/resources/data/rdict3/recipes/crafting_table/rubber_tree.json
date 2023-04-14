@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "III",
+    "IAI",
+    "UAU"
+  ],
+  "key": {
+    "I": {
+      "item": "minecraft:clay_ball"
+    },
+    "A": {
+      "item": "minecraft:oak_sapling"
+    },
+    "U": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "result": {
+    "item": "techreborn:rubber_sapling"
+  }
+}

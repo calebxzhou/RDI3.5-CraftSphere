@@ -4,6 +4,7 @@ import calebxzhou.libertorch.mc.gui.LtScreen;
 import calebxzhou.libertorch.mc.gui.components.LtBaseWidget;
 import calebxzhou.libertorch.mc.gui.components.LtSlider;
 import calebxzhou.rdi.RdiCore;
+import calebxzhou.rdi.screen.ScreenChangeFilter;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
@@ -49,14 +50,18 @@ class mSetScreen{
 	@Nullable
 	public Screen screen;
 
-	@Inject(method = "setScreen",at=@At("HEAD"))
+	@Inject(method = "setScreen",at=@At("HEAD"), cancellable = true)
 	private void setScreen(Screen guiScreen, CallbackInfo ci){
 		if(screen != null){
 			RdiCore.getLogger().info("前画面：{}",screen.getClass().getName());
 		}
 		if(guiScreen != null){
-			RdiCore.getLogger().info("画面迁移至：{}",guiScreen.getClass().getName());
+			RdiCore.getLogger().info("现画面：{}",guiScreen.getClass().getName());
+			if(!ScreenChangeFilter.doFilter(guiScreen)){
+				ci.cancel();
+			}
 		}
+
 
 	}
 }

@@ -1,0 +1,34 @@
+{
+  "parent": "rdict3:capt2/22_obsidian",
+  "display": {
+    "icon": {
+      "item": "minecraft:gold_nugget"
+    },
+    "title": "2.3 我爱金粒",
+    "description": "杀死僵尸猪灵得到金粒。",
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "gold_nugget2": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:gold_nugget"
+            ],
+            "count": 1
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "gold_nugget2"
+    ]
+  ]
+}
