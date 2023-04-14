@@ -9,7 +9,7 @@ import java.util.concurrent.Executors
  * Created  on 2023-04-07,22:44.
  */
 object SoundPlayer {
-    private val threadPool = Executors.newSingleThreadExecutor(NamedThreadFactory("RdiMusicPlayThread"))
+    private val threadPool = Executors.newSingleThreadExecutor(NamedThreadFactory("RdiSoundPlayThread"))
     fun playOgg(sound: RdiSounds){
         playOgg(sound.oggStream)
     }

@@ -3,6 +3,7 @@ package calebxzhou.rdi.mixin;
 import calebxzhou.libertorch.mc.gui.LtScreen;
 import calebxzhou.libertorch.mc.gui.components.LtBaseWidget;
 import calebxzhou.libertorch.mc.gui.components.LtSlider;
+import calebxzhou.rdi.RdiCore;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
@@ -40,6 +41,23 @@ public abstract class mScreenRenderer {
 	@Overwrite
 	public void renderButton(PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
 		LtBaseWidget.renderButton(poseStack,(AbstractWidget) (Object)this,alpha,()-> renderBg(poseStack, Minecraft.getInstance(), mouseX, mouseY));
+	}
+}
+@Mixin(Minecraft.class)
+class mSetScreen{
+	@Shadow
+	@Nullable
+	public Screen screen;
+
+	@Inject(method = "setScreen",at=@At("HEAD"))
+	private void setScreen(Screen guiScreen, CallbackInfo ci){
+		if(screen != null){
+			RdiCore.getLogger().info("前画面：{}",screen.getClass().getName());
+		}
+		if(guiScreen != null){
+			RdiCore.getLogger().info("画面迁移至：{}",guiScreen.getClass().getName());
+		}
+
 	}
 }
 @Mixin(AbstractSliderButton.class)
@@ -95,9 +113,10 @@ class mNoDirtBackground {
 		LtScreen.renderBg();
 		ci.cancel();
 	}
-	@Overwrite
-	private void renderTooltipInternal(PoseStack poseStack, List<ClientTooltipComponent> clientTooltipComponents, int mouseX, int mouseY) {
+	@Inject(method = "renderTooltipInternal",at=@At("HEAD"), cancellable = true)
+	public void renderTooltipInternal(PoseStack poseStack, List<ClientTooltipComponent> clientTooltipComponents, int mouseX, int mouseY, CallbackInfo ci) {
 		LtScreen.renderTooltip(poseStack,clientTooltipComponents,mouseX,mouseY,width,height,itemRenderer);
+		ci.cancel();
 	}
 }
 @Mixin(GuiComponent.class)

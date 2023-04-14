@@ -18,6 +18,7 @@ import java.io.IOException
 import java.nio.charset.StandardCharsets
 import java.util.*
 import java.util.function.Consumer
+import kotlin.math.roundToInt
 
 class RdiLoadingOverlay(minecraft: Minecraft, reload: ReloadInstance, exceptionHandler: Consumer<Optional<Throwable>>) :
     Overlay() {
@@ -60,7 +61,7 @@ class RdiLoadingOverlay(minecraft: Minecraft, reload: ReloadInstance, exceptionH
     }
 
     //到3秒 加载条就弹回去
-    var maximumLoadBarLength = 3000f
+    private var maximumLoadBarLength = 3000f
 
     init {
         //ping一下服务器提高载入速度
@@ -88,7 +89,7 @@ class RdiLoadingOverlay(minecraft: Minecraft, reload: ReloadInstance, exceptionH
         } catch (e: IOException) {
             throw RuntimeException(e)
         }
-        val progressToDisplayPixels = Math.round(maxX * timeRatio)
+        val progressToDisplayPixels = (maxX * timeRatio).roundToInt()
         val barColor = FastColor.ARGB32.color(255, 64, 64, 64)
         fill(matrices, 2, minY + 2, progressToDisplayPixels, maxY - 2, barColor)
     }

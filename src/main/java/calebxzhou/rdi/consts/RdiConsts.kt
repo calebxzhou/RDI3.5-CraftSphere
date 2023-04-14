@@ -15,7 +15,7 @@ object RdiConsts {
     const val MODID_DISPLAY = "RDI"
 
     //是否为调试模式,本地用
-    const val DEBUG = false
+    const val DEBUG = true
 
     //版本号与协议号
     const val PROTOCOL_VERSION = 0x37

@@ -1,8 +1,8 @@
 
 plugins {
 	// replace `<...>` with the plugin name
-		id 'org.jetbrains.kotlin.jvm' version '1.8.10'
-		id 'org.jetbrains.kotlin.plugin.serialization' version '1.8.10'
+		id 'org.jetbrains.kotlin.jvm' version '1.8.20'
+		id 'org.jetbrains.kotlin.plugin.serialization' version '1.8.20'
 	id 'maven-publish'
 	id "java-library"
 	alias libs.plugins.quilt.loom
@@ -17,19 +17,6 @@ repositories {
 
 	mavenCentral()
 
-	maven {url="https://maven.enginehub.org/repo/"}
-	maven { url "https://maven.dblsaiko.net/" }
-	maven { url "https://maven.fabricmc.net/" }
-	maven { url 'https://maven.blamejared.com' }
-	maven { url "https://maven.shedaniel.me/" }
-	maven { url 'https://jitpack.io' }
-	maven { url 'https://maven.terraformersmc.com/releases' }
-	maven { url = "https://maven.terraformersmc.com/" }
-	maven { url "https://ladysnake.jfrog.io/artifactory/mods" }
-	maven { url = "https://dvs1.progwml6.com/files/maven/" }
-	maven { url = "https://modmaven.dev" }
-	maven { url = "https://maven.parchmentmc.org" }
-	maven { url 'https://masa.dy.fi/maven' }
 	maven {
 		name = "Modrinth"
 		url = "https://api.modrinth.com/maven"
@@ -43,6 +30,38 @@ repositories {
 			includeGroup "curse.maven"
 		}
 	}
+	maven { url = "https://maven.jamieswhiteshirt.com/libs-release" } // Reach Entity Attributes
+	maven { url "https://maven.fabricmc.net/" }
+	maven {
+		url = "https://maven.modmuss50.me/"
+	}
+	maven {
+		name = 'Ladysnake Mods'
+		url = 'https://ladysnake.jfrog.io/artifactory/mods'
+		content {
+			includeGroup 'io.github.ladysnake'
+			includeGroupByRegex 'io\\.github\\.onyxstudios.*'
+		}
+	}
+	maven {url="https://maven.enginehub.org/repo/"}
+	maven { url "https://maven.dblsaiko.net/" }
+	maven { url 'https://maven.blamejared.com' }
+	maven { url "https://maven.shedaniel.me/" }
+	maven { url 'https://jitpack.io' }
+	maven { url 'https://maven.terraformersmc.com/releases' }
+	maven { url = "https://maven.terraformersmc.com/" }
+	maven { url "https://ladysnake.jfrog.io/artifactory/mods" }
+	maven { url = "https://dvs1.progwml6.com/files/maven/" }
+	maven { url = "https://modmaven.dev" }
+	maven { url = "https://maven.parchmentmc.org" }
+	maven { url 'https://masa.dy.fi/maven' }
+	maven {
+		name = 'Ladysnake Mods'
+		url = 'https://ladysnake.jfrog.io/artifactory/mods'
+	}
+	maven { url = "https://maven.tterrag.com/" } // Flywheel
+	  // Create, Porting Lib, Forge Tags, Milk Lib, Registrate
+	maven { url = "https://mvn.devos.one/snapshots/" }
 	gradlePluginPortal()
 	maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
 	maven { url "https://oss.sonatype.org/content/repositories/releases/" }
@@ -66,44 +85,87 @@ dependencies {
 	mappings loom.layered {
 		mappings "org.quiltmc:quilt-mappings:${libs.versions.quilt.mappings.get()}:intermediary-v2"
 		officialMojangMappings() // Uncomment if you want to use Mojang mappings as your primary mappings, falling back on QM for parameters and Javadocs
-		parchment("org.parchmentmc.data:parchment-1.19.2:2022.10.16@zip")
+		parchment("org.parchmentmc.data:parchment-1.19.2:2022.11.27@zip")
 	}
 	modImplementation libs.quilt.loader
-// https://mvnrepository.com/artifact/javax.annotation/javax.annotation-api
-	// https://mvnrepository.com/artifact/com.google.code.findbugs/jsr305
 	implementation 'com.google.code.findbugs:jsr305:3.0.2'
-// https://mvnrepository.com/artifact/org.joml/joml
+	implementation 'com.electronwill.night-config:toml:3.6.6'
 	includeImplementation( 'org.joml:joml:1.10.5' )
 	// Quilted Fabric API will automatically pull in the correct QSL version.
 	modImplementation libs.quilted.fabric.api
-	// modImplementation libs.bundles.quilted.fabric.api // If you wish to use Fabric API's deprecated modules, you can replace the above line with this one
 	//新版的 http client okhttp，载入到mod包里
-	// https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
 	includeImplementation( 'com.squareup.okhttp3:okhttp:4.10.0' )
 	includeImplementation( 'com.squareup.okio:okio:3.0.0' )
 	includeImplementation( 'com.squareup.okio:okio-jvm:3.0.0' )
-	// https://mvnrepository.com/artifact/com.github.ben-manes.caffeine/caffeine
 	includeImplementation 'com.github.ben-manes.caffeine:caffeine:3.1.1'
-	implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
 
 
-	modImplementation("maven.modrinth:lithium:mc1.19.2-0.8.3")
+
+
+	modImplementation("maven.modrinth:lithium:mc1.19.2-0.11.1")
 	modImplementation("maven.modrinth:sodium:mc1.19.2-0.4.4")
 	modImplementation("maven.modrinth:sodium-extra:mc1.19.2-0.4.10")
 	modImplementation("maven.modrinth:reeses-sodium-options:mc1.19.2-1.4.7")
 	modImplementation("maven.modrinth:lazydfu:0.1.3")
-	modImplementation("maven.modrinth:ferrite-core:5.0.0-fabric")
-	modImplementation("maven.modrinth:modmenu:4.0.6")
-	modImplementation("maven.modrinth:wthit:quilt-5.12.0")
-
-	modImplementation("maven.modrinth:badpackets:fabric-0.2.0")
-
-	//dashloader，提高载入速度
+	modImplementation("maven.modrinth:ferrite-core:5.0.3-fabric")
+	modImplementation("maven.modrinth:modmenu:4.2.0-beta.2")
+	modImplementation("maven.modrinth:wthit:quilt-5.15.1")
+//dashloader，提高载入速度
 	modImplementation("maven.modrinth:dashloader:4.1.3+1.19")
-	modImplementation("net.fabricmc:fabric-language-kotlin:1.8.4+kotlin.1.7.20")
+	modImplementation("maven.modrinth:dynamic-fps:v2.2.0")
+	modImplementation("maven.modrinth:badpackets:fabric-0.2.1")
+	modImplementation("maven.modrinth:bclib:2.1.6")
+	modImplementation("maven.modrinth:ae2:fabric-12.9.2")
 
+	modImplementation(include("maven.modrinth:modern-industrialization:1.6.4"))
+	implementation "me.zeroeightsix:fiber:0.23.0-SNAPSHOT"
+	modImplementation 'com.github.Draylar:magna:1.8.0-1.19.2'
+	modImplementation "io.github.ladysnake:PlayerAbilityLib:1.6.0"
+	include "io.github.ladysnake:PlayerAbilityLib:1.6.0"
+
+	modImplementation("maven.modrinth:architectury-api:6.5.77+fabric")
+	modImplementation("maven.modrinth:betterend:5CIFclEA")
+	modImplementation("maven.modrinth:bits-and-chisels:2.7.0")
+	modImplementation("maven.modrinth:botania:1.19.2-438-fabric")
+	modImplementation("maven.modrinth:patchouli:1.19.2-77-fabric")
+	modImplementation("maven.modrinth:trinkets:3.4.2")
+	// Adds a dependency on the base cardinal components module (required by every other module)
+	// Replace modImplementation with modApi if you expose components in your own API
+	modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-base:5.0.2"
+	modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:5.0.2"
+
+
+	modImplementation("maven.modrinth:cc-restitched:1.101.2+1.19.1")
+	modImplementation("maven.modrinth:cloth-config:8.2.88+fabric")
+	modImplementation("maven.modrinth:farmers-delight-fabric:1.3.9")
+
+	// Create - dependencies are added transitively
+	modImplementation(include("com.simibubi.create:create-fabric-1.19.2:0.5.0.i-991+1.19.2"))
+
+	modImplementation("maven.modrinth:mouse-tweaks:1.19-2.22-fabric")
+	modImplementation("maven.modrinth:fabricae-ex-nihilo:0.1.11+mc.1.19.2")
+
+
+	modImplementation("maven.modrinth:applied-energistics-2-wireless-terminals:12.8.5-fabric")
+	modImplementation("net.fabricmc:fabric-language-kotlin:1.9.3+kotlin.1.8.20")
+
+	//TechReborn-1.19.2-5.4.0
+	modImplementation("curse.maven:project-233564:4102770")
+	//RebornCore192 540
+	modImplementation("curse.maven:project-237903:4102771")
+	// dashLoader
 	implementation 'dev.quantumfusion:Taski:1.1.0'
 	implementation 'dev.quantumfusion:Hyphen:0.2.2'
+	// dynamicFps
+	implementation 'com.moandjiezana.toml:toml4j:0.7.2'
+	// TeamRebornEnergy
+	include modApi('teamreborn:energy:2.3.0') {
+		exclude(group: "net.fabricmc.fabric-api")
+	}
+	implementation("com.github.LlamaLad7:MixinExtras:0.1.1")
+	annotationProcessor("com.github.LlamaLad7:MixinExtras:0.1.1")
+
+	implementation('org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0')
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	implementation('org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4')

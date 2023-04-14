@@ -12,5 +12,4 @@ pluginManagement {
 		gradlePluginPortal()
 	}
 }
-include 'corepanel'
 
